@@ -64,10 +64,16 @@ router.get('/scan-org/:org_name',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 
 		github.scanOrg(req.session.user.github.access_token,req.params.org_name,function(err,results){
-			console.log('grand scan results are: %s',util.inspect(results))
-			render(req,res,'index/scan-results',{
-				results: results
-			})
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				console.log('grand scan results are: %s',util.inspect(results))
+				render(req,res,'index/scan-results',{
+					org_name: req.params.org_name,
+					results: results
+				})
+
+			}
 		})
 	})
 })

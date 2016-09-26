@@ -1,0 +1,21 @@
+<h3>scan results for <%=org_name%> are</h3>
+<table>
+  <tr>
+    <th>repo</th>
+    <th>branch</th>
+    <th>file</th>
+    <th>keys found</th>
+  </tr>
+<% results.forEach(function(result){ %>
+  <tr>
+    <td><%=result.repo.full_name%></td>
+    <td><%=result.branch.name%></td>
+    <td><%=result.file.path%></td>
+    <td>
+      <% result.matches.forEach(function(match){ %>
+        <%=match%><br/>
+      <% }) %>
+    </td>
+  </tr>
+<% }) %>
+</table>
