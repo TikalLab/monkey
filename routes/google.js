@@ -31,7 +31,6 @@ var url = require('url');
 var async = require('async');
 var request = require('request');
 var _ = require('underscore');
-var github = require('../app_modules/github');
 var errorHandler = require('../app_modules/error');
 
 router.get('/authorize',function(req,res,next){
