@@ -57,6 +57,8 @@ function render(req,res,template,params){
 	params.moment = moment;
 	params.appConfig = config;
 
+	params.user = req.session.user;
+
 	res.render(template,params);
 }
 module.exports = router;

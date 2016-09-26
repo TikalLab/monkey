@@ -1,1 +1,5 @@
-<a href="/scan">run a scan</a>
+<% if('github' in user){ %>
+  <a href="/scan">run a scan</a>
+<% }else{ %>
+  <a href="/github/authorize">connect github</a>
+<% } %>

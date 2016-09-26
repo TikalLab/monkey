@@ -14,6 +14,40 @@ module.exports = {
 			'User-Agent': config.get('app.name')
 		};
 	},
+	getUserOrgs: function(accessToken,callback){
+		var headers = this.getAPIHeaders(accessToken);
+		var orgs = [];
+		var page = 1;
+		var linkHeader;
+
+		async.whilst(
+			function(){
+				return page;
+			},
+			function(callback){
+				var qs = {
+					page: page
+				}
+				request('https://api.github.com/user/orgs',{headers: headers, qs: qs},function(error,response,body){
+					if(error){
+						callback(error);
+					}else if(response.statusCode > 300){
+						callback(response.statusCode + ' : ' + body);
+					}else{
+						var data = JSON.parse(body)
+						orgs = repos.concat(data);
+						linkHeader = parseLinkHeader(response.headers.link);
+						page = (linkHeader? ('next' in linkHeader ? linkHeader.next.page : false) : false);
+						callback(null,orgs);
+					}
+				});
+			},
+			function(err,orgs){
+				callback(err,orgs)
+			}
+		);
+
+	},
 	getUserRepos: function(accessToken,callback){
 		var headers = this.getAPIHeaders(accessToken);
 		var repos = [];
