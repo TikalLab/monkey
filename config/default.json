@@ -19,7 +19,7 @@
 		"uri": "mongodb://localhost:27017/monkey"
 	},
 	"github": {
-		"client_id": "b155f586017243e09c98",
+		"client_id": "9a729a0f65c529a68655",
 		"client_secret": "",
 		"redirect_domain": "localhost:3000"
 	},
