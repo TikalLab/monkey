@@ -52,6 +52,7 @@ module.exports = {
 
 	},
 	getOrgRepos: function(accessToken,orgName,callback){
+		console.log('getting org repos for %s',orgName)
 		var headers = this.getAPIHeaders(accessToken);
 		var repos = [];
 		var page = 1;
@@ -120,6 +121,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
 
 	},
 	getRepoBranches: function(accessToken,repo,callback){
+		console.log('getting repo branches for %s',repo.full_name)
 		var headers = this.getAPIHeaders(accessToken);
 		var branches = [];
 		var page = 1;
@@ -154,6 +156,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
 
 	},
 	scanRepo: function(accessToken,repo,callback){
+		console.log('scanning repo %s',repo.full_name)
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
@@ -181,6 +184,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
 		})
 	},
 	scanOrg: function(accessToken,orgName,callback){
+		console.log('scanning org %s',orgName)
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
@@ -221,6 +225,8 @@ console.log('link heafer: %s',util.inspect(response.headers));
     });
 	},
 	getBranch: function(accessToken,repo,branchName,callback){
+		console.log('getting barnch %s:%s',repo.full_name,branchName)
+
 		var headers = this.getAPIHeaders(accessToken)
 		request('https://api.github.com/repos/' + repo.full_name + '/branches/' + branchName,{headers: headers},function(error,response,body){
       if(error){
@@ -234,6 +240,8 @@ console.log('link heafer: %s',util.inspect(response.headers));
     });
 	},
 	getTree: function(accessToken,repo,branch,callback){
+		console.log('getting tree for %s:%s',repo.full_name,branch.name)
+
 	  var headers = this.getAPIHeaders(accessToken);
 
     var qs = {
@@ -252,6 +260,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
 
 	},
 	scanBranch: function(accessToken,repo,branch,callback){
+		console.log('scanning branch %s:%s',repo.full_name,branch.name)
 		var thisObject = this;
 		var headers = this.getAPIHeaders(accessToken);
 		async.waterfall([
