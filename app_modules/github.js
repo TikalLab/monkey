@@ -48,6 +48,40 @@ module.exports = {
 		);
 
 	},
+	getOrgRepos: function(accessToken,orgName,callback){
+		var headers = this.getAPIHeaders(accessToken);
+		var repos = [];
+		var page = 1;
+		var linkHeader;
+
+		async.whilst(
+			function(){
+				return page;
+			},
+			function(callback){
+				var qs = {
+					page: page
+				}
+				request('https://api.github.com/orgs/' + orgName + '/repos',{headers: headers, qs: qs},function(error,response,body){
+					if(error){
+						callback(error);
+					}else if(response.statusCode > 300){
+						callback(response.statusCode + ' : ' + body);
+					}else{
+						var data = JSON.parse(body)
+						repos = repos.concat(data);
+						linkHeader = parseLinkHeader(response.headers.link);
+						page = (linkHeader? ('next' in linkHeader ? linkHeader.next.page : false) : false);
+						callback(null,repos);
+					}
+				});
+			},
+			function(err,repos){
+				callback(err,repos)
+			}
+		);
+
+	},
 	getUserRepos: function(accessToken,callback){
 		var headers = this.getAPIHeaders(accessToken);
 		var repos = [];
@@ -117,13 +151,58 @@ console.log('link heafer: %s',util.inspect(response.headers));
 
 	},
 	scanRepo: function(accessToken,repo,callback){
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				github.getRepoBranches(accessToken,repo,function(err,branches){
+					callback(err,branches)
+				})
+			},
+			function(branches,callback){
+				var results = [];
+				async.each(branches,function(branch,callback){
+					thisObject.scanBranch(accessToken,repo,branch,function(err,branchResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(branchResults)
+							callback()
+						}
+					})
+				},function(err){
 
+				})
+			}
+		],function(err,results){
+			callback(err,results)
+		})
 	},
-	scanOrg: function(accessToken,org,callback){
-
-	},
-	getOrgRepos: function(accessToken,org,callback){
-
+	scanOrg: function(accessToken,orgName,callback){
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getOrgRepos(accessToken,orgName,function(err,repos){
+					callback(err,repos)
+				})
+			},
+			function(repos,callback){
+				var results = [];
+				async.each(repos,function(repo,callback){
+					thisObject.scanRepo(accessToken,repo,function(err,repoResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(repoResults);
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,results)
+				})
+			}
+		],function(err,results){
+			callback(err,results)
+		})
 	},
 	getRepo: function(accessToken,repoName,callback){
 		var headers = this.getAPIHeaders(accessToken)

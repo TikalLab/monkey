@@ -60,6 +60,17 @@ router.get('/reconnect',function(req, res, next) {
 	render(req,res,'index/reconnect',{})
 })
 
+router.get('/scan-org/:org_name',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		github.scanOrg(req.session.user.github.access_token,req.params.org_name,function(err,results){
+			render(req,res,'index/scan-results',{
+				results: results
+			})
+		})
+	})
+})
+
 function render(req,res,template,params){
 
 //	params.user = req.session.user;

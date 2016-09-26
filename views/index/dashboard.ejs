@@ -1,7 +1,7 @@
 <% if('github' in user){ %>
   <% if(githubOrgs){ %>
     <% githubOrgs.forEach(function(org){ %>
-      <a href="/scan">scan <%=org.login%></a>
+      <a href="/scan-org/<%=org.login%>">scan <%=org.login%></a>
     <% }) %>
   <% } %>
 
