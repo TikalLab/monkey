@@ -35,7 +35,7 @@ module.exports = {
 					if(error){
 						callback(error);
 					}else if(response.statusCode > 300){
-						callback(response.statusCode + ' : ' + body);
+						callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 					}else{
 						var data = JSON.parse(body)
 						orgs = orgs.concat(data);
@@ -70,7 +70,7 @@ module.exports = {
 					if(error){
 						callback(error);
 					}else if(response.statusCode > 300){
-						callback(response.statusCode + ' : ' + body);
+						callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 					}else{
 						var data = JSON.parse(body)
 						repos = repos.concat(data);
@@ -101,13 +101,10 @@ module.exports = {
 					if(error){
 						callback(error);
 					}else if(response.statusCode > 300){
-						callback(response.statusCode + ' : ' + body);
+						callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 					}else{
 						var data = JSON.parse(body)
 						repos = repos.concat(data);
-//console.log('data is %s',util.inspect(data));
-console.log('repos count %s',repos.length);
-console.log('link heafer: %s',util.inspect(response.headers));
 						linkHeader = parseLinkHeader(response.headers.link);
 						page = (linkHeader? ('next' in linkHeader ? linkHeader.next.page : false) : false);
 						callback(null,repos);
@@ -139,13 +136,11 @@ console.log('link heafer: %s',util.inspect(response.headers));
 					if(error){
 						callback(error);
 					}else if(response.statusCode > 300){
-						callback(response.statusCode + ' : ' + body);
+						console.log('error in getRepoBranches for %s',repo.full_name)
+						callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 					}else{
 						var data = JSON.parse(body)
 						branches = branches.concat(data);
-//console.log('data is %s',util.inspect(data));
-console.log('branches count %s',branches.length);
-console.log('link heafer: %s',util.inspect(response.headers));
 						linkHeader = parseLinkHeader(response.headers.link);
 						page = (linkHeader? ('next' in linkHeader ? linkHeader.next.page : false) : false);
 						callback(null,branches);
@@ -220,7 +215,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
       if(error){
         callback(error);
       }else if(response.statusCode > 300){
-        callback(response.statusCode + ' : ' + body);
+        callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
       }else{
         var repo = JSON.parse(body)
         callback(null,repo);
@@ -235,7 +230,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
       if(error){
         callback(error);
       }else if(response.statusCode > 300){
-        callback(response.statusCode + ' : ' + body);
+        callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
       }else{
         var branch = JSON.parse(body)
         callback(null,branch);
@@ -254,7 +249,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
       if(error){
         callback(error);
       }else if(response.statusCode > 300){
-        callback(response.statusCode + ' : ' + body);
+        callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
       }else{
         var data = JSON.parse(body)
         callback(null,data.tree);
@@ -279,7 +274,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
 		        if(error){
 		          callback(error);
 		        }else if(response.statusCode > 300){
-		          callback(response.statusCode + ' : ' + body);
+		          callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 		        }else{
 		          var data = JSON.parse(body);
 		// console.log('data is %s',util.inspect(data))
