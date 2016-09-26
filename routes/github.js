@@ -44,7 +44,9 @@ router.get('/authorized',function(req,res,next){
  					callback(response.statusCode + ' : ' + body);
  				}else{
  					var data = JSON.parse(body);
+console.log('data from github: %s',util.inspect(data))
  					var accessToken = data.access_token;
+
  					callback(null,accessToken);
  				}
  			});

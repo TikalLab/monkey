@@ -16,7 +16,7 @@ var loginEnforcer = require('../app_modules/login-enforcer')
 var errorHandler = require('../app_modules/error');
 // var unsubscriber = require('../app_modules/unsubscriber');
 // var configurations = require('../app_modules/configurations');
-// var github = require('../app_modules/github');
+var github = require('../app_modules/github');
 
 
 router.get('/',function(req, res, next) {
@@ -31,6 +31,20 @@ router.get('/',function(req, res, next) {
 
 router.get('/dashboard',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
+
+		async.parallel([
+			function(callback){
+				if('github' in req.session.user){
+					github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
+						callback(err,orgs)
+					})
+				}else{
+					callback(null,null)
+				}
+			}
+		],function(err,results){
+
+		})
 		render(req,res,'index/dashboard',{
 
 		})

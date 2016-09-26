@@ -35,7 +35,7 @@ module.exports = {
 						callback(response.statusCode + ' : ' + body);
 					}else{
 						var data = JSON.parse(body)
-						orgs = repos.concat(data);
+						orgs = orgs.concat(data);
 						linkHeader = parseLinkHeader(response.headers.link);
 						page = (linkHeader? ('next' in linkHeader ? linkHeader.next.page : false) : false);
 						callback(null,orgs);
