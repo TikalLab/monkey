@@ -1,5 +1,10 @@
 <% if('github' in user){ %>
-  <a href="/scan">run a scan</a>
+  <% if(githubOrgs){ %>
+    <% githubOrgs.forEach(function(org){ %>
+      <a href="/scan">scan <%=org.login%></a>
+    <% }) %>
+  <% } %>
+
 <% }else{ %>
   <a href="/github/authorize">connect github</a>
 <% } %>

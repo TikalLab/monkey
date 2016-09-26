@@ -43,9 +43,9 @@ router.get('/dashboard',function(req, res, next) {
 				}
 			}
 		],function(err,results){
-
-		})
-		render(req,res,'index/dashboard',{
+			render(req,res,'index/dashboard',{
+				githubOrgs: results[0]
+			})
 
 		})
 	})
