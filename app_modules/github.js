@@ -132,7 +132,10 @@ console.log('link heafer: %s',util.inspect(response.headers));
 				return page;
 			},
 			function(callback){
-				request('https://api.github.com/repos/' + repo + '/branches?page=' + page,{headers: headers},function(error,response,body){
+				var qs = {
+					page: page
+				}
+				request('https://api.github.com/repos/' + repo.full_name + '/branches',{headers: headers,qs: qs},function(error,response,body){
 					if(error){
 						callback(error);
 					}else if(response.statusCode > 300){
@@ -160,7 +163,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
-				github.getRepoBranches(accessToken,repo,function(err,branches){
+				thisObject.getRepoBranches(accessToken,repo,function(err,branches){
 					callback(err,branches)
 				})
 			},
@@ -284,12 +287,15 @@ console.log('link heafer: %s',util.inspect(response.headers));
 		            var content = atob(data.content)
 								var matches = keysFinder.find(content);
 								if(matches){
+									console.log('scan result for %s:%s:%s: affected',repo.full_name,branch.name,item.path)
 									filesWithKeys.push({
 										repo: repo,
 										branch: branch,
 										file: item,
 										matches: matches
 									})
+								}else{
+									console.log('scan result for %s:%s:%s: not affected',repo.full_name,branch.name,item.path)
 								}
 		          }
 		          callback()
