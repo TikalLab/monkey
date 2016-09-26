@@ -4,7 +4,10 @@ var _ = require('underscore');
 var async = require('async');
 var parseLinkHeader = require('parse-link-header');
 var util = require('util');
+var atob = require('atob')
 
+
+var keysFinder = require('../app_modules/keys-finder')
 
 module.exports = {
 	getAPIHeaders: function(accessToken){
@@ -170,7 +173,7 @@ console.log('link heafer: %s',util.inspect(response.headers));
 						}
 					})
 				},function(err){
-
+					callback(err,results)
 				})
 			}
 		],function(err,results){
@@ -246,6 +249,50 @@ console.log('link heafer: %s',util.inspect(response.headers));
         callback(null,data.tree);
       }
     });
+
+	},
+	scanBranch: function(accessToken,repo,branch,callback){
+		var thisObject = this;
+		var headers = this.getAPIHeaders(accessToken);
+		async.waterfall([
+			function(callback){
+				thisObject.getTree(accessToken,repo,branch,function(err,tree){
+					callback(err,tree)
+				})
+			},
+			function(tree,callback){
+				var filesWithKeys = [];
+				async.each(tree,function(item,callback){
+					request(item.url,{headers: headers},function(error,response,body){
+		        if(error){
+		          callback(error);
+		        }else if(response.statusCode > 300){
+		          callback(response.statusCode + ' : ' + body);
+		        }else{
+		          var data = JSON.parse(body);
+		// console.log('data is %s',util.inspect(data))
+		          if('content' in data){
+		            var content = atob(data.content)
+								var matches = keysFinder.find(content);
+								if(matches){
+									filesWithKeys.push({
+										repo: repo,
+										branch: branch,
+										file: item,
+										matches: matches
+									})
+								}
+		          }
+		          callback()
+		        }
+		      })
+				},function(err){
+					callback(err,filesWithKeys)
+				})
+			}
+		],function(err,results){
+			callback(err,results)
+		})
 
 	}
 
