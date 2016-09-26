@@ -1,5 +1,5 @@
 {
-  "name": "zpder",
+  "name": "monkey",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -14,7 +14,7 @@
     "express": "~4.13.1",
     "express-partials": "*",
     "express-session": "*",
-    "mongodb": "^1.4.39",
+    "mongodb": "*",
     "monk": "*",
     "morgan": "~1.6.1",
     "config": "*",
