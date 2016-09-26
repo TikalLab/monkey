@@ -12,7 +12,7 @@ var path = require('path');
 var _ = require('underscore');
 var async = require('async');
 
-// var loginEnforcer = require('../app_modules/login-enforcer')
+var loginEnforcer = require('../app_modules/login-enforcer')
 var errorHandler = require('../app_modules/error');
 // var unsubscriber = require('../app_modules/unsubscriber');
 // var configurations = require('../app_modules/configurations');
@@ -27,6 +27,23 @@ router.get('/',function(req, res, next) {
 		});
 
 	}
+})
+
+router.get('/dashboard',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+		render(req,res,'index/dashboard',{
+
+		})
+	})
+})
+
+router.get('/logout',function(req, res, next) {
+	delete req.session.user;
+	res.redirect('/');
+})
+
+router.get('/reconnect',function(req, res, next) {
+	render(req,res,'index/reconnect',{})
 })
 
 function render(req,res,template,params){
