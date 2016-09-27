@@ -7,9 +7,13 @@ var async = require('async');
 var request = require('request');
 var _ = require('underscore');
 var crypto = require('crypto');
+var fs = require('fs')
 
 var github = require('../app_modules/github');
 var errorHandler = require('../app_modules/error');
+var mailer = require('../app_modules/mailer');
+
+var alertTemplate = fs.readFileSync(path.join(__dirname,'../views/emails/alert.ejs'), 'utf8');
 
 router.get('/authorize',function(req,res,next){
 	req.session.afterGithubRedirectTo = req.query.next;
@@ -142,7 +146,22 @@ function processPush(user,push,db){
 				callback()
 			}else{
 				// TBD notify user
-				console.log('need to notify user about files with keys: %s',util.inspect(filesWithKeys))
+				console.log('need to notify user about files with keys: %s',util.inspect(filesWithKeys,{depth:8}))
+
+				mailer.sendMulti(
+					users, //recipients
+					'[' + config.get('app.name') + '] Possible private key committed alert',
+					alertTemplate,
+					{
+						files_with_keys: filesWithKeys
+					},
+					'alert',
+					function(err){
+						callback(err)
+					}
+
+				);
+
 			}
 		}
 	],function(err){

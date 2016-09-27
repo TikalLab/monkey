@@ -1,0 +1,31 @@
+<p>Hi %recipient.name%,</p>
+<p>We have found an aledgely private key in a code committed to one of your repositories:</p>
+
+<table>
+  <tr>
+    <th>repo</th>
+    <th>branch</th>
+    <th>file</th>
+    <th>keys found</th>
+  </tr>
+<% files_with_keys.forEach(function(file){ %>
+  <tr>
+    <td><%=file.repo.name%></td>
+    <td><%=file.branch%></td>
+    <td><%=file.file%></td>
+    <td>
+      <% file.matches.forEach(function(match){ %>
+        <%=match%><br/>
+      <% }) %>
+    </td>
+  </tr>
+<% }) %>
+</table>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>
+To stop getting this email: http://<%=config.get('app.domain')%>/unsubscribe/<%=email_type%>/%recipient.id%/%recipient.code%<br/>
+To unsubscribe from all <%=config.get('app.name')%> emails: http://<%=config.get('app.domain')%>/unsubscribe/all/%recipient.id%/%recipient.code%
+</p>

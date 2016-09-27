@@ -344,9 +344,12 @@ module.exports = {
 						_.each(commit.files,function(file){
 							var matches = keysFinder.find(file.patch);
 							if(matches){
+								var refParts = push.ref.split('/');
+								var branchName = refParts[refParts.length -1]
 								filesWithKeys.push({
-									commit: commit,
-									file: file,
+									repo: push.repository.name,
+									branch: branchName,
+									file: file.filename,
 									matches: matches
 								})
 							}

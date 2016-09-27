@@ -35,6 +35,7 @@
     "email-addresses": "*",
     "atob": "*",
     "cheerio": "*",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "git-patch-additions": "*"
   }
 }
