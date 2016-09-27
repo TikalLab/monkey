@@ -328,6 +328,9 @@ module.exports = {
 				callback(null,hook);
 			}
 		});
+	},
+	scanPush: function(accessToken,push,callback){
+		callback(null,['dsadas'])
 	}
 
 

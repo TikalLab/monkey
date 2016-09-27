@@ -107,17 +107,9 @@ router.post('/org-webhook',function(req, res, next) {
 					// what happened in github that caused us to receive this hook?
 					console.log('headres are : %s',util.inspect(req.headers));
 					switch(req.headers['x-github-event']){
-					case 'issues':
-						console.log('this is an issues event!');
-						processIssuesEvent(user,req.body,req.db);
-						break;
-					case 'issue_comment':
-						console.log('this is an issue comment event!');
-						processIssueCommentEvent(user,req.body,req.db);
-						break;
-					case 'pull_request':
-						console.log('this is a pull request!');
-						processPullRequestEvent(user,req.body,req.db);
+					case 'push':
+						console.log('this is a push!');
+						processPush(user,req.body,req.db);
 						break;
 					default:
 						console.log('header is : %s',req.headers['x-github-event']);
@@ -138,6 +130,29 @@ router.post('/org-webhook',function(req, res, next) {
 
 })
 
+function processPush(user,push,db){
+	async.waterfall([
+		function(callback){
+			github.scanPush(user.github.access_token,push,function(err,filesWithKeys){
+				callback(err,filesWithKeys)
+			})
+		},
+		function(filesWithKeys,callback){
+			if(!filesWithKeys){
+				callback()
+			}else{
+				// TBD notify user
+				console.log('need to notify user about files with keys: %s',util.inspect(filesWithKeys))
+			}
+		}
+	],function(err){
+		if(err){
+			console.log('error processing push: %s',err)
+		}else{
+			console.log('push processed succerssfully')
+		}
+	})
 
+}
 
 module.exports = router;
