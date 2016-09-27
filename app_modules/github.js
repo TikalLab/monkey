@@ -304,6 +304,50 @@ module.exports = {
 			callback(err,results)
 		})
 
+	},
+	hookOrg: function(accessToken,orgName,callback){
+		var headers = this.getAPIHeaders(accessToken);
+		asyc.waterfall([
+			function(callback){
+
+				var form = {
+					"name": "web",
+					"active": true,
+					"events": ["push"],
+					"config": {
+						"url": "https://" + config.get('github.webhook_domain') + "/github/org-webhook",
+						"content_type": "json",
+						"secret": config.get('github.hook_secret')
+					}
+				};
+				request.post('https://api.github.com/orgs/' + orgName + '/hooks',{headers: headers, body: JSON.stringify(form)},function(error,response,body){
+					if(error){
+						callback(error);
+					}else if(response.statusCode > 300){
+						callback(response.statusCode + ' : ' + body);
+					}else{
+						var hook = JSON.parse(body);
+						callback(null,hook);
+					}
+				});
+			},
+			// update the org in the user record in db,
+			// so if a webhook fires we know who to attach it to
+			function(hook,callback){
+				var users = req.db.get('users');
+				users.findAndModify({
+					_id: req.session.user._id
+				},{
+					$addToSet:{'hooks.orgs': {org_name: orgName, hook_id: hook.id}}
+				},{
+					new: true
+				},function(err,user){
+					callback(err,user)
+				});
+			}
+		],function(err){
+
+		})
 	}
 
 

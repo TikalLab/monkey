@@ -78,6 +78,20 @@ router.get('/scan-org/:org_name',function(req, res, next) {
 	})
 })
 
+router.get('/hook-org/:org_name',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		github.hookOrg(req.session.user.github.access_token,req.params.org_name,function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				res.redirect('/dashboard')
+
+			}
+		})
+	})
+})
+
 function render(req,res,template,params){
 
 //	params.user = req.session.user;
