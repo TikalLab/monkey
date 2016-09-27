@@ -88,12 +88,27 @@ router.get('/hook-org/:org_name',function(req, res, next) {
 				})
 			},
 			function(hook,callback){
-
-			},
-		],function(err){
+				var users = req.db.get('users');
+				users.findAndModify({
+					_id: req.session.user._id
+				},{
+					$addToSet:{
+						'hooks.orgs': {
+							org_name: req.params.org_name,
+							hook_id: hook.id
+						}
+					}
+				},{
+					new: true
+				},function(err,user){
+					callback(err,user)
+				});
+			}
+		],function(err,user){
 			if(err){
 				errorHandler.error(req,res,next,err)
 			}else{
+				req.session.user = user;
 				res.redirect('/dashboard')
 
 			}

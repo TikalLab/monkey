@@ -84,8 +84,9 @@ router.post('/org-webhook',function(req, res, next) {
 	console.log('%s',util.inspect(req.body));
 
 	// calc the signature according to X-Hub-Signature and verify the hook is valid
-	hmac = crypto.createHmac('sha1', config.get('github.hook_secret'));
-	hmac.update(req.rawBody);
+	var hmac = crypto.createHmac('sha1', config.get('github.hook_secret'));
+	hmac.update(JSON.stringify(req.body));
+	// hmac.update(req.rawBody);
 	var calcedSignature = hmac.digest('hex');
 	console.log('signature is %s',calcedSignature);
 
