@@ -6,6 +6,8 @@ var url = require('url');
 var async = require('async');
 var request = require('request');
 var _ = require('underscore');
+var crypto = require('crypto');
+
 var github = require('../app_modules/github');
 var errorHandler = require('../app_modules/error');
 
@@ -76,6 +78,65 @@ console.log('data from github: %s',util.inspect(data))
  		}
  	});
 })
+
+router.post('/org-webhook',function(req, res, next) {
+	console.log('received a ORG webhook notification from github!');
+	console.log('%s',util.inspect(req.body));
+
+	// calc the signature according to X-Hub-Signature and verify the hook is valid
+	hmac = crypto.createHmac('sha1', config.get('github.hook_secret'));
+	hmac.update(req.rawBody);
+	var calcedSignature = hmac.digest('hex');
+	console.log('signature is %s',calcedSignature);
+
+	var githubSignature = req.headers['x-hub-signature'].split('=')[1]; // header content is in format sha1={signature}, we need only the {signature} part
+	if(githubSignature != calcedSignature){
+		console.log('A SPOOFED HOOK RECEIVED!!! github sig: %s, calced sig: %s',githubSignature,calcedSignature);
+	}else{
+		// find the user that signed the organization and use their access_token
+		var users = req.db.get('users');
+		users.find({'hooks.orgs.org_name':{$in: [req.body.organization.login]}},function(err,docs){
+			if(err){
+				console.log('error finding an org-user match: %s',err);
+			}else{
+				if(docs.length > 0){
+					var user = docs[0]; // the first user will do...
+//					processHook(user,req.body);
+
+					// what happened in github that caused us to receive this hook?
+					console.log('headres are : %s',util.inspect(req.headers));
+					switch(req.headers['x-github-event']){
+					case 'issues':
+						console.log('this is an issues event!');
+						processIssuesEvent(user,req.body,req.db);
+						break;
+					case 'issue_comment':
+						console.log('this is an issue comment event!');
+						processIssueCommentEvent(user,req.body,req.db);
+						break;
+					case 'pull_request':
+						console.log('this is a pull request!');
+						processPullRequestEvent(user,req.body,req.db);
+						break;
+					default:
+						console.log('header is : %s',req.headers['x-github-event']);
+						break;
+					}
+
+
+				}else{
+					console.log('find zero matches org-user!!!');
+				}
+			}
+		})
+	}
+
+
+
+	res.sendStatus(200);
+
+})
+
 
 
 module.exports = router;
