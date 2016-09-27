@@ -328,6 +328,7 @@ module.exports = {
 				callback(null,hook);
 			}
 		});
+	}
 
 
 }
