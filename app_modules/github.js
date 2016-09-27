@@ -330,7 +330,33 @@ module.exports = {
 		});
 	},
 	scanPush: function(accessToken,push,callback){
-		callback(null,['dsadas'])
+		var headers = this.getAPIHeaders(accessToken);
+		var filesWithKeys =[];
+		async.each(push.commits,function(commit,callback){
+				var url = 'https://api.github.com/repos/' + push.repository.owner.name + '/' + push.repository.name + '/commits/' + commit.id;
+				request(url,{headers: headers},function(error,response,body){
+					if(error){
+						callback(error);
+					}else if(response.statusCode > 300){
+						callback(response.statusCode + ' : ' + body);
+					}else{
+						var commit = JSON.parse(body);
+						_.each(commit.files,function(file){
+							var matches = keysFinder.find(file.patch);
+							if(matches){
+								filesWithKeys.push({
+									commit: commit,
+									file: file,
+									matches: matches
+								})
+							}
+						})
+						callback();
+					}
+				});
+		},function(err){
+			callback(err,filesWithKeys)
+		})
 	}
 
 
