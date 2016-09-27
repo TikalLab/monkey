@@ -8,6 +8,7 @@ var request = require('request');
 var _ = require('underscore');
 var crypto = require('crypto');
 var fs = require('fs')
+var path = require('path')
 
 var github = require('../app_modules/github');
 var errorHandler = require('../app_modules/error');
@@ -149,7 +150,7 @@ function processPush(user,push,db){
 				console.log('need to notify user about files with keys: %s',util.inspect(filesWithKeys,{depth:8}))
 
 				mailer.sendMulti(
-					users, //recipients
+					[user], //recipients
 					'[' + config.get('app.name') + '] Possible private key committed alert',
 					alertTemplate,
 					{
