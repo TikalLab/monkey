@@ -1,6 +1,8 @@
 var config = require('config');
 var util = require('util');
 var async = require('async');
+var fs = require('fs')
+var path = require('path')
 
 
 //mongo
@@ -12,6 +14,9 @@ var scanItems = require('./models/scan-items')
 var scans = require('./models/scans')
 
 var github = require('./app_modules/github')
+var mailer = require('./app_modules/mailer')
+
+var scanReadyTemplate = fs.readFileSync(path.join(__dirname,'./views/emails/scan-ready.ejs'), 'utf8');
 
 
 function scanItem(item,callback){
@@ -32,22 +37,34 @@ function scanItem(item,callback){
     // mark it as scanned
     function(user,matches,callback){
       scanItems.scanned(item,matches,db,function(err){
-        callback(err)
+        callback(err,user)
       })
     },
     // check if scan is finsihed
-    function(callback){
+    function(user,callback){
       scans.checkIfFinished(item.scan_id,db,function(err,scan){
-        callback(err,scan)
+        callback(err,user,scan)
       })
     },
     // notify user if finished
-    function(scan,callback){
-      if(!scan){
+    function(user,scan,callback){
+      if(!('_id' in scan)){
         callback()
       }else{
+        mailer.sendMulti(
+					[user], //recipients
+					'[' + config.get('app.name') + '] Scan finished',
+					scanReadyTemplate,
+					{
+						scan_id: scan._id.toString()
+					},
+					'scan-ready',
+					function(err){
+						callback(err)
+					}
+
+				);
         // TBD notify user
-        callback()
       }
     }
   ],function(err){
