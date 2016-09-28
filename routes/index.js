@@ -18,6 +18,8 @@ var errorHandler = require('../app_modules/error');
 // var configurations = require('../app_modules/configurations');
 var github = require('../app_modules/github');
 
+var scans = require('../models/scans');
+var scanItems = require('../models/scan-items');
 
 router.get('/',function(req, res, next) {
 	if(req.session.user){
@@ -75,6 +77,43 @@ router.get('/scan-org/:org_name',function(req, res, next) {
 
 			}
 		})
+	})
+})
+
+router.get('/build-org-scan/:org_name',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.waterfall([
+			function(callback){
+				github.buildOrgScan(req.session.user.github.access_token,req.params.org_name,function(err,results){
+					callback(err,results)
+				})
+			},
+			function(items,callback){
+				scans.create(req.session.user._id.toString(),'github',items.length,req.db,function(err,scan){
+					callback(err,items,scan)
+				})
+			},
+			function(items,scan,callback){
+				async.each(items,function(item,callback){
+					scanItems.create(scan._id.toString(),req.session.user._id.toString(),'github',item,req.db,function(err,scanItem){
+						callback(err)
+					})
+				},function(err){
+					callback(err,items,scan)
+				})
+			}
+		],function(err,items,scan){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				render(req,res,'index/build-org-scan',{
+					org_name: req.params.org_name,
+					scan: scan
+				})
+			}
+		})
+
 	})
 })
 

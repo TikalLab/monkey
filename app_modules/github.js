@@ -181,6 +181,34 @@ module.exports = {
 			callback(err,results)
 		})
 	},
+	buildRepoScan: function(accessToken,repo,callback){
+		console.log('scanning repo %s',repo.full_name)
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getRepoBranches(accessToken,repo,function(err,branches){
+					callback(err,branches)
+				})
+			},
+			function(branches,callback){
+				var results = [];
+				async.each(branches,function(branch,callback){
+					thisObject.buildBranchScan(accessToken,repo,branch,function(err,branchResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(branchResults)
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,results)
+				})
+			}
+		],function(err,results){
+			callback(err,results)
+		})
+	},
 	scanOrg: function(accessToken,orgName,callback){
 		console.log('scanning org %s',orgName)
 		var thisObject = this;
@@ -194,6 +222,34 @@ module.exports = {
 				var results = [];
 				async.each(repos,function(repo,callback){
 					thisObject.scanRepo(accessToken,repo,function(err,repoResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(repoResults);
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,results)
+				})
+			}
+		],function(err,results){
+			callback(err,results)
+		})
+	},
+	buildOrgScan: function(accessToken,orgName,callback){
+		console.log('scanning org %s',orgName)
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getOrgRepos(accessToken,orgName,function(err,repos){
+					callback(err,repos)
+				})
+			},
+			function(repos,callback){
+				var results = [];
+				async.each(repos,function(repo,callback){
+					thisObject.buildRepoScan(accessToken,repo,function(err,repoResults){
 						if(err){
 							callback(err)
 						}else{
@@ -300,6 +356,21 @@ module.exports = {
 					callback(err,filesWithKeys)
 				})
 			}
+		],function(err,results){
+			callback(err,results)
+		})
+
+	},
+	buildBranchScan: function(accessToken,repo,branch,callback){
+		console.log('scanning branch %s:%s',repo.full_name,branch.name)
+		var thisObject = this;
+		var headers = this.getAPIHeaders(accessToken);
+		async.waterfall([
+			function(callback){
+				thisObject.getTree(accessToken,repo,branch,function(err,tree){
+					callback(err,tree)
+				})
+			},
 		],function(err,results){
 			callback(err,results)
 		})
