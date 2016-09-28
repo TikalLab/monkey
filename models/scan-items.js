@@ -20,6 +20,7 @@ module.exports = {
     var scanItems = db.get('scan_items');
     scanItems.findOneAndUpdate({
       is_scanning: false,
+      is_scanned: false,
       scan_after: {$lt: new Date()}
     },{
       $set: {is_scanning: true}
@@ -37,8 +38,10 @@ module.exports = {
         is_scanned: true,
         matches: matches
       }
-    },function(err,next){
-      callback(err,next)
+    },{
+      new: true
+    },function(err,item){
+      callback(err,item)
     })
 
   }

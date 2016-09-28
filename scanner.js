@@ -8,11 +8,13 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk(config.get('mongo.uri'));
 
-var scanItems = require('../models/scan-items')
-var scans = require('../models/scans')
+var scanItems = require('./models/scan-items')
+var scans = require('./models/scans')
+
+var github = require('./app_modules/github')
 
 
-function scanItem(item){
+function scanItem(item,callback){
   async.waterfall([
     // get the user, need their access token
     function(callback){
@@ -23,7 +25,7 @@ function scanItem(item){
     },
     // scan the item
     function(user,callback){
-      github.scanItem(user.github.access_token,item,function(err,matches){
+      github.scanItem(user.github.access_token,item.item,function(err,matches){
         callback(err,user,matches)
       })
     },
@@ -45,6 +47,7 @@ function scanItem(item){
         callback()
       }else{
         // TBD notify user
+        callback()
       }
     }
   ],function(err){
@@ -56,11 +59,13 @@ function next(){
   async.waterfall([
     function(callback){
       scanItems.next(db,function(err,item){
+        console.log('found item to scan: %s',item._id.toString())
         callback(err,item)
       })
     },
     function(item,callback){
       if(!item){
+        console.log('queue empty')
         callback('queue empty')
       }else{
         scanItem(item,function(err){
@@ -77,4 +82,5 @@ function next(){
   })
 }
 
+console.log('starting')
 next();
