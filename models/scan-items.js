@@ -20,11 +20,26 @@ module.exports = {
     var scanItems = db.get('scan_items');
     scanItems.findOneAndUpdate({
       is_scanning: false,
-      scan_after:{$lt: new Date()}
+      scan_after: {$lt: new Date()}
     },{
-      $set:{is_scanning: true}
+      $set: {is_scanning: true}
     },function(err,next){
       callback(err,next)
     })
+  },
+  scanned: function(item,matches,db,callback){
+    var scanItems = db.get('scan_items');
+    scanItems.findOneAndUpdate({
+      _id: item._id.toString()
+    },{
+      $set: {
+        is_scanning: false,
+        is_scanned: true,
+        matches: matches
+      }
+    },function(err,next){
+      callback(err,next)
+    })
+
   }
 }
