@@ -197,7 +197,12 @@ module.exports = {
 						if(err){
 							callback(err)
 						}else{
-							results = results.concat(branchResults)
+							var extendedBranchResults = _.map(branchResults,function(result){
+								result['repo'] = repo.full_name;
+								result['branch'] = branch.name;
+								return result;
+							})
+							results = results.concat(extendedBranchResults)
 							callback()
 						}
 					})
@@ -430,6 +435,25 @@ module.exports = {
 				});
 		},function(err){
 			callback(err,filesWithKeys)
+		})
+	},
+	scanItem: function(accessToken,item,callback){
+		var headers = this.getAPIHeaders(accessToken);
+		request(item.url,{headers: headers},function(error,response,body){
+			if(error){
+				callback(error);
+			}else if(response.statusCode > 300){
+				callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
+			}else{
+				var data = JSON.parse(body);
+// console.log('data is %s',util.inspect(data))
+				var matches;
+				if('content' in data){
+					var content = atob(data.content)
+					matches = keysFinder.find(content);
+				}
+				callback(null,matches)
+			}
 		})
 	}
 
