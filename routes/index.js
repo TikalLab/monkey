@@ -117,6 +117,24 @@ router.get('/build-org-scan/:org_name',function(req, res, next) {
 	})
 })
 
+router.get('/scan/:scan_id',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		scans.getFull(req.session.user._id.toString,req.params.scan_id,req.db,function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				console.log('grand scan results are: %s',util.inspect(results,{depth:8}))
+				render(req,res,'index/scan',{
+					org_name: req.params.org_name,
+					results: results
+				})
+
+			}
+		})
+	})
+})
+
 router.get('/hook-org/:org_name',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 

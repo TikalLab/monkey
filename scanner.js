@@ -59,7 +59,9 @@ function next(){
   async.waterfall([
     function(callback){
       scanItems.next(db,function(err,item){
-        console.log('found item to scan: %s',item._id.toString())
+        if(item){
+          console.log('found item to scan: %s',item._id.toString())
+        }
         callback(err,item)
       })
     },

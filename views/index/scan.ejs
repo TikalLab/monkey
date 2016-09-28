@@ -1,0 +1,20 @@
+<table>
+  <tr>
+    <th>repo</th>
+    <th>branch</th>
+    <th>file</th>
+    <th>keys found</th>
+  </tr>
+<% results.matched_items.forEach(function(result){ %>
+  <tr>
+    <td><%=result.item.repo%></td>
+    <td><%=result.item.branch%></td>
+    <td><%=result.item.path%></td>
+    <td>
+      <% result.matches.forEach(function(match){ %>
+        <%=match%><br/>
+      <% }) %>
+    </td>
+  </tr>
+<% }) %>
+</table>

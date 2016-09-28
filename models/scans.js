@@ -38,5 +38,31 @@ module.exports = {
     ],function(err,scan){
       callback(err,scan)
     })
+  },
+  getFull: function(userID,scanID,db,callback){
+    var scans = db.get('scans');
+    var scanItems = db.get('scan_items');
+    async.parallel([
+      function(callback){
+        scans.findOne({_id: scanID, user_id: userID},function(err,scan){
+          callback(err,scan)
+        })
+      },
+      function(callback){
+        scanItems.find({scan_id: scanID, user_id: userID, matches: {$ne: null}},function(err,items){
+          callback(err,items)
+        })
+      }
+    ],function(err,results){
+      if(err){
+        callback(err)
+      }else{
+        callback(null,{
+          scan: results[0],
+          matched_items: results[1]
+        })
+      }
+    })
+
   }
 }
