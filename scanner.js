@@ -64,13 +64,19 @@ function scanItem(item,callback){
 					}
 
 				);
-        // TBD notify user
       }
     }
   ],function(err){
-    callback(err)
+    if(err == 'ratelimit'){
+      // TBD handle rate limit
+      scanItems.postpone(item.user_id,db)
+    }else{
+      callback(err)
+    }
   })
 }
+
+
 
 function next(){
   async.waterfall([

@@ -443,9 +443,14 @@ module.exports = {
 			if(error){
 				callback(error);
 			}else if(response.statusCode > 300){
-				console.log('DDD')
-				callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
+				if(response.headers['x-ratelimit-remaining'] == '0'){
+					callback('ratelimit');
+				}else{
+					callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
+				}
 			}else{
+
+
 				var data = JSON.parse(body);
 // console.log('data is %s',util.inspect(data))
 				var matches;

@@ -1,4 +1,5 @@
 var util = require('util')
+var moment = require('moment')
 
 module.exports = {
   create: function(scanID,userID,scm,item,db,callback){
@@ -44,5 +45,19 @@ module.exports = {
       callback(err,item)
     })
 
+  },
+  postpone: function(userID,db,callback){
+    var scanItems = db.get('scan_items');
+    scanItems.update({
+      user_id: userID
+    },{
+      $set:{
+        scan_after: moment().add(1,'hours').toDate()
+      }
+    },{
+      multi: true
+    },function(err){
+      callback(err)
+    })
   }
 }
