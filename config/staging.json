@@ -1,0 +1,39 @@
+{
+	"mailgun": {
+		"api_key": "",
+		"domain": "infoxicate.com"
+	},
+	"app": {
+		"name": "monky-staging",
+		"email": "shaharsol@tikalk.com",
+		"domain": "monkey-staging.herokuapp.com",
+		"unsubscribe_secret": "",
+		"cookie_secret": "",
+		"cdn_url": "",
+		"webhook_domain": "monkey-staging.herokuapp.com",
+		"view": {
+			"list_limit": 1
+		}
+	},
+	"mongo": {
+		"uri": ""
+	},
+	"github": {
+		"client_id": "d4c23f7daf4e6b02c4a4",
+		"client_secret": "",
+		"redirect_domain": "monkey-staging.herokuapp.com",
+		"hook_secret": "",
+		"webhook_domain": "monkey-staging.herokuapp.com"
+	},
+	"google": {
+		"client_id": "880998887507-st4fumgdghcol1vasmjaaks4npbklmkq.apps.googleusercontent.com",
+		"client_secret": "",
+		"redirect_domain": "monkey-staging.herokuapp.com"
+	},
+	"auth": {
+		"username": "admin",
+		"password": ""
+	}
+
+
+}
