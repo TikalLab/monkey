@@ -5,7 +5,7 @@ var async = require('async');
 var parseLinkHeader = require('parse-link-header');
 var util = require('util');
 var atob = require('atob')
-var simpleGit = require('simple-git')
+var simpleGit = require('simple-git')()
 var fs = require('fs')
 var url = require('url');
 
@@ -21,10 +21,12 @@ module.exports = {
 	},
 	getUser: function(accessToken,callback){
 		var headers = this.getAPIHeaders(accessToken);
-		request('https://api.github.com/user/',{headers: headers},function(error,response,body){
+		console.log('headers are %s',util.inspect(headers))
+		request('https://api.github.com/user',{headers: headers},function(error,response,body){
 			if(error){
 				callback(error);
 			}else if(response.statusCode > 300){
+				console.log('error in getUser')
 				callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 			}else{
 				var data = JSON.parse(body);
@@ -451,11 +453,12 @@ module.exports = {
 	scanBranchLocally: function(accessToken,user,repo,branch,callback){
 		console.log('scanning branch %s:%s locally',repo.full_name,branch.name)
 		var thisObject = this;
-		var dir = '/tmp/' + repo.full_name + '/' + branch.name;
-
+		var dir = '/tmp/' + repo.owner.login + '-' + repo.name + '-' + branch.name;
+console.log('dir is %s',dir)
 		var parsedUrl = url.parse(repo.clone_url);
 		parsedUrl.auth = user.login + ':' + accessToken;
 		var cloneUrl = url.format(parsedUrl);
+console.log('url is %s',cloneUrl)
 
 		async.waterfall([
 			// create a dir specifically for this branch

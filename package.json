@@ -37,6 +37,7 @@
     "cheerio": "*",
     "serve-favicon": "~2.3.0",
     "simple-git": "*",
+    "nodegit": "*",
     "git-patch-additions": "*"
   }
 }

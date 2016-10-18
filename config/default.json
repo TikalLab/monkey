@@ -8,7 +8,7 @@
 		"email": "daily@snapgluedev.com",
 		"domain": "localhost:3000",
 		"unsubscribe_secret": "",
-		"cookie_secret": "",
+		"cookie_secret": "abc",
 		"cdn_url": "",
 		"webhook_domain": "facetogether.ngrok.io",
 		"view": {
