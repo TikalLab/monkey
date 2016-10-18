@@ -5,7 +5,7 @@ var async = require('async');
 var parseLinkHeader = require('parse-link-header');
 var util = require('util');
 var atob = require('atob')
-var simpleGit = require('simple-git')()
+// var simpleGit = require('simple-git')()
 var fs = require('fs')
 var url = require('url');
 
@@ -460,6 +460,8 @@ console.log('dir is %s',dir)
 		var cloneUrl = url.format(parsedUrl);
 console.log('url is %s',cloneUrl)
 
+		var simpleGit = require('simple-git')(dir);
+
 		async.waterfall([
 			// create a dir specifically for this branch
 			function(callback){
@@ -470,6 +472,12 @@ console.log('url is %s',cloneUrl)
 			// clone the git
 			function(callback){
 				simpleGit.clone(cloneUrl,dir,function(err){
+					callback(err)
+				})
+			},
+			// do a "fetch" (whatever thats good for...)
+			function(callback){
+				simpleGit.fetch(function(err){
 					callback(err)
 				})
 			},
