@@ -91,12 +91,15 @@ router.get('/build-org-scan/:org_name',function(req, res, next) {
 			},
 			function(items,callback){
 				scans.create(req.session.user._id.toString(),'github',items.length,req.db,function(err,scan){
+					console.log('created scan: %s',util.inspect(scan))
 					callback(err,items,scan)
 				})
 			},
 			function(items,scan,callback){
 				async.each(items,function(item,callback){
+					console.log('will log item: %s',item.sha)
 					scanItems.create(scan._id.toString(),req.session.user._id.toString(),'github',item,req.db,function(err,scanItem){
+						console.log('logged item %s',item.sha)
 						callback(err)
 					})
 				},function(err){
@@ -114,6 +117,24 @@ router.get('/build-org-scan/:org_name',function(req, res, next) {
 			}
 		})
 
+	})
+})
+
+router.get('/scan-org-locally/:org_name',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		github.scanOrgLocally(req.session.user.github.access_token,req.params.org_name,function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				console.log('grand scan results are: %s',util.inspect(results))
+				render(req,res,'index/scan-results',{
+					org_name: req.params.org_name,
+					results: results
+				})
+
+			}
+		})
 	})
 })
 

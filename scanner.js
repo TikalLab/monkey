@@ -69,7 +69,9 @@ function scanItem(item,callback){
   ],function(err){
     if(err == 'ratelimit'){
       // TBD handle rate limit
-      scanItems.postpone(item.user_id,db)
+      scanItems.postpone(item.user_id,db,function(err){
+        callback(err)
+      })
     }else{
       callback(err)
     }
@@ -100,8 +102,10 @@ function next(){
     },
   ],function(err){
     if(err){
+      console.log('error scanning item, sleeping for 5 secs')
       setTimeout(function(){next()},5000)
     }else{
+      console.log('scanned item successfuly')
       return next()
     }
   })

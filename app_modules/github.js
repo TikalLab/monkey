@@ -5,7 +5,9 @@ var async = require('async');
 var parseLinkHeader = require('parse-link-header');
 var util = require('util');
 var atob = require('atob')
-
+var simpleGit = require('simple-git')
+var fs = require('fs')
+var url = require('url');
 
 var keysFinder = require('../app_modules/keys-finder')
 
@@ -16,6 +18,19 @@ module.exports = {
 			Accept: 'application/vnd.github.v3+json',
 			'User-Agent': config.get('app.name')
 		};
+	},
+	getUser: function(accessToken,callback){
+		var headers = this.getAPIHeaders(accessToken);
+		request('https://api.github.com/user/',{headers: headers},function(error,response,body){
+			if(error){
+				callback(error);
+			}else if(response.statusCode > 300){
+				callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
+			}else{
+				var data = JSON.parse(body);
+				callback(null,data)
+			}
+		})
 	},
 	getUserOrgs: function(accessToken,callback){
 		var headers = this.getAPIHeaders(accessToken);
@@ -181,6 +196,37 @@ module.exports = {
 			callback(err,results)
 		})
 	},
+
+	scanRepoLocally: function(accessToken,user,repo,callback){
+		console.log('scanning repo %s',repo.full_name)
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getRepoBranches(accessToken,repo,function(err,branches){
+					callback(err,branches)
+				})
+			},
+			function(branches,callback){
+				var results = [];
+				async.each(branches,function(branch,callback){
+					thisObject.scanBranchLocally(accessToken,user,repo,branch,function(err,branchResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(branchResults)
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,results)
+				})
+			}
+		],function(err,results){
+			callback(err,results)
+		})
+	},
+
+
 	buildRepoScan: function(accessToken,repo,callback){
 		console.log('scanning repo %s',repo.full_name)
 		var thisObject = this;
@@ -242,6 +288,41 @@ module.exports = {
 			callback(err,results)
 		})
 	},
+
+	scanOrgLocally: function(accessToken,orgName,callback){
+		console.log('scanning org %s locally',orgName)
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getUser(accessToken,function(err,user){
+					callback(err,user)
+				})
+			},
+			function(user,callback){
+				thisObject.getOrgRepos(accessToken,orgName,function(err,repos){
+					callback(err,user,repos)
+				})
+			},
+			function(user,repos,callback){
+				var results = [];
+				async.each(repos,function(repo,callback){
+					thisObject.scanRepoLocally(accessToken,user,repo,function(err,repoResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(repoResults);
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,results)
+				})
+			}
+		],function(err,results){
+			callback(err,results)
+		})
+	},
+
 	buildOrgScan: function(accessToken,orgName,callback){
 		console.log('scanning org %s',orgName)
 		var thisObject = this;
@@ -366,6 +447,94 @@ module.exports = {
 		})
 
 	},
+
+	scanBranchLocally: function(accessToken,user,repo,branch,callback){
+		console.log('scanning branch %s:%s locally',repo.full_name,branch.name)
+		var thisObject = this;
+		var dir = '/tmp/' + repo.full_name + '/' + branch.name;
+
+		var parsedUrl = url.parse(repo.clone_url);
+		parsedUrl.auth = user.login + ':' + accessToken;
+		var cloneUrl = url.format(parsedUrl);
+
+		async.waterfall([
+			// create a dir specifically for this branch
+			function(callback){
+				fs.mkdir(dir,function(err){
+					callback(err)
+				})
+			},
+			// clone the git
+			function(callback){
+				simpleGit.clone(cloneUrl,dir,function(err){
+					callback(err)
+				})
+			},
+			// checkout the branch
+			function(callback){
+				simpleGit.checkout(branch.name,function(err){
+					callback(err)
+				})
+			},
+			// scan the branch
+			function(callback){
+					callback(null)
+			},
+			// cleanup
+			function(callback){
+				callback(null)
+			}
+		],function(err,results){
+			callback(err,results)
+		})
+
+		// var headers = this.getAPIHeaders(accessToken);
+		// async.waterfall([
+		// 	function(callback){
+		// 		thisObject.getTree(accessToken,repo,branch,function(err,tree){
+		// 			callback(err,tree)
+		// 		})
+		// 	},
+		// 	function(tree,callback){
+		// 		var filesWithKeys = [];
+		// 		async.each(tree,function(item,callback){
+		// 			request(item.url,{headers: headers},function(error,response,body){
+		//         if(error){
+		//           callback(error);
+		//         }else if(response.statusCode > 300){
+		//           callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
+		//         }else{
+		//           var data = JSON.parse(body);
+		// // console.log('data is %s',util.inspect(data))
+		//           if('content' in data){
+		//             var content = atob(data.content)
+		// 						var matches = keysFinder.find(content);
+		// 						if(matches){
+		// 							console.log('scan result for %s:%s:%s: affected',repo.full_name,branch.name,item.path)
+		// 							filesWithKeys.push({
+		// 								repo: repo,
+		// 								branch: branch,
+		// 								file: item,
+		// 								matches: matches
+		// 							})
+		// 						}else{
+		// 							console.log('scan result for %s:%s:%s: not affected',repo.full_name,branch.name,item.path)
+		// 						}
+		//           }
+		//           callback()
+		//         }
+		//       })
+		// 		},function(err){
+		// 			callback(err,filesWithKeys)
+		// 		})
+		// 	}
+		// ],function(err,results){
+		// 	callback(err,results)
+		// })
+
+	},
+
+
 	buildBranchScan: function(accessToken,repo,branch,callback){
 		console.log('scanning branch %s:%s',repo.full_name,branch.name)
 		var thisObject = this;

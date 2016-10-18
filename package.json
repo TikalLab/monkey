@@ -36,6 +36,7 @@
     "atob": "*",
     "cheerio": "*",
     "serve-favicon": "~2.3.0",
+    "simple-git": "*",
     "git-patch-additions": "*"
   }
 }
