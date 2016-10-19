@@ -504,7 +504,7 @@ console.log('grep result: %s',util.inspect(lines))
 								fileWithKeys['branch'] = branch.name;
 
 								filesWithKeys.push(fileWithKeys)
-								
+
 							}
 						})
 						callback(null,filesWithKeys)
@@ -673,7 +673,7 @@ console.log('parts are %s',util.inspect(parts))
 		var codePart = parts[1];
 
 		var fileParts = filePart.split('/');
-		fileParts.splice(0,2);
+		fileParts = fileParts.slice(3);
 		var file = fileParts.join('/');
 
 		var matches = codePart.match(/\b([a-f0-9]{40})\b/);

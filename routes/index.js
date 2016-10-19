@@ -128,7 +128,7 @@ router.get('/scan-org-locally/:org_name',function(req, res, next) {
 				errorHandler.error(req,res,next,err)
 			}else{
 				console.log('grand scan results are: %s',util.inspect(results))
-				render(req,res,'index/scan-results',{
+				render(req,res,'index/local-scan-results',{
 					org_name: req.params.org_name,
 					results: results
 				})
