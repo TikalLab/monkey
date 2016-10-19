@@ -489,11 +489,28 @@ console.log('url is %s',cloneUrl)
 			},
 			// scan the branch
 			function(callback){
-					callback(null)
+				exec("grep -rE '[0-9a-f]{5,40}' /tmp/pubsublab-tlvdemo-test/*", function(err, stdin, stdout){
+					if(err){
+						callback(err)
+					}else{
+						var lines = stdin.split('\n');
+						var filesWithKeys = [];
+						_.each(lines,function(line){
+							var fileWithKeys = processGrepLine(line);
+							fileWithKeys['repo'] = repo.full_name;
+							fileWithKeys['branch'] = branch.name;
+
+							filesWithKeys.push(fileWithKeys)
+						})
+						callback(null,filesWithKeys)
+					}
+
+				})
 			},
 			// cleanup
-			function(callback){
-				callback(null)
+			function(filesWithKeys,callback){
+				//TBD do the cleanup
+				callback(null,filesWithKeys)
 			}
 		],function(err,results){
 			callback(err,results)
@@ -641,6 +658,25 @@ console.log('url is %s',cloneUrl)
 				callback(null,matches)
 			}
 		})
+	},
+	processGrepLine: function(line){
+		// a line looks like:
+		// '/tmp/pubsublab-tlvdemo-test/index.js:var s = \'c9a70467770469462ad05d88df987e1e0aefc750\';'
+		var parts = line.split(':');
+		var filePart = parts[0];
+		var codePart = parts[1];
+
+		var fileParts = filePart.split('/');
+		fileParts.splice(0,2);
+		var file = fileParts.join('/');
+
+		var matches = codePart.match(/\b([a-f0-9]{40})\b/);
+
+		return {
+			file: file,
+			matches: matches
+		}
+
 	}
 
 

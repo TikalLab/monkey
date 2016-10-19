@@ -1,8 +1,50 @@
-var s = '@@ -3,3 +3,4 @@ var s = \'c9a70467770469462ad05d88df987e1e0aefc750\';\n var a = 1;\n var b = 2;\n var c = 3;\n+var d = 1;';
+// var grep = require('grep1');
+//
+// grep(['-rE','/\b([a-f0-9]{40})\b/','/tmp/pubsublab-tlvdemo-test/*'],function(err, stdout, stderr) {
+//   if (err || stderr) {
+//     console.log(err, stderr);
+//   } else {
+//     console.log(stdout);
+//   }
+// })
 
-var gpa = require('git-patch-additions');
+var util = require('util')
+// var grep = require('simple-grep');
+// grep('\b[0-9a-f]{5,40}\b', '/tmp/pubsublab-tlvdemo-test/', function(list){
+//   console.log(util.inspect(list,{depth:8}));
+// });
 
-var additions = gpa.get(s);
+// grep(['hello','/tmp/pubsublab-tlvdemo-test/*'],function(err, stdout, stderr) {
+//   if (err || stderr) {
+//     console.log(err, stderr);
+//   } else {
+//     console.log(stdout);
+//   }
+// })
 
-var util = require('util');
-console.log(util.inspect(additions))
+
+// const execFile = require('child_process').execFile;
+// // const child = execFile('grep', ['-rE',"'\b[0-9a-f]{5,40}\b'",'/tmp/pubsublab-tlvdemo-test/*'], function(error, stdout, stderr) {
+// const child = execFile('grep', ["-rE", "'\b[0-9a-f]{5,40}\b'","/tmp/pubsublab-tlvdemo-test/"], function(error, stdout, stderr) {
+//     if (error) {
+//         console.error('stderr', stderr);
+//         console.log('stdout', stdout);
+//         throw error;
+//     }
+//     console.log('stdout', stdout);
+// });
+var exec = require('child_process').exec;
+
+
+// exec("grep -rE '\b[0-9a-f]{5,40}\b' /tmp/pubsublab-tlvdemo-test/*", function(err, stdin, stdout){
+exec("grep -rE '[0-9a-f]{5,40}' /tmp/pubsublab-tlvdemo-test/*", function(err, stdin, stdout){
+  if(err){
+    console.log('err: ',util.inspect(err))
+  }else{
+    var lines = stdin.split('\n');
+    console.log('lines: %s',util.inspect(lines))
+  }
+
+  // console.log('stdin: ',util.inspect(stdin))
+  // console.log('stdout: ',util.inspect(stdout))
+})
