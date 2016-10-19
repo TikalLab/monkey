@@ -8,6 +8,7 @@ var atob = require('atob')
 // var simpleGit = require('simple-git')()
 var fs = require('fs')
 var url = require('url');
+var exec = require('child_process').exec;
 
 var keysFinder = require('../app_modules/keys-finder')
 
@@ -494,13 +495,17 @@ console.log('url is %s',cloneUrl)
 						callback(err)
 					}else{
 						var lines = stdin.split('\n');
+console.log('grep result: %s',util.inspect(lines))
 						var filesWithKeys = [];
 						_.each(lines,function(line){
-							var fileWithKeys = processGrepLine(line);
-							fileWithKeys['repo'] = repo.full_name;
-							fileWithKeys['branch'] = branch.name;
+							if(line){
+								var fileWithKeys = thisObject.processGrepLine(line);
+								fileWithKeys['repo'] = repo.full_name;
+								fileWithKeys['branch'] = branch.name;
 
-							filesWithKeys.push(fileWithKeys)
+								filesWithKeys.push(fileWithKeys)
+								
+							}
 						})
 						callback(null,filesWithKeys)
 					}
@@ -663,6 +668,7 @@ console.log('url is %s',cloneUrl)
 		// a line looks like:
 		// '/tmp/pubsublab-tlvdemo-test/index.js:var s = \'c9a70467770469462ad05d88df987e1e0aefc750\';'
 		var parts = line.split(':');
+console.log('parts are %s',util.inspect(parts))
 		var filePart = parts[0];
 		var codePart = parts[1];
 
