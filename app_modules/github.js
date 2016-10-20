@@ -211,7 +211,7 @@ module.exports = {
 			},
 			function(branches,callback){
 				var results = [];
-				async.each(branches,function(branch,callback){
+				async.eachLimit(branches,20,function(branch,callback){
 					thisObject.scanBranchLocally(accessToken,user,repo,branch,function(err,branchResults){
 						if(err){
 							callback(err)
@@ -303,12 +303,15 @@ module.exports = {
 			},
 			function(user,callback){
 				thisObject.getOrgRepos(accessToken,orgName,function(err,repos){
+					_.each(repos,function(repo){
+						console.log('found repo: %s',repo.full_name)
+					})
 					callback(err,user,repos)
 				})
 			},
 			function(user,repos,callback){
 				var results = [];
-				async.each(repos,function(repo,callback){
+				async.eachLimit(repos,20,function(repo,callback){
 					thisObject.scanRepoLocally(accessToken,user,repo,function(err,repoResults){
 						if(err){
 							callback(err)
@@ -463,6 +466,11 @@ console.log('url is %s',cloneUrl)
 
 		var simpleGit = require('simple-git')(dir);
 
+		// TBD
+		// remoce the *
+		// exclude .git
+		var grepCommand = util.format("grep -rE '[0-9a-f]{5,40}' %s/*",dir);
+
 		async.waterfall([
 			// create a dir specifically for this branch
 			function(callback){
@@ -490,7 +498,7 @@ console.log('url is %s',cloneUrl)
 			},
 			// scan the branch
 			function(callback){
-				exec("grep -rE '[0-9a-f]{5,40}' /tmp/pubsublab-tlvdemo-test/*", function(err, stdin, stdout){
+				exec(grepCommand, function(err, stdin, stdout){
 					if(err){
 						callback(err)
 					}else{
