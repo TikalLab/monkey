@@ -7,6 +7,7 @@ var util = require('util');
 var atob = require('atob')
 // var simpleGit = require('simple-git')()
 var fs = require('fs')
+var fse = require('fs-extra')
 var url = require('url');
 var exec = require('child_process').exec;
 
@@ -22,12 +23,12 @@ module.exports = {
 	},
 	getUser: function(accessToken,callback){
 		var headers = this.getAPIHeaders(accessToken);
-		console.log('headers are %s',util.inspect(headers))
+		// console.log('headers are %s',util.inspect(headers))
 		request('https://api.github.com/user',{headers: headers},function(error,response,body){
 			if(error){
 				callback(error);
 			}else if(response.statusCode > 300){
-				console.log('error in getUser')
+				// console.log('error in getUser')
 				callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 			}else{
 				var data = JSON.parse(body);
@@ -70,7 +71,7 @@ module.exports = {
 
 	},
 	getOrgRepos: function(accessToken,orgName,callback){
-		console.log('getting org repos for %s',orgName)
+		// console.log('getting org repos for %s',orgName)
 		var headers = this.getAPIHeaders(accessToken);
 		var repos = [];
 		var page = 1;
@@ -136,7 +137,7 @@ module.exports = {
 
 	},
 	getRepoBranches: function(accessToken,repo,callback){
-		console.log('getting repo branches for %s',repo.full_name)
+		// console.log('getting repo branches for %s',repo.full_name)
 		var headers = this.getAPIHeaders(accessToken);
 		var branches = [];
 		var page = 1;
@@ -154,7 +155,7 @@ module.exports = {
 					if(error){
 						callback(error);
 					}else if(response.statusCode > 300){
-						console.log('error in getRepoBranches for %s',repo.full_name)
+						// console.log('error in getRepoBranches for %s',repo.full_name)
 						callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 					}else{
 						var data = JSON.parse(body)
@@ -172,7 +173,7 @@ module.exports = {
 
 	},
 	scanRepo: function(accessToken,repo,callback){
-		console.log('scanning repo %s',repo.full_name)
+		// console.log('scanning repo %s',repo.full_name)
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
@@ -201,7 +202,7 @@ module.exports = {
 	},
 
 	scanRepoLocally: function(accessToken,user,repo,callback){
-		console.log('scanning repo %s',repo.full_name)
+		// console.log('scanning repo %s',repo.full_name)
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
@@ -211,7 +212,7 @@ module.exports = {
 			},
 			function(branches,callback){
 				var results = [];
-				async.eachLimit(branches,20,function(branch,callback){
+				async.eachLimit(branches,1,function(branch,callback){
 					thisObject.scanBranchLocally(accessToken,user,repo,branch,function(err,branchResults){
 						if(err){
 							callback(err)
@@ -231,7 +232,7 @@ module.exports = {
 
 
 	buildRepoScan: function(accessToken,repo,callback){
-		console.log('scanning repo %s',repo.full_name)
+		// console.log('scanning repo %s',repo.full_name)
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
@@ -264,7 +265,7 @@ module.exports = {
 		})
 	},
 	scanOrg: function(accessToken,orgName,callback){
-		console.log('scanning org %s',orgName)
+		// console.log('scanning org %s',orgName)
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
@@ -293,7 +294,7 @@ module.exports = {
 	},
 
 	scanOrgLocally: function(accessToken,orgName,callback){
-		console.log('scanning org %s locally',orgName)
+		// console.log('scanning org %s locally',orgName)
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
@@ -304,14 +305,14 @@ module.exports = {
 			function(user,callback){
 				thisObject.getOrgRepos(accessToken,orgName,function(err,repos){
 					_.each(repos,function(repo){
-						console.log('found repo: %s',repo.full_name)
+						// console.log('found repo: %s',repo.full_name)
 					})
 					callback(err,user,repos)
 				})
 			},
 			function(user,repos,callback){
 				var results = [];
-				async.eachLimit(repos,20,function(repo,callback){
+				async.eachLimit(repos,1,function(repo,callback){
 					thisObject.scanRepoLocally(accessToken,user,repo,function(err,repoResults){
 						if(err){
 							callback(err)
@@ -325,12 +326,13 @@ module.exports = {
 				})
 			}
 		],function(err,results){
+console.log('FINISHED scanning org locally!!!')			
 			callback(err,results)
 		})
 	},
 
 	buildOrgScan: function(accessToken,orgName,callback){
-		console.log('scanning org %s',orgName)
+		// console.log('scanning org %s',orgName)
 		var thisObject = this;
 		async.waterfall([
 			function(callback){
@@ -371,7 +373,7 @@ module.exports = {
     });
 	},
 	getBranch: function(accessToken,repo,branchName,callback){
-		console.log('getting barnch %s:%s',repo.full_name,branchName)
+		// console.log('getting barnch %s:%s',repo.full_name,branchName)
 
 		var headers = this.getAPIHeaders(accessToken)
 		request('https://api.github.com/repos/' + repo.full_name + '/branches/' + branchName,{headers: headers},function(error,response,body){
@@ -386,7 +388,7 @@ module.exports = {
     });
 	},
 	getTree: function(accessToken,repo,branch,callback){
-		console.log('getting tree for %s:%s',repo.full_name,branch.name)
+		// console.log('getting tree for %s:%s',repo.full_name,branch.name)
 
 	  var headers = this.getAPIHeaders(accessToken);
 
@@ -406,7 +408,7 @@ module.exports = {
 
 	},
 	scanBranch: function(accessToken,repo,branch,callback){
-		console.log('scanning branch %s:%s',repo.full_name,branch.name)
+		// console.log('scanning branch %s:%s',repo.full_name,branch.name)
 		var thisObject = this;
 		var headers = this.getAPIHeaders(accessToken);
 		async.waterfall([
@@ -425,12 +427,12 @@ module.exports = {
 		          callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 		        }else{
 		          var data = JSON.parse(body);
-		// console.log('data is %s',util.inspect(data))
+		// // console.log('data is %s',util.inspect(data))
 		          if('content' in data){
 		            var content = atob(data.content)
 								var matches = keysFinder.find(content);
 								if(matches){
-									console.log('scan result for %s:%s:%s: affected',repo.full_name,branch.name,item.path)
+									// console.log('scan result for %s:%s:%s: affected',repo.full_name,branch.name,item.path)
 									filesWithKeys.push({
 										repo: repo,
 										branch: branch,
@@ -438,7 +440,7 @@ module.exports = {
 										matches: matches
 									})
 								}else{
-									console.log('scan result for %s:%s:%s: not affected',repo.full_name,branch.name,item.path)
+									// console.log('scan result for %s:%s:%s: not affected',repo.full_name,branch.name,item.path)
 								}
 		          }
 		          callback()
@@ -455,21 +457,21 @@ module.exports = {
 	},
 
 	scanBranchLocally: function(accessToken,user,repo,branch,callback){
-		console.log('scanning branch %s:%s locally',repo.full_name,branch.name)
+		// console.log('scanning branch %s:%s locally',repo.full_name,branch.name)
 		var thisObject = this;
 		var dir = '/tmp/' + repo.owner.login + '-' + repo.name + '-' + branch.name;
-console.log('dir is %s',dir)
+// console.log('dir is %s',dir)
 		var parsedUrl = url.parse(repo.clone_url);
 		parsedUrl.auth = user.login + ':' + accessToken;
 		var cloneUrl = url.format(parsedUrl);
-console.log('url is %s',cloneUrl)
+// console.log('url is %s',cloneUrl)
 
 		var simpleGit = require('simple-git')(dir);
 
 		// TBD
 		// remoce the *
 		// exclude .git
-		var grepCommand = util.format("grep -rE '[0-9a-f]{5,40}' %s/*",dir);
+		var grepCommand = util.format("grep -rE '[0-9a-f]{40}' %s/*",dir);
 
 		async.waterfall([
 			// create a dir specifically for this branch
@@ -500,18 +502,26 @@ console.log('url is %s',cloneUrl)
 			function(callback){
 				exec(grepCommand, function(err, stdin, stdout){
 					if(err){
-						callback(err)
+						// console.log('grep failed in %s/%s. err: %s',repo.full_name,branch.name,util.inspect(err))
+						// console.log('grep command: %s',grepCommand)
+						// console.log('grep failed stdin: %s',util.inspect(stdin))
+						// console.log('grep failed stdout: %s',util.inspect(stdout))
+						// callback(err)
+						callback(null,[])
 					}else{
 						var lines = stdin.split('\n');
-console.log('grep result: %s',util.inspect(lines))
+// console.log('grep result: %s',util.inspect(lines))
 						var filesWithKeys = [];
 						_.each(lines,function(line){
 							if(line){
 								var fileWithKeys = thisObject.processGrepLine(line);
-								fileWithKeys['repo'] = repo.full_name;
-								fileWithKeys['branch'] = branch.name;
+								if(fileWithKeys.matches){
+									fileWithKeys['repo'] = repo.full_name;
+									fileWithKeys['branch'] = branch.name;
+	console.log('new find: %s',util.inspect(fileWithKeys))
+									filesWithKeys.push(fileWithKeys)
 
-								filesWithKeys.push(fileWithKeys)
+								}
 
 							}
 						})
@@ -523,7 +533,9 @@ console.log('grep result: %s',util.inspect(lines))
 			// cleanup
 			function(filesWithKeys,callback){
 				//TBD do the cleanup
-				callback(null,filesWithKeys)
+				fse.remove(dir,function(err){
+					callback(err,filesWithKeys)
+				})
 			}
 		],function(err,results){
 			callback(err,results)
@@ -546,12 +558,12 @@ console.log('grep result: %s',util.inspect(lines))
 		//           callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 		//         }else{
 		//           var data = JSON.parse(body);
-		// // console.log('data is %s',util.inspect(data))
+		// // // console.log('data is %s',util.inspect(data))
 		//           if('content' in data){
 		//             var content = atob(data.content)
 		// 						var matches = keysFinder.find(content);
 		// 						if(matches){
-		// 							console.log('scan result for %s:%s:%s: affected',repo.full_name,branch.name,item.path)
+		// 							// console.log('scan result for %s:%s:%s: affected',repo.full_name,branch.name,item.path)
 		// 							filesWithKeys.push({
 		// 								repo: repo,
 		// 								branch: branch,
@@ -559,7 +571,7 @@ console.log('grep result: %s',util.inspect(lines))
 		// 								matches: matches
 		// 							})
 		// 						}else{
-		// 							console.log('scan result for %s:%s:%s: not affected',repo.full_name,branch.name,item.path)
+		// 							// console.log('scan result for %s:%s:%s: not affected',repo.full_name,branch.name,item.path)
 		// 						}
 		//           }
 		//           callback()
@@ -577,7 +589,7 @@ console.log('grep result: %s',util.inspect(lines))
 
 
 	buildBranchScan: function(accessToken,repo,branch,callback){
-		console.log('scanning branch %s:%s',repo.full_name,branch.name)
+		// console.log('scanning branch %s:%s',repo.full_name,branch.name)
 		var thisObject = this;
 		var headers = this.getAPIHeaders(accessToken);
 		async.waterfall([
@@ -662,7 +674,7 @@ console.log('grep result: %s',util.inspect(lines))
 
 
 				var data = JSON.parse(body);
-// console.log('data is %s',util.inspect(data))
+// // console.log('data is %s',util.inspect(data))
 				var matches;
 				if('content' in data){
 					var content = atob(data.content)
@@ -676,9 +688,9 @@ console.log('grep result: %s',util.inspect(lines))
 		// a line looks like:
 		// '/tmp/pubsublab-tlvdemo-test/index.js:var s = \'c9a70467770469462ad05d88df987e1e0aefc750\';'
 		var parts = line.split(':');
-console.log('parts are %s',util.inspect(parts))
+// console.log('parts are %s',util.inspect(parts))
 		var filePart = parts[0];
-		var codePart = parts[1];
+		var codePart = parts[1] || '';
 
 		var fileParts = filePart.split('/');
 		fileParts = fileParts.slice(3);

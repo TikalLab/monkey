@@ -37,7 +37,7 @@ var exec = require('child_process').exec;
 
 
 // exec("grep -rE '\b[0-9a-f]{5,40}\b' /tmp/pubsublab-tlvdemo-test/*", function(err, stdin, stdout){
-exec("grep -rE '[0-9a-f]{5,40}' /tmp/pubsublab-tlvdemo-test/*", function(err, stdin, stdout){
+exec("grep -rE '[0-9a-f]{40}' /tmp/tikalk-fuse.dbsynch.sample-master/*", function(err, stdin, stdout){
   if(err){
     console.log('err: ',util.inspect(err))
   }else{

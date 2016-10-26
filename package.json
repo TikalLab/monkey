@@ -39,6 +39,7 @@
     "simple-git": "*",
     "simple-grep": "*",
     "grep1": "*",
+    "fs-extra": "*",
     "git-patch-additions": "*"
   }
 }
