@@ -22,6 +22,7 @@ function scan(waitingScan,callback){
   async.waterfall([
     // get the user, need their access token
     function(callback){
+      console.log('getting user for scan %s',waitingScan._id)
       var users = db.get('users');
       users.findOne({_id: waitingScan.user_id},function(err,user){
         callback(err,user)
@@ -29,19 +30,23 @@ function scan(waitingScan,callback){
     },
     // mark the scan as scanning
     function(user,callback){
-      localScan.markScanning(db,waitingScan._id.toString(),function(err){
+      console.log('got user for scan %s: %s',waitingScan._id,user._id)
+      localScans.markScanning(db,waitingScan._id.toString(),function(err){
         callback(err,user)
       })
-    }
+    },
     // scan the scan
     function(user,callback){
+      console.log('marked scan %s as scanning',waitingScan._id)
       github.scanOrgLocally(user.github.access_token,waitingScan.org_name,function(err,matches){
         callback(err,user,matches)
       })
     },
     // mark it as scanned
     function(user,matches,callback){
-      localScan.scanned(db,matches,function(err,localScan){
+      console.log('scan %s fisished',waitingScan._id)
+
+      localScans.scanned(db,waitingScan._id.toString(),matches,function(err,localScan){
         callback(err,user,localScan)
       })
     },

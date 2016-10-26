@@ -20,6 +20,7 @@ var github = require('../app_modules/github');
 
 var scans = require('../models/scans');
 var scanItems = require('../models/scan-items');
+var localScans = require('../models/local-scans');
 
 router.get('/',function(req, res, next) {
 	if(req.session.user){
@@ -172,6 +173,23 @@ router.get('/scan/:scan_id',function(req, res, next) {
 				render(req,res,'index/scan',{
 					org_name: req.params.org_name,
 					results: results
+				})
+
+			}
+		})
+	})
+})
+
+router.get('/local-scan/:local_scan_id',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		localScans.get(req.db,req.session.user._id.toString(),req.params.local_scan_id,function(err,localScan){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				console.log('grand scan results are: %s',util.inspect(results,{depth:8}))
+				render(req,res,'index/local-scan',{
+					local_scan: localScan
 				})
 
 			}
