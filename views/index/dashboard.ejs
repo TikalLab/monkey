@@ -2,7 +2,7 @@
   <% if(githubOrgs){ %>
     <% githubOrgs.forEach(function(org){ %>
       <p>
-        <a href="/scan-org/<%=org.login%>">scan <%=org.login%></a> | <a href="/build-org-scan/<%=org.login%>">build scan for <%=org.login%></a> | <a href="/scan-org-locally/<%=org.login%>">scan <%=org.login%> locally (for large orgs)</a> | <a href="/hook-org/<%=org.login%>">hook <%=org.login%></a>
+        <a href="/scan-org/<%=org.login%>">scan <%=org.login%></a> | <a href="/build-org-scan/<%=org.login%>">build scan for <%=org.login%></a> | <a href="/scan-org-locally/<%=org.login%>">scan <%=org.login%> locally (for large orgs)</a> | <a href="/build-local-org-scan/<%=org.login%>">build local scan for <%=org.login%> (for large orgs)</a> | <a href="/hook-org/<%=org.login%>">hook <%=org.login%></a>
     <% }) %>
   <% } %>
 

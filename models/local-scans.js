@@ -2,12 +2,14 @@ var util = require('util')
 var async = require('async')
 
 module.exports = {
-  create: function(userID,scm,noOfItems,db,callback){
+  create: function(userID,orgName,scm,db,callback){
     var localScans = db.get('local_scans');
     localScans.insert({
       user_id: userID,
+      org_name: orgName,
       scm: scm,
       is_finished: false,
+      is_scanning: false,
       created_at: new Date()
     },function(err,localScan){
       callback(err,localScan)
@@ -18,6 +20,19 @@ module.exports = {
     localScans.find({is_finished: false,is_scanning: false},{sort:{_id:1}},function(err,waitingScans){
       callback(err,waitingScans[0])
     })
+  },
+  markScanning(db,localScanID,callback){
+    var localScans = db.get('local_scans');
+    localScans.update({_id: localScanID},{$set:{is_scanning: true}},function(err){
+      callback(err)
+    })
+  },
+  scanned(db,matches,callback){
+    var localScans = db.get('local_scans');
+    localScans.findAndModify({_id: localScanID},{$set:{is_scanning: fasle,is_finished: true, matches: matches}},{new: true},function(err,localScan){
+      callback(err,localScan)
+    })
+
   }
   checkIfFinished: function(scanID,db,callback){
     var scans = db.get('scans');

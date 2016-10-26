@@ -138,6 +138,29 @@ router.get('/scan-org-locally/:org_name',function(req, res, next) {
 	})
 })
 
+router.get('/build-local-org-scan/:org_name',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.waterfall([
+			function(callback){
+				localScans.create(req.session.user._id.toString(),req.params.org_name,'github',req.db,function(err,scan){
+					console.log('created scan: %s',util.inspect(scan))
+					callback(err,scan)
+				})
+			},
+		],function(err,scan){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				render(req,res,'index/build-local-org-scan',{
+					scan: scan
+				})
+			}
+		})
+
+	})
+})
+
 router.get('/scan/:scan_id',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 

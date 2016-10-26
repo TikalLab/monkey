@@ -10,13 +10,12 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk(config.get('mongo.uri'));
 
-var scanItems = require('./models/scan-items')
 var localScans = require('./models/local-scans')
 
 var github = require('./app_modules/github')
 var mailer = require('./app_modules/mailer')
 
-var scanReadyTemplate = fs.readFileSync(path.join(__dirname,'./views/emails/scan-ready.ejs'), 'utf8');
+var localScanReadyTemplate = fs.readFileSync(path.join(__dirname,'./views/emails/local-scan-ready.ejs'), 'utf8');
 
 
 function scan(waitingScan,callback){
@@ -24,26 +23,26 @@ function scan(waitingScan,callback){
     // get the user, need their access token
     function(callback){
       var users = db.get('users');
-      users.findOne({_id: item.user_id},function(err,user){
+      users.findOne({_id: waitingScan.user_id},function(err,user){
         callback(err,user)
       })
     },
-    // scan the item
+    // mark the scan as scanning
     function(user,callback){
-      github.scanItem(user.github.access_token,item.item,function(err,matches){
+      localScan.markScanning(db,waitingScan._id.toString(),function(err){
+        callback(err,user)
+      })
+    }
+    // scan the scan
+    function(user,callback){
+      github.scanOrgLocally(user.github.access_token,waitingScan.org_name,function(err,matches){
         callback(err,user,matches)
       })
     },
     // mark it as scanned
     function(user,matches,callback){
-      scanItems.scanned(item,matches,db,function(err){
-        callback(err,user)
-      })
-    },
-    // check if scan is finsihed
-    function(user,callback){
-      scans.checkIfFinished(item.scan_id,db,function(err,scan){
-        callback(err,user,scan)
+      localScan.scanned(db,matches,function(err,localScan){
+        callback(err,user,localScan)
       })
     },
     // notify user if finished
@@ -54,11 +53,11 @@ function scan(waitingScan,callback){
         mailer.sendMulti(
 					[user], //recipients
 					'[' + config.get('app.name') + '] Scan finished',
-					scanReadyTemplate,
+					localScanReadyTemplate,
 					{
 						scan_id: scan._id.toString()
 					},
-					'scan-ready',
+					'local-scan-ready',
 					function(err){
 						callback(err)
 					}
@@ -67,14 +66,7 @@ function scan(waitingScan,callback){
       }
     }
   ],function(err){
-    if(err == 'ratelimit'){
-      // TBD handle rate limit
-      scanItems.postpone(item.user_id,db,function(err){
-        callback(err)
-      })
-    }else{
-      callback(err)
-    }
+    callback(err)
   })
 }
 
