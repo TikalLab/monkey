@@ -99,7 +99,7 @@ function next(){
     },
   ],function(err){
     if(err){
-      console.log('error scanning item, sleeping for 5 secs')
+      console.log('error scanning item, sleeping for 5 secs: %s',err)
       setTimeout(function(){next()},5000)
     }else{
       console.log('scanned item successfuly')

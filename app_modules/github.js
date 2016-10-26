@@ -326,8 +326,10 @@ module.exports = {
 				})
 			}
 		],function(err,results){
-console.log('FINISHED scanning org locally!!!')			
-			callback(err,results)
+console.log('FINISHED scanning org locally!!!')
+console.log('results count: %s',results.length)
+			callback(null,results)
+			// callback(err,results)
 		})
 	},
 
