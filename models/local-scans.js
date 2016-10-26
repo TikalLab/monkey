@@ -50,4 +50,10 @@ module.exports = {
     })
 
   },
+  get: function(db,userID,localScanID,callback){
+    var localScans = db.get('local_scans');
+    localScans.findOne({_id: localScanID,user_id: userID},function(err,localScan){
+      callback(err,localScan)
+    })
+  }
 }

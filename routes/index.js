@@ -187,7 +187,6 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 			if(err){
 				errorHandler.error(req,res,next,err)
 			}else{
-				console.log('grand scan results are: %s',util.inspect(results,{depth:8}))
 				render(req,res,'index/local-scan',{
 					local_scan: localScan
 				})
