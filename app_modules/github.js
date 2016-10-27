@@ -9,6 +9,7 @@ var atob = require('atob')
 var fs = require('fs')
 var fse = require('fs-extra')
 var url = require('url');
+var slug = require('slug')
 var exec = require('child_process').exec;
 
 var keysFinder = require('../app_modules/keys-finder')
@@ -328,8 +329,8 @@ module.exports = {
 		],function(err,results){
 console.log('FINISHED scanning org locally!!!')
 console.log('results count: %s',results.length)
-			callback(null,results)
-			// callback(err,results)
+			// callback(null,results)
+			callback(err,results)
 		})
 	},
 
@@ -461,7 +462,7 @@ console.log('results count: %s',results.length)
 	scanBranchLocally: function(accessToken,user,repo,branch,callback){
 		// console.log('scanning branch %s:%s locally',repo.full_name,branch.name)
 		var thisObject = this;
-		var dir = '/tmp/' + repo.owner.login + '-' + repo.name + '-' + branch.name;
+		var dir = '/tmp/' + repo.owner.login + '-' + repo.name + '-' + slug(branch.name);
 // console.log('dir is %s',dir)
 		var parsedUrl = url.parse(repo.clone_url);
 		parsedUrl.auth = user.login + ':' + accessToken;

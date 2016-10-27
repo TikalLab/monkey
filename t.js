@@ -33,18 +33,20 @@ var util = require('util')
 //     }
 //     console.log('stdout', stdout);
 // });
-var exec = require('child_process').exec;
-
-
-// exec("grep -rE '\b[0-9a-f]{5,40}\b' /tmp/pubsublab-tlvdemo-test/*", function(err, stdin, stdout){
-exec("grep -rE '[0-9a-f]{40}' /tmp/tikalk-fuse.dbsynch.sample-master/*", function(err, stdin, stdout){
-  if(err){
-    console.log('err: ',util.inspect(err))
-  }else{
-    var lines = stdin.split('\n');
-    console.log('lines: %s',util.inspect(lines))
-  }
-
-  // console.log('stdin: ',util.inspect(stdin))
-  // console.log('stdout: ',util.inspect(stdout))
-})
+// var exec = require('child_process').exec;
+//
+//
+// // exec("grep -rE '\b[0-9a-f]{5,40}\b' /tmp/pubsublab-tlvdemo-test/*", function(err, stdin, stdout){
+// exec("grep -rE '[0-9a-f]{40}' /tmp/tikalk-fuse.dbsynch.sample-master/*", function(err, stdin, stdout){
+//   if(err){
+//     console.log('err: ',util.inspect(err))
+//   }else{
+//     var lines = stdin.split('\n');
+//     console.log('lines: %s',util.inspect(lines))
+//   }
+//
+//   // console.log('stdin: ',util.inspect(stdin))
+//   // console.log('stdout: ',util.inspect(stdout))
+// })
+var slug = require('slug');
+console.log(slug('a/b'))
