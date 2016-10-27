@@ -27,6 +27,7 @@ router.get('/',function(req, res, next) {
 		res.redirect('/dashboard');
 	}else{
 		render(req,res,'index/homepage',{
+			isHomepage: true
 		});
 
 	}
@@ -245,8 +246,17 @@ function render(req,res,template,params){
 	params._ = _;
 	params.moment = moment;
 	params.appConfig = config;
+	params.config = config;
 
 	params.user = req.session.user;
+
+	if(!('active_page' in params)){
+		params.active_page = false;
+	}
+
+	if(!('isHomepage' in params)){
+		params.isHomepage = false;
+	}
 
 	res.render(template,params);
 }

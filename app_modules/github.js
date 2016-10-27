@@ -321,7 +321,7 @@ module.exports = {
 							results = results.concat(repoResults);
 							callback()
 						}
-					})
+					})	
 				},function(err){
 					callback(err,results)
 				})
