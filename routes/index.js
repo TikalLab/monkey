@@ -33,25 +33,38 @@ router.get('/',function(req, res, next) {
 	}
 })
 
+router.get('/connect-scm',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+		render(req,res,'index/connect-scm',{
+			
+		})
+	})
+})
+
 router.get('/dashboard',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 
-		async.parallel([
-			function(callback){
-				if('github' in req.session.user){
-					github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
-						callback(err,orgs)
-					})
-				}else{
-					callback(null,null)
+		if(!('github' in req.session.user)){
+			res.redirect('/connect-scm')
+		}else{
+			async.parallel([
+				function(callback){
+					if('github' in req.session.user){
+						github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
+							callback(err,orgs)
+						})
+					}else{
+						callback(null,null)
+					}
 				}
-			}
-		],function(err,results){
-			render(req,res,'index/dashboard',{
-				githubOrgs: results[0]
+			],function(err,results){
+				render(req,res,'index/dashboard',{
+					githubOrgs: results[0]
+				})
+
 			})
 
-		})
+		}
 	})
 })
 
