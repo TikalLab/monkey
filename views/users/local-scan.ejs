@@ -14,12 +14,13 @@
         <tbody>
           <% local_scan.matches.forEach(function(match){ %>
             <% match.matches.forEach(function(key){ %>
-              <tr>
+              <% var trID = slug(match.repo) + '_' + slug(match.branch) + '_' + slug(match.file) + '_' + key%>
+              <tr id="<%=trID%>">
                 <td><%=match.repo%></td>
                 <td><%=match.branch%></td>
                 <td><%=match.file%></td>
                 <td><%=key%></td>
-                <td><button class="btn btn-success" onclick="approveKey('<%=match.repo%>','<%=match.branch%>','<%=match.file%>','<%=key%>')">Approve Key</button></td>
+                <td><button class="btn btn-success" onclick="approveKey('<%=match.repo%>','<%=match.branch%>','<%=match.file%>','<%=key%>','<%=trID%>')">Approve Key</button></td>
               </tr>
             <% }) %>
           <% }) %>
@@ -31,7 +32,7 @@
 
 
 <script>
-function approveKey(repo,branch,file,key){
+function approveKey(repo,branch,file,key,trID){
   $.ajax({
 		type: 'POST',
 		url: '/approve-key',
@@ -44,7 +45,11 @@ function approveKey(repo,branch,file,key){
       key: key,
 		},
 		success: function(data){
-			alert('success')
+      $('#' + trID).effect('highlight', {}, 200, function(){
+				    $(this).fadeOut('slow', function(){
+				        $(this).remove();
+				    });
+				});
 		},
 		error: function(err){
       console.log(err)

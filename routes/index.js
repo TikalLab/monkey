@@ -12,6 +12,7 @@ var path = require('path');
 var _ = require('underscore');
 var us = require('underscore.string');
 var async = require('async');
+var slug = require('slug')
 
 var loginEnforcer = require('../app_modules/login-enforcer')
 var errorHandler = require('../app_modules/error');
@@ -252,7 +253,7 @@ router.get('/hook-org/:org_name',function(req, res, next) {
 })
 
 router.post('/approve-key',function(req, res, next) {
-	approvedKeys.create(req.body.scanID,req.body.org,req.body.repo,req.body.branch,req.body.file,req.body.key,req.db,function(err,approvedKey){
+	approvedKeys.create(req.body.scan_id,req.body.org,req.body.repo,req.body.branch,req.body.file,req.body.key,req.db,function(err,approvedKey){
 		res.json({
 			approved_key: approvedKey
 		})
@@ -272,6 +273,7 @@ function render(req,res,template,params){
 	params.appConfig = config;
 	params.config = config;
 	params.alert = '';
+	params.slug = slug;
 
 	params.user = req.session.user;
 
