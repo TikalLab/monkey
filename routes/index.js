@@ -10,6 +10,7 @@ var fs = require('fs');
 var ejs = require('ejs');
 var path = require('path');
 var _ = require('underscore');
+var us = require('underscore.string');
 var async = require('async');
 
 var loginEnforcer = require('../app_modules/login-enforcer')
@@ -36,7 +37,7 @@ router.get('/',function(req, res, next) {
 router.get('/connect-scm',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 		render(req,res,'index/connect-scm',{
-			
+
 		})
 	})
 })
@@ -201,7 +202,7 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 			if(err){
 				errorHandler.error(req,res,next,err)
 			}else{
-				render(req,res,'index/local-scan',{
+				render(req,res,'users/local-scan',{
 					local_scan: localScan
 				})
 
@@ -257,9 +258,11 @@ function render(req,res,template,params){
 
 	params.app = req.app;
 	params._ = _;
+	params.us = us;
 	params.moment = moment;
 	params.appConfig = config;
 	params.config = config;
+	params.alert = '';
 
 	params.user = req.session.user;
 
