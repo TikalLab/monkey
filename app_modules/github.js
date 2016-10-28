@@ -321,7 +321,7 @@ module.exports = {
 							results = results.concat(repoResults);
 							callback()
 						}
-					})	
+					})
 				},function(err){
 					callback(err,results)
 				})
@@ -699,7 +699,7 @@ console.log('results count: %s',results.length)
 		fileParts = fileParts.slice(3);
 		var file = fileParts.join('/');
 
-		var matches = codePart.match(/\b([a-f0-9]{40})\b/);
+		var matches = codePart.match(/\b([a-f0-9]{40})\b/g);
 
 		return {
 			file: file,

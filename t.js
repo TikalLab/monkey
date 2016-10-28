@@ -48,5 +48,8 @@ var util = require('util')
 //   // console.log('stdin: ',util.inspect(stdin))
 //   // console.log('stdout: ',util.inspect(stdout))
 // })
-var slug = require('slug');
-console.log(slug('a/b'))
+// var slug = require('slug');
+// console.log(slug('a/b'))
+var s = '6e8bd6bdccbe78899e3cc06b31b6dbf4324c2e56 ae3477e27be955de7e1bc9adfdca626b478d3cb2 ffffffffffffffffffffffffffffffffffffffff';
+var matches = s.match(/\b([a-f0-9]{40})\b/g)
+console.log(util.inspect(matches))
