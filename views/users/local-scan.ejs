@@ -8,19 +8,48 @@
             <th>branch</th>
             <th>file</th>
             <th>keys found</th>
+            <th>actions</th>
           </tr>
         </thead>
         <tbody>
           <% local_scan.matches.forEach(function(match){ %>
-            <tr>
-              <td><%=match.repo%></td>
-              <td><%=match.branch%></td>
-              <td><%=match.file%></td>
-              <td><%=match.matches[0]%></td>
-            </tr>
+            <% match.matches.forEach(function(key){ %>
+              <tr>
+                <td><%=match.repo%></td>
+                <td><%=match.branch%></td>
+                <td><%=match.file%></td>
+                <td><%=key%></td>
+                <td><button class="btn btn-success" onclick="approveKey('<%=match.repo%>','<%=match.branch%>','<%=match.file%>','<%=key%>')">Approve Key</button></td>
+              </tr>
+            <% }) %>
           <% }) %>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+
+<script>
+function approveKey(repo,branch,file,key){
+  $.ajax({
+		type: 'POST',
+		url: '/approve-key',
+		data:{
+			scan_id: '<%=local_scan._id%>',
+      org: '<%=local_scan.org_name%>',
+			repo: repo,
+      branch: branch,
+      file: file,
+      key: key,
+		},
+		success: function(data){
+			alert('success')
+		},
+		error: function(err){
+      console.log(err)
+			alert('something went wrong: ' + err);
+		}
+	})
+}
+</script>

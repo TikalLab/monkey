@@ -22,6 +22,7 @@ var github = require('../app_modules/github');
 var scans = require('../models/scans');
 var scanItems = require('../models/scan-items');
 var localScans = require('../models/local-scans');
+var approvedKeys = require('../models/approved-keys');
 
 router.get('/',function(req, res, next) {
 	if(req.session.user){
@@ -246,6 +247,14 @@ router.get('/hook-org/:org_name',function(req, res, next) {
 
 			}
 
+		})
+	})
+})
+
+router.post('/approve-key',function(req, res, next) {
+	approvedKeys.create(req.body.scanID,req.body.org,req.body.repo,req.body.branch,req.body.file,req.body.key,req.db,function(err,approvedKey){
+		res.json({
+			approved_key: approvedKey
 		})
 	})
 })
