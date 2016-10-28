@@ -18,7 +18,7 @@
               <tr id="<%=trID%>">
                 <td><%=match.repo%></td>
                 <td><%=match.branch%></td>
-                <td><%=match.file%></td>
+                <td><a target="_blank" href="<%=util.format('https://github.com/%s/blob/%s/%s',match.repo,match.branch,match.file)%>"><%=match.file%></a></td>
                 <td><%=key%></td>
                 <td><button class="btn btn-success" onclick="approveKey('<%=match.repo%>','<%=match.branch%>','<%=match.file%>','<%=key%>','<%=trID%>')">Approve Key</button></td>
               </tr>

@@ -274,6 +274,8 @@ function render(req,res,template,params){
 	params.config = config;
 	params.alert = '';
 	params.slug = slug;
+	params.util = util;
+
 
 	params.user = req.session.user;
 
