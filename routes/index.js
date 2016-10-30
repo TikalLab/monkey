@@ -61,13 +61,27 @@ router.get('/dashboard',function(req, res, next) {
 					}
 				}
 			],function(err,results){
-				render(req,res,'index/dashboard',{
+				render(req,res,'users/dashboard',{
 					githubOrgs: results[0]
 				})
 
 			})
 
 		}
+	})
+})
+
+router.get('/org/:org_name',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+		github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
+			render(req,res,'users/org',{
+				org: req.params.org_name,
+				active_page: 'org_' + req.params.org_name,
+				githubOrgs: orgs
+			})
+		})
+
+
 	})
 })
 

@@ -145,12 +145,13 @@
 				<!-- Main navigation -->
 				<ul class="navigation">
 					<li class="<%= (active_page == 'dashboard' ? 'active' : '')%>">
-						<a class="expand <%=(us.startsWith(active_page,'dashboard_')) ? 'level-open' : 'level-closed' %>" id="<%=(us.startsWith(active_page,'dashboard_')) ? 'second-level' : '' %>" href="#"><span>Dashboards</span> <i class="icon-screen2"></i></a>
+						<a class="expand <%=(us.startsWith(active_page,'dashboard_')) ? 'level-open' : 'level-closed' %>" id="<%=(us.startsWith(active_page,'dashboard_')) ? 'second-level' : '' %>" href="#"><span>Organizations</span> <i class="icon-screen2"></i></a>
 						<ul>
+   							<% githubOrgs.forEach(function(org){ %>
+  								<li class="<%= (active_page == 'org' + org.login ? 'active' : '')%>"><a href="/org/<%=org.login%>"><%=org.login%></a></li>
+  							<% }) %>
+
 						</ul>
-					</li>
-					<li class="<%= (active_page == 'add_dashboard' ? 'active' : '')%>">
-						<a href="/add-dashboard"><span>Add Dashboard</span> <i class="icon-new"></i></a>
 					</li>
 				</ul>
 				<!-- /main navigation -->
