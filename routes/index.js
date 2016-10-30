@@ -238,16 +238,30 @@ router.get('/scan/:scan_id',function(req, res, next) {
 router.get('/local-scan/:local_scan_id',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 
-		localScans.get(req.db,req.session.user._id.toString(),req.params.local_scan_id,function(err,localScan){
+		async.parallel([
+			function(callback){
+				github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
+					callback(err,orgs)
+				})
+			},
+			function(callback){
+				localScans.get(req.db,req.session.user._id.toString(),req.params.local_scan_id,function(err,localScan){
+					callback(err,localScan)
+				})
+			}
+		],function(err,results){
 			if(err){
 				errorHandler.error(req,res,next,err)
 			}else{
 				render(req,res,'users/local-scan',{
-					local_scan: localScan
+					githubOrgs: results[0],
+					local_scan: results[1]
 				})
 
 			}
 		})
+
+
 	})
 })
 
