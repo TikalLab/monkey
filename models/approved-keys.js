@@ -16,4 +16,10 @@ module.exports = {
       callback(err,approvedKey)
     })
   },
+  all: function(db,callback){
+    var approvedKeys = db.get('approved_keys');
+    approvedKeys.find({},function(err,keys){
+      callback(err,keys)
+    })
+  }
 }

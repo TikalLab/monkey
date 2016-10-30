@@ -248,11 +248,27 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 				localScans.get(req.db,req.session.user._id.toString(),req.params.local_scan_id,function(err,localScan){
 					callback(err,localScan)
 				})
+			},
+			function(callback){
+				approvedKeys.all(req.db,function(err,approvedKeys){
+					callback(err,approvedKeys)
+				})
 			}
 		],function(err,results){
 			if(err){
 				errorHandler.error(req,res,next,err)
 			}else{
+
+
+				// filter out approved keys
+				var loaclScan = results[1];
+				var approvedKeys = results[2];
+				var unapprovedMatches = _.reject(localScan.suspected_keys,function(suspectedKey){
+					return _.find(approvedKeys,function(approvedKey){
+						return approvedKey.key == suspectedKey
+					})
+				})
+
 				render(req,res,'users/local-scan',{
 					githubOrgs: results[0],
 					local_scan: results[1]

@@ -1,5 +1,6 @@
 var util = require('util')
 var async = require('async')
+var _ = require('underscore')
 
 module.exports = {
   create: function(userID,orgName,scm,db,callback){
@@ -35,13 +36,30 @@ module.exports = {
   },
   scanned: function(db,localScanID,matches,callback){
     var localScans = db.get('local_scans');
+
+    // flatten matches
+
+    var suspectedKeys = [];
+    _.each(matches,function(match){
+      _.each(match.matches,function(suspectedKey){
+        suspectedKeys.push({
+          repo: match.repo,
+          branch: match.branch,
+          file: match.file,
+          suspected_key: suspectedKey
+        })
+      })
+    })
+
+    suspectedKeys = _.uniq(suspectedKeys);
+    
     localScans.findAndModify({
       _id: localScanID
     },{
       $set:{
         is_scanning: false,
         is_finished: true,
-        matches: matches
+        suspected_keys: suspectedKeys
       }
     },{
       new: true
