@@ -261,17 +261,18 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 
 
 				// filter out approved keys
-				var loaclScan = results[1];
+				var localScan = results[1];
 				var approvedKeys = results[2];
-				var unapprovedMatches = _.reject(localScan.suspected_keys,function(suspectedKey){
+				var suspectedKeys = _.reject(localScan.suspected_keys,function(suspectedKey){
 					return _.find(approvedKeys,function(approvedKey){
-						return approvedKey.key == suspectedKey
+						return approvedKey.key == suspectedKey.key
 					})
 				})
 
+				localScan.suspected_keys = suspectedKeys;
 				render(req,res,'users/local-scan',{
 					githubOrgs: results[0],
-					local_scan: results[1]
+					local_scan: localScan
 				})
 
 			}

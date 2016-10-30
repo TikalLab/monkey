@@ -7,22 +7,20 @@
             <th>repo</th>
             <th>branch</th>
             <th>file</th>
-            <th>keys found</th>
+            <th>suspected key</th>
             <th>actions</th>
           </tr>
         </thead>
         <tbody>
-          <% local_scan.matches.forEach(function(match){ %>
-            <% match.matches.forEach(function(key){ %>
-              <% var trID = slug(match.repo) + '_' + slug(match.branch) + '_' + slug(match.file) + '_' + key%>
-              <tr id="<%=trID%>">
-                <td><%=match.repo%></td>
-                <td><%=match.branch%></td>
-                <td><a target="_blank" href="<%=util.format('https://github.com/%s/blob/%s/%s',match.repo,match.branch,match.file)%>"><%=match.file%></a></td>
-                <td><%=key%></td>
-                <td><button class="btn btn-success" onclick="approveKey('<%=match.repo%>','<%=match.branch%>','<%=match.file%>','<%=key%>','<%=trID%>')">Approve Key</button></td>
-              </tr>
-            <% }) %>
+          <% local_scan.suspected_keys.forEach(function(suspectedKey){ %>
+            <% var trID = slug(suspectedKey.repo) + '_' + slug(suspectedKey.branch) + '_' + slug(suspectedKey.file) + '_' + suspectedKey.key%>
+            <tr id="<%=trID%>">
+              <td><%=suspectedKey.repo%></td>
+              <td><%=suspectedKey.branch%></td>
+              <td><a target="_blank" href="<%=util.format('https://github.com/%s/blob/%s/%s',suspectedKey.repo,suspectedKey.branch,suspectedKey.file)%>"><%=suspectedKey.file%></a></td>
+              <td><%=suspectedKey.key%></td>
+              <td><button class="btn btn-success" onclick="approveKey('<%=suspectedKey.repo%>','<%=suspectedKey.branch%>','<%=suspectedKey.file%>','<%=suspectedKey.key%>','<%=trID%>')">Approve Key</button></td>
+            </tr>
           <% }) %>
         </tbody>
       </table>

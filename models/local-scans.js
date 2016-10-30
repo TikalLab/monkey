@@ -46,13 +46,13 @@ module.exports = {
           repo: match.repo,
           branch: match.branch,
           file: match.file,
-          suspected_key: suspectedKey
+          key: suspectedKey
         })
       })
     })
 
     suspectedKeys = _.uniq(suspectedKeys);
-    
+
     localScans.findAndModify({
       _id: localScanID
     },{

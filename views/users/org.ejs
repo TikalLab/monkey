@@ -42,7 +42,7 @@
               <td><a href="/local-scan/<%=scan._id.toString()%>"><%=scan._id.toString()%></a></td>
               <td><%=moment(scan.created_at).calendar()%></td>
               <td><%=scan.is_scanning ? 'Scanning' : (scan.is_finished ? 'Finished' : 'Waiting')%></td>
-              <td><%='matches' in scan ? scan.matches.length : 0%></td>
+              <td><%='suspected_keys' in scan ? scan.suspected_keys.length : 0%></td>
             </tr>
           <% }) %>
         </tbody>
