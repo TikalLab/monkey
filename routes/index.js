@@ -272,7 +272,8 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 				localScan.suspected_keys = suspectedKeys;
 				render(req,res,'users/local-scan',{
 					githubOrgs: results[0],
-					local_scan: localScan
+					local_scan: localScan,
+					active_page: 'org_' + localScan.org_name
 				})
 
 			}
