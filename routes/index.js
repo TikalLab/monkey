@@ -74,13 +74,31 @@ router.get('/dashboard',function(req, res, next) {
 
 router.get('/org/:org_name',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
-		github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
-			render(req,res,'users/org',{
-				org: req.params.org_name,
-				active_page: 'org_' + req.params.org_name,
-				githubOrgs: orgs
-			})
+
+		async.parallel([
+			function(callback){
+				github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
+					callback(err,orgs)
+				})
+			},
+			function(callback){
+				localScans.getPerOrg(req.db,req.session.user._id.toString(),req.params.org_name,function(err,scans){
+					callback(err,scans)
+				})
+			},
+		],function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				render(req,res,'users/org',{
+					org: req.params.org_name,
+					active_page: 'org_' + req.params.org_name,
+					githubOrgs: results[0],
+					scans: results[1]
+				})
+			}
 		})
+
 
 
 	})

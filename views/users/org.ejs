@@ -22,3 +22,31 @@
 
 	</ul>
 </div>
+
+
+<div class="panel panel-default">
+	<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Scans</h6></div>
+    <div class="datatable">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Started at</th>
+            <th>Status</th>
+            <th># keys found</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% scans.forEach(function(scan){ %>
+            <tr>
+              <td><%=scan._id.toString()%></td>
+              <td><%=moment(scan.created_at).calendar()%></td>
+              <td><%=scan.is_scanning ? 'Scanning' : (scan.is_finished ? 'Finished' : 'Waiting')%></td>
+              <td><%='matches' in scan ? scan.matches.length : 0%></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

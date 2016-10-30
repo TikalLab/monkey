@@ -55,5 +55,12 @@ module.exports = {
     localScans.findOne({_id: localScanID,user_id: userID},function(err,localScan){
       callback(err,localScan)
     })
+  },
+  getPerOrg: function(db,userID,orgName,callback){
+    var localScans = db.get('local_scans');
+    localScans.find({user_id: userID,org_name: orgName},function(err,userLocalScans){
+      callback(err,userLocalScans)
+    })
+
   }
 }
