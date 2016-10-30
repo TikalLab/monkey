@@ -19,6 +19,7 @@ var errorHandler = require('../app_modules/error');
 // var unsubscriber = require('../app_modules/unsubscriber');
 // var configurations = require('../app_modules/configurations');
 var github = require('../app_modules/github');
+var alertIcons = require('../app_modules/alert-icons');
 
 var scans = require('../models/scans');
 var scanItems = require('../models/scan-items');
@@ -184,9 +185,14 @@ router.get('/build-local-org-scan/:org_name',function(req, res, next) {
 			if(err){
 				errorHandler.error(req,res,next,err)
 			}else{
-				render(req,res,'index/build-local-org-scan',{
-					scan: scan
-				})
+				req.session.alert = {
+					type: 'success',
+					message: util.format('Scan %s succerssfully started. We will email you when it is ready',scan._id)
+				};
+				res.redirect('/org/' + req.params.org_name)
+				// render(req,res,'index/build-local-org-scan',{
+				// 	scan: scan
+				// })
 			}
 		})
 
@@ -286,10 +292,12 @@ function render(req,res,template,params){
 	params.moment = moment;
 	params.appConfig = config;
 	params.config = config;
-	params.alert = '';
 	params.slug = slug;
 	params.util = util;
 
+	params.alertIcons = alertIcons;
+	params.alert = req.session.alert;
+	delete req.session.alert;
 
 	params.user = req.session.user;
 
