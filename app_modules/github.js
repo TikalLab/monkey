@@ -117,7 +117,11 @@ module.exports = {
 				return page;
 			},
 			function(callback){
-				request('https://api.github.com/user/repos?page=' + page,{headers: headers},function(error,response,body){
+				var qs = {
+					page: page,
+					type: 'owner'
+				}
+				request('https://api.github.com/user/repos',{headers: headers, qs: qs},function(error,response,body){
 					if(error){
 						callback(error);
 					}else if(response.statusCode > 300){

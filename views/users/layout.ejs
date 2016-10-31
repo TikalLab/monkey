@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SnapGlue - a DevOps dashboard for non DevOps</title>
+<title>MonKey - Keeps your code safe from hazardous private keys</title>
 
 <link rel="icon" href="<%=config.get('app.cdn_url')%>/images/snapglue-icon192.png">
 <link href="<%=config.get('app.cdn_url')%>/londinium/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -80,7 +80,7 @@
 	<!-- Navbar -->
 	<div class="navbar navbar-inverse" role="navigation">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/"><img src="<%=config.get('app.cdn_url')%>/images/snapglue-white32.png" alt="CodeMill"></a>
+			<a class="navbar-brand" href="/"><img src="<%=config.get('app.cdn_url')%>/images/snapglue-white32.png" alt="MonKey"></a>
 			<a class="sidebar-toggle"><i class="icon-paragraph-justify2"></i></a>
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-icons">
 				<span class="sr-only">Toggle navbar</span>
@@ -148,8 +148,17 @@
           <li class="<%= (active_page == 'orgs' ? 'active' : '')%>">
 						<a class="expand <%=(us.startsWith(active_page,'org_')) ? 'level-open' : 'level-closed' %>" id="<%=(us.startsWith(active_page,'org_')) ? 'second-level' : '' %>" href="#"><span>Organizations</span> <i class="icon-people"></i></a>
 						<ul>
-   							<% githubOrgs.forEach(function(org){ %>
+   							<% user.github.orgs.forEach(function(org){ %>
   								<li class="<%= (active_page == 'org_' + org.login ? 'active' : '')%>"><a href="/org/<%=org.login%>"><%=org.login%></a></li>
+  							<% }) %>
+
+						</ul>
+					</li>
+          <li class="<%= (active_page == 'repos' ? 'active' : '')%>">
+						<a class="expand <%=(us.startsWith(active_page,'repo_')) ? 'level-open' : 'level-closed' %>" id="<%=(us.startsWith(active_page,'repo_')) ? 'second-level' : '' %>" href="#"><span>Repositories</span> <i class="icon-people"></i></a>
+						<ul>
+   							<% user.github.repos.forEach(function(repo){ %>
+  								<li class="<%= (active_page == 'repo_' + repo.id ? 'active' : '')%>"><a href="/repo/<%=repo.id%>"><%=repo.name%></a></li>
   							<% }) %>
 
 						</ul>

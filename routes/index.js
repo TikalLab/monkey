@@ -47,28 +47,8 @@ router.get('/connect-scm',function(req, res, next) {
 
 router.get('/dashboard',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
-
-		if(!('github' in req.session.user)){
-			res.redirect('/connect-scm')
-		}else{
-			async.parallel([
-				function(callback){
-					if('github' in req.session.user){
-						github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
-							callback(err,orgs)
-						})
-					}else{
-						callback(null,null)
-					}
-				}
-			],function(err,results){
-				render(req,res,'users/dashboard',{
-					githubOrgs: results[0]
-				})
-
-			})
-
-		}
+		render(req,res,'users/dashboard',{
+		})
 	})
 })
 
@@ -76,11 +56,6 @@ router.get('/org/:org_name',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 
 		async.parallel([
-			function(callback){
-				github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
-					callback(err,orgs)
-				})
-			},
 			function(callback){
 				localScans.getPerOrg(req.db,req.session.user._id.toString(),req.params.org_name,function(err,scans){
 					callback(err,scans)
@@ -93,8 +68,7 @@ router.get('/org/:org_name',function(req, res, next) {
 				render(req,res,'users/org',{
 					org: req.params.org_name,
 					active_page: 'org_' + req.params.org_name,
-					githubOrgs: results[0],
-					scans: results[1]
+					scans: results[0]
 				})
 			}
 		})
@@ -104,6 +78,36 @@ router.get('/org/:org_name',function(req, res, next) {
 	})
 })
 
+router.get('/repo/:repo_id',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.parallel([
+			function(callback){
+				localScans.getPerRepo(req.db,req.session.user._id.toString(),req.params.repo_id,function(err,scans){
+					callback(err,scans)
+				})
+			},
+		],function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+
+				var repo = _.find(req.session.user.github.repos,function(repo){
+					return repo.id == req.params.repo_id
+				})
+
+				render(req,res,'users/repo',{
+					repo: repo,
+					active_page: 'repo_' + req.params.repo_id,
+					scans: results[0]
+				})
+			}
+		})
+
+
+
+	})
+})
 router.get('/logout',function(req, res, next) {
 	delete req.session.user;
 	res.redirect('/');
@@ -194,7 +198,7 @@ router.get('/build-local-org-scan/:org_name',function(req, res, next) {
 
 		async.waterfall([
 			function(callback){
-				localScans.create(req.session.user._id.toString(),req.params.org_name,'github',req.db,function(err,scan){
+				localScans.createOrgScan(req.session.user._id.toString(),req.params.org_name,'github',req.db,function(err,scan){
 					console.log('created scan: %s',util.inspect(scan))
 					callback(err,scan)
 				})
@@ -208,6 +212,34 @@ router.get('/build-local-org-scan/:org_name',function(req, res, next) {
 					message: util.format('Scan %s succerssfully started. We will email you when it is ready',scan._id)
 				};
 				res.redirect('/org/' + req.params.org_name)
+				// render(req,res,'index/build-local-org-scan',{
+				// 	scan: scan
+				// })
+			}
+		})
+
+	})
+})
+
+router.get('/build-local-repo-scan/:repo_id',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.waterfall([
+			function(callback){
+				localScans.createRepoScan(req.session.user._id.toString(),req.params.repo_id,'github',req.db,function(err,scan){
+					console.log('created scan: %s',util.inspect(scan))
+					callback(err,scan)
+				})
+			},
+		],function(err,scan){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				req.session.alert = {
+					type: 'success',
+					message: util.format('Scan %s succerssfully started. We will email you when it is ready',scan._id)
+				};
+				res.redirect('/repo/' + req.params.repo_id)
 				// render(req,res,'index/build-local-org-scan',{
 				// 	scan: scan
 				// })
@@ -240,11 +272,6 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 
 		async.parallel([
 			function(callback){
-				github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
-					callback(err,orgs)
-				})
-			},
-			function(callback){
 				localScans.get(req.db,req.session.user._id.toString(),req.params.local_scan_id,function(err,localScan){
 					callback(err,localScan)
 				})
@@ -261,8 +288,8 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 
 
 				// filter out approved keys
-				var localScan = results[1];
-				var approvedKeys = results[2];
+				var localScan = results[0];
+				var approvedKeys = results[1];
 				var suspectedKeys = _.reject(localScan.suspected_keys,function(suspectedKey){
 					return _.find(approvedKeys,function(approvedKey){
 						return approvedKey.key == suspectedKey.key
@@ -271,7 +298,6 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 
 				localScan.suspected_keys = suspectedKeys;
 				render(req,res,'users/local-scan',{
-					githubOrgs: results[0],
 					local_scan: localScan,
 					active_page: 'org_' + localScan.org_name
 				})

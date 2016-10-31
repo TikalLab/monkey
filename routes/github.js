@@ -72,7 +72,30 @@ console.log('data from github: %s',util.inspect(data))
 				new: true
 			},function(err,user){
 				callback(err,user)
-			})
+			}),
+			// add user orgs to session
+			function(user,callback){
+				github.getUserOrgs(user.github.access_token,function(err,orgs){
+					if(err){
+						callback(err)
+					}else{
+						user.github.orgs = orgs;
+						callback(null,user)
+					}
+				})
+			},
+			// add user repos to session
+			function(user,callback){
+				github.getUserRepos(user.github.access_token,function(err,repos){
+					if(err){
+						callback(err)
+					}else{
+						user.github.repos = repos;
+						callback(null,user)
+					}
+				})
+			}
+
 		}
  	],function(err,user){
  		if(err){

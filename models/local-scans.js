@@ -3,11 +3,24 @@ var async = require('async')
 var _ = require('underscore')
 
 module.exports = {
-  create: function(userID,orgName,scm,db,callback){
+  createOrgScan: function(userID,orgName,scm,db,callback){
     var localScans = db.get('local_scans');
     localScans.insert({
       user_id: userID,
       org_name: orgName,
+      scm: scm,
+      is_finished: false,
+      is_scanning: false,
+      created_at: new Date()
+    },function(err,localScan){
+      callback(err,localScan)
+    })
+  },
+  createRepoScan: function(userID,repoID,scm,db,callback){
+    var localScans = db.get('local_scans');
+    localScans.insert({
+      user_id: userID,
+      repo_id: repoID,
       scm: scm,
       is_finished: false,
       is_scanning: false,
@@ -79,6 +92,12 @@ module.exports = {
     localScans.find({user_id: userID,org_name: orgName},function(err,userLocalScans){
       callback(err,userLocalScans)
     })
-
+  },
+  getPerRepo: function(db,userID,repoID,callback){
+    var localScans = db.get('local_scans');
+    localScans.find({user_id: userID,repo_id: repoID},function(err,userLocalScans){
+      callback(err,userLocalScans)
+    })
   }
+
 }
