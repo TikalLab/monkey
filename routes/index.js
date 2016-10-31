@@ -239,7 +239,7 @@ router.get('/build-local-repo-scan/:repo_owner/:repo_name',function(req, res, ne
 					type: 'success',
 					message: util.format('Scan %s succerssfully started. We will email you when it is ready',scan._id)
 				};
-				res.redirect('/repo/' + req.params.repo_id)
+				res.redirect('/repo/' + req.params.repo_owner + '/' + req.params.repo_name)
 				// render(req,res,'index/build-local-org-scan',{
 				// 	scan: scan
 				// })

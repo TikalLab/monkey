@@ -96,9 +96,9 @@ module.exports = {
       callback(err,userLocalScans)
     })
   },
-  getPerRepo: function(db,userID,repoID,callback){
+  getPerRepo: function(db,userID,repoOwner,repoName,callback){
     var localScans = db.get('local_scans');
-    localScans.find({user_id: userID,repo_id: repoID},function(err,userLocalScans){
+    localScans.find({user_id: userID,'repo.owner': repoOwner,'repo.name': repoName},function(err,userLocalScans){
       callback(err,userLocalScans)
     })
   }

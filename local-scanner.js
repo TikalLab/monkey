@@ -43,7 +43,7 @@ function scan(waitingScan,callback){
           callback(err,user,matches)
         })
       }else if('repo' in waitingScan){
-        github.scanRepoLocally(user.github.access_token,waitingScan.repo_owner,waitingScan.repo_name,function(err,matches){
+        github.startRepoScan(user.github.access_token,user,waitingScan.repo_owner,waitingScan.repo_name,function(err,matches){
           callback(err,user,matches)
         })
       }

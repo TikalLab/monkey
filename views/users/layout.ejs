@@ -158,7 +158,7 @@
 						<a class="expand <%=(us.startsWith(active_page,'repo_')) ? 'level-open' : 'level-closed' %>" id="<%=(us.startsWith(active_page,'repo_')) ? 'second-level' : '' %>" href="#"><span>Repositories</span> <i class="icon-people"></i></a>
 						<ul>
    							<% user.github.repos.forEach(function(repo){ %>
-  								<li class="<%= (active_page == 'repo_' + repo.id ? 'active' : '')%>"><a href="/repo/<%=repo.id%>"><%=repo.name%></a></li>
+  								<li class="<%= (active_page == 'repo_' + repo.owner.login + '_ ' + repo.name ? 'active' : '')%>"><a href="/repo/<%=repo.owner.login%>/<%=repo.name%>"><%=repo.name%></a></li>
   							<% }) %>
 
 						</ul>
