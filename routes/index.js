@@ -352,6 +352,53 @@ router.get('/hook-org/:org_name',function(req, res, next) {
 	})
 })
 
+router.get('/hook-repo/:repo_owner/:repo_name',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.waterfall([
+			function(callback){
+				github.hookRepo(req.session.user.github.access_token,req.params.repo_owner,req.params.repo_name,function(err,hook){
+					callback(err,hook)
+				})
+			},
+			function(hook,callback){
+				var users = req.db.get('users');
+				users.findAndModify({
+					_id: req.session.user._id
+				},{
+					$addToSet:{
+						'hooks.repos': {
+							repo: {
+								owner: req.params.repo_owner,
+								name: req.params.repo_name
+							},,
+							hook_id: hook.id
+						}
+					}
+				},{
+					new: true
+				},function(err,user){
+					callback(err,user)
+				});
+			}
+		],function(err,user){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				req.session.user = user;
+				req.session.alert = {
+					type: 'success',
+					message: 'Repository hooked succerssfully. You will now be notified whenever a suspected key is pushed to this repository'
+				}
+				res.redirect('/repo/' + req.params.repo_owner + '/' + req.params.repo_name)
+
+			}
+
+		})
+	})
+})
+
+
 router.post('/approve-key',function(req, res, next) {
 	approvedKeys.create(req.body.scan_id,req.body.org,req.body.repo,req.body.branch,req.body.file,req.body.key,req.db,function(err,approvedKey){
 		res.json({

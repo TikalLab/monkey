@@ -622,6 +622,30 @@ console.log('results count: %s',results.length)
 			}
 		});
 	},
+	hookRepo: function(accessToken,repoOwner,repoName,callback){
+		var headers = this.getAPIHeaders(accessToken);
+
+		var form = {
+			"name": "web",
+			"active": true,
+			"events": ["push"],
+			"config": {
+				"url": "https://" + config.get('github.webhook_domain') + "/github/repo-webhook",
+				"content_type": "json",
+				"secret": config.get('github.hook_secret')
+			}
+		};
+		request.post('https://api.github.com/repos/' + repoOwner + '/' + repoName + '/hooks',{headers: headers, body: JSON.stringify(form)},function(error,response,body){
+			if(error){
+				callback(error);
+			}else if(response.statusCode > 300){
+				callback(response.statusCode + ' : ' + body);
+			}else{
+				var hook = JSON.parse(body);
+				callback(null,hook);
+			}
+		});
+	},
 	scanPush: function(accessToken,push,callback){
 		var headers = this.getAPIHeaders(accessToken);
 		var filesWithKeys =[];
