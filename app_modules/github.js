@@ -214,9 +214,8 @@ module.exports = {
 					callback(err,user)
 				})
 			},
-			function(user,callbacl){
+			function(user,callback){
 				var u = util.format('https://api.github.com/repos/%s/%s',repoOwner,repoName)
-				console.log('u is %s',u)
 				request(u,{headers: headers},function(error,response,body){
 					if(error){
 						callback(error);
@@ -233,7 +232,7 @@ module.exports = {
 			if(err){
 				callback(err)
 			}else{
-				scanRepoLocally(accessToken,user,repo,callback)
+				thisObject.scanRepoLocally(accessToken,user,repo,callback)
 			}
 		})
 
@@ -572,7 +571,6 @@ console.log('results count: %s',results.length)
 			},
 			// cleanup
 			function(filesWithKeys,callback){
-				//TBD do the cleanup
 				fse.remove(dir,function(err){
 					callback(err,filesWithKeys)
 				})
@@ -581,49 +579,6 @@ console.log('results count: %s',results.length)
 			callback(err,results)
 		})
 
-		// var headers = this.getAPIHeaders(accessToken);
-		// async.waterfall([
-		// 	function(callback){
-		// 		thisObject.getTree(accessToken,repo,branch,function(err,tree){
-		// 			callback(err,tree)
-		// 		})
-		// 	},
-		// 	function(tree,callback){
-		// 		var filesWithKeys = [];
-		// 		async.each(tree,function(item,callback){
-		// 			request(item.url,{headers: headers},function(error,response,body){
-		//         if(error){
-		//           callback(error);
-		//         }else if(response.statusCode > 300){
-		//           callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
-		//         }else{
-		//           var data = JSON.parse(body);
-		// // // console.log('data is %s',util.inspect(data))
-		//           if('content' in data){
-		//             var content = atob(data.content)
-		// 						var matches = keysFinder.find(content);
-		// 						if(matches){
-		// 							// console.log('scan result for %s:%s:%s: affected',repo.full_name,branch.name,item.path)
-		// 							filesWithKeys.push({
-		// 								repo: repo,
-		// 								branch: branch,
-		// 								file: item,
-		// 								matches: matches
-		// 							})
-		// 						}else{
-		// 							// console.log('scan result for %s:%s:%s: not affected',repo.full_name,branch.name,item.path)
-		// 						}
-		//           }
-		//           callback()
-		//         }
-		//       })
-		// 		},function(err){
-		// 			callback(err,filesWithKeys)
-		// 		})
-		// 	}
-		// ],function(err,results){
-		// 	callback(err,results)
-		// })
 
 	},
 

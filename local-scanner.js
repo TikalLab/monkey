@@ -52,7 +52,8 @@ function scan(waitingScan,callback){
     },
     // mark it as scanned
     function(user,matches,callback){
-      console.log('scan %s fisished',waitingScan._id)
+      console.log('scan %s finished',waitingScan._id)
+      console.log('matches are: %s',util.inspect(matches))
 
       localScans.scanned(db,waitingScan._id.toString(),matches,function(err,localScan){
         callback(err,user,localScan)
