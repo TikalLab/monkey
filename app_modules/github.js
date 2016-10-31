@@ -205,7 +205,19 @@ module.exports = {
 			callback(err,results)
 		})
 	},
-
+	startRepoScan: function(accessToken,user,repoOwner,repoName,callback){
+		request('https://api.github.com/repos/' + repoOwner + '/' + repoName,{headers: headers},function(error,response,body){
+			if(error){
+				callback(error);
+			}else if(response.statusCode > 300){
+				// console.log('error in getRepoBranches for %s',repo.full_name)
+				callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
+			}else{
+				var repo = JSON.parse(body)
+				scanRepoLocally(accessToken,user,repo,callback)
+			}
+		});
+	},
 	scanRepoLocally: function(accessToken,user,repo,callback){
 		// console.log('scanning repo %s',repo.full_name)
 		var thisObject = this;

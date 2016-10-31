@@ -16,11 +16,14 @@ module.exports = {
       callback(err,localScan)
     })
   },
-  createRepoScan: function(userID,repoID,scm,db,callback){
+  createRepoScan: function(userID,repoOwner,repoName,scm,db,callback){
     var localScans = db.get('local_scans');
     localScans.insert({
       user_id: userID,
-      repo_id: repoID,
+      repo: {
+        owner: repoOwner,
+        name: repoName
+      }
       scm: scm,
       is_finished: false,
       is_scanning: false,

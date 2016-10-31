@@ -221,12 +221,12 @@ router.get('/build-local-org-scan/:org_name',function(req, res, next) {
 	})
 })
 
-router.get('/build-local-repo-scan/:repo_id',function(req, res, next) {
+router.get('/build-local-repo-scan/:repo_owner/:repo_name',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 
 		async.waterfall([
 			function(callback){
-				localScans.createRepoScan(req.session.user._id.toString(),req.params.repo_id,'github',req.db,function(err,scan){
+				localScans.createRepoScan(req.session.user._id.toString(),req.params.repo_owner,req.params.repo_name,'github',req.db,function(err,scan){
 					console.log('created scan: %s',util.inspect(scan))
 					callback(err,scan)
 				})

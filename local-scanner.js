@@ -38,9 +38,15 @@ function scan(waitingScan,callback){
     // scan the scan
     function(user,callback){
       console.log('marked scan %s as scanning',waitingScan._id)
-      github.scanOrgLocally(user.github.access_token,waitingScan.org_name,function(err,matches){
-        callback(err,user,matches)
-      })
+      if('org_name' in waitingScan){
+        github.scanOrgLocally(user.github.access_token,waitingScan.org_name,function(err,matches){
+          callback(err,user,matches)
+        })
+      }else if('repo' in waitingScan){
+        github.scanRepoLocally(user.github.access_token,waitingScan.repo_owner,waitingScan.repo_name,function(err,matches){
+          callback(err,user,matches)
+        })
+      }
     },
     // mark it as scanned
     function(user,matches,callback){
