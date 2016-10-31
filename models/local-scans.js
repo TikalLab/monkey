@@ -23,7 +23,7 @@ module.exports = {
       repo: {
         owner: repoOwner,
         name: repoName
-      }
+      },
       scm: scm,
       is_finished: false,
       is_scanning: false,

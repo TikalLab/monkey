@@ -78,12 +78,12 @@ router.get('/org/:org_name',function(req, res, next) {
 	})
 })
 
-router.get('/repo/:repo_id',function(req, res, next) {
+router.get('/repo/:repo_owner/:repo_name',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 
 		async.parallel([
 			function(callback){
-				localScans.getPerRepo(req.db,req.session.user._id.toString(),req.params.repo_id,function(err,scans){
+				localScans.getPerRepo(req.db,req.session.user._id.toString(),req.params.repo_owner,req.params.repo_name,function(err,scans){
 					callback(err,scans)
 				})
 			},
@@ -93,12 +93,12 @@ router.get('/repo/:repo_id',function(req, res, next) {
 			}else{
 
 				var repo = _.find(req.session.user.github.repos,function(repo){
-					return repo.id == req.params.repo_id
+					return repo.owner.login == req.params.repo_owner && repo.name == req.params.repo_name
 				})
 
 				render(req,res,'users/repo',{
 					repo: repo,
-					active_page: 'repo_' + req.params.repo_id,
+					active_page: 'repo_' + req.params.repo_owner + '_' + req.params.repo_name,
 					scans: results[0]
 				})
 			}
