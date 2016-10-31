@@ -340,7 +340,11 @@ router.get('/hook-org/:org_name',function(req, res, next) {
 				errorHandler.error(req,res,next,err)
 			}else{
 				req.session.user = user;
-				res.redirect('/dashboard')
+				req.session.alert = {
+					type: 'success',
+					message: 'Organization hooked succerssfully. You will now be notified whenever a suspected key is pushed to any of this organization\'s repositories'
+				}
+				res.redirect('/org/' + req.params.org_name )
 
 			}
 

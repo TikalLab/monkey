@@ -10,12 +10,12 @@ module.exports = {
 		}else if(!('orgs' in req.session.user.github)){
 			github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
 				req.session.user.github.orgs = orgs;
-				res.redirect('/')
+				res.redirect(req.originalUrl)
 			})
 		}else if(!('repos' in req.session.user.github)){
 			github.getUserRepos(req.session.user.github.access_token,function(err,repos){
 				req.session.user.github.repos = repos;
-				res.redirect('/')
+				res.redirect(req.originalUrl)
 			})
 		}else{
 			callback();

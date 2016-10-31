@@ -9,6 +9,10 @@
 			<span class="bottom-info bg-danger"><div>Scan Now</div></span>
       </a>
 		</li>
+
+    <% if (!('hooks' in user) || !_.find(user.hooks.orgs,function(orgHook){
+      return orgHook.org_name == org
+    })){ %>
 		<li class="bg-success">
 			<div class="top-info">
 				<a href="/hook-org/<%=org%>">Hook <%=org%> With Alerts</a>
@@ -18,6 +22,7 @@
 			<span class="bottom-info bg-primary"><div>Hook Now</div></span>
       </a>
 		</li>
+    <% } %>
 
 
 	</ul>
