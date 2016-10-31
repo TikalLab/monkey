@@ -39,11 +39,13 @@ function scan(waitingScan,callback){
     function(user,callback){
       console.log('marked scan %s as scanning',waitingScan._id)
       if('org_name' in waitingScan){
+        console.log('will start org scan')
         github.scanOrgLocally(user.github.access_token,waitingScan.org_name,function(err,matches){
           callback(err,user,matches)
         })
       }else if('repo' in waitingScan){
-        github.startRepoScan(user.github.access_token,user,waitingScan.repo_owner,waitingScan.repo_name,function(err,matches){
+        console.log('will start repo scan')
+        github.startRepoScan(user.github.access_token,user,waitingScan.repo.owner,waitingScan.repo.name,function(err,matches){
           callback(err,user,matches)
         })
       }

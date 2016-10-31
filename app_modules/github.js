@@ -206,7 +206,8 @@ module.exports = {
 		})
 	},
 	startRepoScan: function(accessToken,user,repoOwner,repoName,callback){
-
+		var headers = this.getAPIHeaders(accessToken);
+		var thisObject = this;
 		async.waterfall([
 			function(callback){
 				thisObject.getUser(accessToken,function(err,user){
@@ -214,7 +215,9 @@ module.exports = {
 				})
 			},
 			function(user,callbacl){
-				request('https://api.github.com/repos/' + repoOwner + '/' + repoName,{headers: headers},function(error,response,body){
+				var u = util.format('https://api.github.com/repos/%s/%s',repoOwner,repoName)
+				console.log('u is %s',u)
+				request(u,{headers: headers},function(error,response,body){
 					if(error){
 						callback(error);
 					}else if(response.statusCode > 300){
