@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          <% local_scan.suspected_keys.forEach(function(suspectedKey){ %>
+          <% push_scan.suspected_keys.forEach(function(suspectedKey){ %>
             <% var trID = slug(suspectedKey.repo) + '_' + slug(suspectedKey.branch) + '_' + slug(suspectedKey.file) + '_' + suspectedKey.key%>
             <tr id="<%=trID%>">
               <td><%=suspectedKey.repo%></td>
@@ -35,8 +35,7 @@ function approveKey(repo,branch,file,key,trID){
 		type: 'POST',
 		url: '/approve-key',
 		data:{
-			scan_id: '<%=local_scan._id%>',
-      org: '<%=local_scan.org_name%>',
+			scan_id: '<%=push_scan._id%>',
 			repo: repo,
       branch: branch,
       file: file,
