@@ -48,6 +48,11 @@ function scan(waitingScan,callback){
         github.startRepoScan(user.github.access_token,user,waitingScan.repo.owner,waitingScan.repo.name,function(err,matches){
           callback(err,user,matches)
         })
+      }else if('is_account_scan' in waitingScan){
+        console.log('will start account scan')
+        github.scanAccountLocally(user.github.access_token,function(err,matches){
+          callback(err,user,matches)
+        })
       }
     },
     // mark it as scanned

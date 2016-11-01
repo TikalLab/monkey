@@ -369,6 +369,42 @@ console.log('results count: %s',results.length)
 			callback(err,results)
 		})
 	},
+	scanAccountLocally: function(accessToken,callback){
+		// console.log('scanning org %s locally',orgName)
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getUser(accessToken,function(err,user){
+					callback(err,user)
+				})
+			},
+			function(user,callback){
+				thisObject.getUserRepos(accessToken,function(err,repos){
+					callback(err,user,repos)
+				})
+			},
+			function(user,repos,callback){
+				var results = [];
+				async.eachLimit(repos,1,function(repo,callback){
+					thisObject.scanRepoLocally(accessToken,user,repo,function(err,repoResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(repoResults);
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,results)
+				})
+			}
+		],function(err,results){
+console.log('FINISHED scanning account locally!!!')
+console.log('results count: %s',results.length)
+			// callback(null,results)
+			callback(err,results)
+		})
+	},
 
 	buildOrgScan: function(accessToken,orgName,callback){
 		// console.log('scanning org %s',orgName)
