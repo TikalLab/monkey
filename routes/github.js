@@ -14,6 +14,8 @@ var github = require('../app_modules/github');
 var errorHandler = require('../app_modules/error');
 var mailer = require('../app_modules/mailer');
 
+var pushScans = require('../models/push-scans');
+
 var alertTemplate = fs.readFileSync(path.join(__dirname,'../views/emails/alert.ejs'), 'utf8');
 
 router.get('/authorize',function(req,res,next){
@@ -218,6 +220,11 @@ function processPush(user,push,db){
 			})
 		},
 		function(filesWithKeys,callback){
+			pushScans.create(user._id.toString(),push,filesWithKeys,db,function(err,pushScan){
+				callback(err,filesWithKeys,pushScan)
+			})
+		},
+		function(filesWithKeys,pushScan,callback){
 			if(!filesWithKeys){
 				callback()
 			}else{
@@ -229,7 +236,7 @@ function processPush(user,push,db){
 					'[' + config.get('app.name') + '] Possible private key committed alert',
 					alertTemplate,
 					{
-						files_with_keys: filesWithKeys
+						push_scan: pushScan
 					},
 					'alert',
 					function(err){

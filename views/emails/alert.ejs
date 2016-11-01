@@ -1,26 +1,5 @@
 <p>Hi %recipient.name%,</p>
-<p>We have found an aledgely private key in a code committed to one of your repositories:</p>
-
-<table>
-  <tr>
-    <th>repo</th>
-    <th>branch</th>
-    <th>file</th>
-    <th>keys found</th>
-  </tr>
-<% files_with_keys.forEach(function(file){ %>
-  <tr>
-    <td><%=file.repo.name%></td>
-    <td><%=file.branch%></td>
-    <td><%=file.file%></td>
-    <td>
-      <% file.matches.forEach(function(match){ %>
-        <%=match%><br/>
-      <% }) %>
-    </td>
-  </tr>
-<% }) %>
-</table>
+<p>We have found an aledgely private key in a code committed to one of your repositories. Please make sure to urgently <a href="http://<%=config.get('app.domain')%>/push-scan/<%=push_scan._id.toString()%>">check it here</a></p>
 
 
 <p>&nbsp;</p>
