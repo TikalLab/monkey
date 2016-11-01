@@ -494,6 +494,101 @@ router.get('/hook-repo/:repo_owner/:repo_name',function(req, res, next) {
 	})
 })
 
+function hookRepo(userID,accessToken,repoOwner,repoName,callback){
+	async.waterfall([
+		function(callback){
+			github.hookRepo(accessToken,repoOwner,repoName,function(err,hook){
+				callback(err,hook)
+			})
+		},
+		function(hook,callback){
+			var users = req.db.get('users');
+			users.findAndModify({
+				_id: userID
+			},{
+				$addToSet:{
+					'hooks.repos': {
+						repo: {
+							owner: repoOwner,
+							name: repoName
+						},
+						hook_id: hook.id
+					}
+				}
+			},{
+				new: true
+			},function(err,user){
+				callback(err,user)
+			});
+		}
+	],function(err,user){
+		callback(err,user)
+	})
+
+}
+router.get('/hook-account',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.waterfall([
+			function(callback){
+				github.getUserRepos(req.session.user.github.access_token,function(err,repos){
+					callback(err,repos)
+				})
+			},
+			function(repos,callback){
+				var hooks = [];
+				async.each(repos,function(repo,callback){
+
+					github.hookRepo(req.session.github.access_token,repo.owner.login,repo.name,function(err,hook){
+						if(err){
+							// ignore????
+							callback()
+						}else{
+							hooks.push({
+								repo: {
+									owner: repo.owner.login,
+									name: repo.name
+								},
+								hook_id: hook.id
+							})
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,hooks)
+				})
+			},
+			function(hooks,callback){
+				var users = req.db.get('users');
+				users.findAndModify({
+					_id: req.session.user._id
+				},{
+					$addToSet:{
+						'hooks.repos': hooks
+					}
+				},{
+					new: true
+				},function(err,user){
+					callback(err,user)
+				});
+			}
+		],function(err,user){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				req.session.user = user;
+				req.session.alert = {
+					type: 'success',
+					message: 'Account hooked succerssfully. You will now be notified whenever a suspected key is pushed to any of your repositories.'
+				}
+				res.redirect('/account')
+
+			}
+
+		})
+	})
+})
+
 
 router.post('/approve-key',function(req, res, next) {
 	approvedKeys.create(req.body.scan_id,req.body.org,req.body.repo,req.body.branch,req.body.file,req.body.key,req.db,function(err,approvedKey){
