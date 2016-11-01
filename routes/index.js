@@ -371,7 +371,7 @@ router.get('/hook-repo/:repo_owner/:repo_name',function(req, res, next) {
 							repo: {
 								owner: req.params.repo_owner,
 								name: req.params.repo_name
-							},,
+							},
 							hook_id: hook.id
 						}
 					}

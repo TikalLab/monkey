@@ -11,10 +11,10 @@
 		</li>
 		<li class="bg-success">
 			<div class="top-info">
-				<a href="/hook-repo/<%=repo.id%>">Hook <%=repo.full_name%> With Alerts</a>
+				<a href="/hook-repo/<%=repo.owner.login%>/<%=repo.name%>">Hook <%=repo.full_name%> With Alerts</a>
 				<small></small>
 			</div>
-			<a href="/hook-repo/<%=repo.id%>"><i class="icon-mail-send"></i>
+			<a href="/hook-repo/<%=repo.owner.login%>/<%=repo.name%>"><i class="icon-mail-send"></i>
 			<span class="bottom-info bg-primary"><div>Hook Now</div></span>
       </a>
 		</li>
