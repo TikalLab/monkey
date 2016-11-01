@@ -494,38 +494,6 @@ router.get('/hook-repo/:repo_owner/:repo_name',function(req, res, next) {
 	})
 })
 
-function hookRepo(userID,accessToken,repoOwner,repoName,callback){
-	async.waterfall([
-		function(callback){
-			github.hookRepo(accessToken,repoOwner,repoName,function(err,hook){
-				callback(err,hook)
-			})
-		},
-		function(hook,callback){
-			var users = req.db.get('users');
-			users.findAndModify({
-				_id: userID
-			},{
-				$addToSet:{
-					'hooks.repos': {
-						repo: {
-							owner: repoOwner,
-							name: repoName
-						},
-						hook_id: hook.id
-					}
-				}
-			},{
-				new: true
-			},function(err,user){
-				callback(err,user)
-			});
-		}
-	],function(err,user){
-		callback(err,user)
-	})
-
-}
 router.get('/hook-account',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 
@@ -539,11 +507,13 @@ router.get('/hook-account',function(req, res, next) {
 				var hooks = [];
 				async.each(repos,function(repo,callback){
 
-					github.hookRepo(req.session.github.access_token,repo.owner.login,repo.name,function(err,hook){
+					github.hookRepo(req.session.user.github.access_token,repo.owner.login,repo.name,function(err,hook){
 						if(err){
+console.log('%s failed to hooked: %s',repo.full_name,err)
 							// ignore????
 							callback()
 						}else{
+console.log('%s hooked',repo.full_name)
 							hooks.push({
 								repo: {
 									owner: repo.owner.login,
@@ -564,7 +534,10 @@ router.get('/hook-account',function(req, res, next) {
 					_id: req.session.user._id
 				},{
 					$addToSet:{
-						'hooks.repos': hooks
+						'hooks.repos': {$each: hooks}
+					},
+					$set: {
+						'github.is_account_hooked': true
 					}
 				},{
 					new: true
