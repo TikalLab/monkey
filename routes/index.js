@@ -24,6 +24,7 @@ var alertIcons = require('../app_modules/alert-icons');
 var scans = require('../models/scans');
 var scanItems = require('../models/scan-items');
 var localScans = require('../models/local-scans');
+var pushScans = require('../models/push-scans');
 var approvedKeys = require('../models/approved-keys');
 
 router.get('/',function(req, res, next) {
@@ -300,6 +301,48 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 				render(req,res,'users/local-scan',{
 					local_scan: localScan,
 					active_page: 'org_' + localScan.org_name
+				})
+
+			}
+		})
+
+
+	})
+})
+
+router.get('/push-scan/:push_scan_id',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.parallel([
+			function(callback){
+				pushScans.get(req.db,req.session.user._id.toString(),req.params.push_scan_id,function(err,pushScan){
+					callback(err,pushScan)
+				})
+			},
+			function(callback){
+				approvedKeys.all(req.db,function(err,approvedKeys){
+					callback(err,approvedKeys)
+				})
+			}
+		],function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+
+
+				// filter out approved keys
+				var pushScan = results[0];
+				var approvedKeys = results[1];
+				var suspectedKeys = _.reject(pushScan.suspected_keys,function(suspectedKey){
+					return _.find(approvedKeys,function(approvedKey){
+						return approvedKey.key == suspectedKey.key
+					})
+				})
+
+				pushScan.suspected_keys = suspectedKeys;
+				render(req,res,'users/push-scan',{
+					push_scan: pushScan,
+					active_page: 'repo_' + pushScan.push.repository.owner.name + '_' + pushScan.push.repository.name
 				})
 
 			}

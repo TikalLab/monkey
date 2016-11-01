@@ -1,0 +1,58 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Daily Report</h6></div>
+    <div class="datatable">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>repo</th>
+            <th>branch</th>
+            <th>file</th>
+            <th>suspected key</th>
+            <th>actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% local_scan.suspected_keys.forEach(function(suspectedKey){ %>
+            <% var trID = slug(suspectedKey.repo) + '_' + slug(suspectedKey.branch) + '_' + slug(suspectedKey.file) + '_' + suspectedKey.key%>
+            <tr id="<%=trID%>">
+              <td><%=suspectedKey.repo%></td>
+              <td><%=suspectedKey.branch%></td>
+              <td><a target="_blank" href="<%=util.format('https://github.com/%s/blob/%s/%s',suspectedKey.repo,suspectedKey.branch,suspectedKey.file)%>"><%=suspectedKey.file%></a></td>
+              <td><%=suspectedKey.key%></td>
+              <td><button class="btn btn-success" onclick="approveKey('<%=suspectedKey.repo%>','<%=suspectedKey.branch%>','<%=suspectedKey.file%>','<%=suspectedKey.key%>','<%=trID%>')">Approve Key</button></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function approveKey(repo,branch,file,key,trID){
+  $.ajax({
+		type: 'POST',
+		url: '/approve-key',
+		data:{
+			scan_id: '<%=local_scan._id%>',
+      org: '<%=local_scan.org_name%>',
+			repo: repo,
+      branch: branch,
+      file: file,
+      key: key,
+		},
+		success: function(data){
+      $('#' + trID).effect('highlight', {}, 200, function(){
+				    $(this).fadeOut('slow', function(){
+				        $(this).remove();
+				    });
+				});
+		},
+		error: function(err){
+      console.log(err)
+			alert('something went wrong: ' + err);
+		}
+	})
+}
+</script>

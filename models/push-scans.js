@@ -1,5 +1,6 @@
 var util = require('util')
 var moment = require('moment')
+var _ = require('underscore')
 
 module.exports = {
   create: function(userID,push,matches,db,callback){
@@ -26,4 +27,11 @@ module.exports = {
       callback(err,pushScan)
     })
   },
+  get: function(db,userID,pushScanID,callback){
+    var pushScans = db.get('push_scans');
+    pushScans.findOne({_id: pushScanID,user_id: userID},function(err,pushScan){
+      callback(err,pushScan)
+    })
+  },
+
 }
