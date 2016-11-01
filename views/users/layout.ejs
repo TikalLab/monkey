@@ -145,6 +145,9 @@
 				<!-- Main navigation -->
 				<ul class="navigation">
 					<li class="<%= (active_page == 'dashboard' ? 'active' : '')%>"><a href="/dashboard"><span>Dashboard</span><i class="icon-screen2"></i></a></li>
+          <li class="<%= (active_page == 'account' ? 'active' : '')%>">
+            <a href="/account">Github Account</a>
+          </li>
           <li class="<%= (active_page == 'orgs' ? 'active' : '')%>">
 						<a class="expand <%=(us.startsWith(active_page,'org_')) ? 'level-open' : 'level-closed' %>" id="<%=(us.startsWith(active_page,'org_')) ? 'second-level' : '' %>" href="#"><span>Organizations</span> <i class="icon-people"></i></a>
 						<ul>

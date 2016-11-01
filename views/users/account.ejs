@@ -1,0 +1,53 @@
+<div class="row">
+	<ul class="info-blocks">
+		<li class="bg-primary">
+			<div class="top-info">
+				<a href="/build-local-account-scan">Scan Account Now</a>
+				<small></small>
+			</div>
+			<a href="/build-local-account-scan"><i class="icon-zoom-in2"></i>
+			<span class="bottom-info bg-danger"><div>Scan Now</div></span>
+      </a>
+		</li>
+
+		<li class="bg-success">
+			<div class="top-info">
+				<a href="/hook-account">Hook Account With Alerts</a>
+				<small></small>
+			</div>
+			<a href="/hook-account"><i class="icon-mail-send"></i>
+			<span class="bottom-info bg-primary"><div>Hook Now</div></span>
+      </a>
+		</li>
+
+
+	</ul>
+</div>
+
+
+<div class="panel panel-default">
+	<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Scans</h6></div>
+    <div class="datatable">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Started at</th>
+            <th>Status</th>
+            <th># keys found</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% scans.forEach(function(scan){ %>
+            <tr>
+              <td><a href="/local-scan/<%=scan._id.toString()%>"><%=scan._id.toString()%></a></td>
+              <td><%=moment(scan.created_at).calendar()%></td>
+              <td><%=scan.is_scanning ? 'Scanning' : (scan.is_finished ? 'Finished' : 'Waiting')%></td>
+              <td><%='suspected_keys' in scan ? scan.suspected_keys.length : 0%></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

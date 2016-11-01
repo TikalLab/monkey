@@ -101,6 +101,12 @@ module.exports = {
     localScans.find({user_id: userID,'repo.owner': repoOwner,'repo.name': repoName},function(err,userLocalScans){
       callback(err,userLocalScans)
     })
+  },
+  getPerAccount: function(db,userID,callback){
+    var localScans = db.get('local_scans');
+    localScans.find({user_id: userID, is_account_scan: true},function(err,userLocalScans){
+      callback(err,userLocalScans)
+    })
   }
 
 }

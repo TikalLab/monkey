@@ -53,6 +53,31 @@ router.get('/dashboard',function(req, res, next) {
 	})
 })
 
+router.get('/account',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.parallel([
+			function(callback){
+				localScans.getPerAccount(req.db,req.session.user._id.toString(),function(err,scans){
+					callback(err,scans)
+				})
+			},
+		],function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				render(req,res,'users/account',{
+					active_page: 'user',
+					scans: results[0]
+				})
+			}
+		})
+
+
+
+	})
+})
+
 router.get('/org/:org_name',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 
