@@ -16,6 +16,19 @@ module.exports = {
       callback(err,localScan)
     })
   },
+  createAccountScan: function(userID,scm,db,callback){
+    var localScans = db.get('local_scans');
+    localScans.insert({
+      user_id: userID,
+      is_account_scan: true,
+      scm: scm,
+      is_finished: false,
+      is_scanning: false,
+      created_at: new Date()
+    },function(err,localScan){
+      callback(err,localScan)
+    })
+  },
   createRepoScan: function(userID,repoOwner,repoName,scm,db,callback){
     var localScans = db.get('local_scans');
     localScans.insert({
