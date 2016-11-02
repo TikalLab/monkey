@@ -56,32 +56,33 @@
 	max-height: 32px;
 }
 @media(max-width:767px) {
-	
+
 	.inner-section{
 		padding-top: 75px;
 		padding-bottom: 75px;
 	}
-	
+
 }
 
 /*==========
 Following is the switch of testimonials to grey background
 ==========*/
-#who-we-are .single-feedback .box{
+#testimonials .single-feedback .box{
 	background: #fff;
 }
 
-#who-we-are .single-feedback .client-pic{
+#testimonials .single-feedback .client-pic{
 	border: 3px solid #f7f8fa;
 	box-shadow: 0px 0px 0px 3px #fff;
 }
 
-#who-we-are .single-feedback .box:after{
+#testimonials .single-feedback .box:after{
 	border-top-color: #fff;
 }
 /*==========
 End switch of testimonials to grey background
 ==========*/
+
 
 .single-feedback .client-pic {
 	height: 96px;
