@@ -13,6 +13,10 @@
 		"webhook_domain": "monkey-staging.herokuapp.com",
 		"view": {
 			"list_limit": 1
+		},
+		"async_limits":{
+			"repos": 3,
+			"branches": 3
 		}
 	},
 	"mongo": {

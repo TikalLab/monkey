@@ -249,7 +249,7 @@ module.exports = {
 			},
 			function(branches,callback){
 				var results = [];
-				async.eachLimit(branches,1,function(branch,callback){
+				async.eachLimit(branches,Number(config.get('app.async_limits.branches')),function(branch,callback){
 					thisObject.scanBranchLocally(accessToken,user,repo,branch,function(err,branchResults){
 						if(err){
 							callback(err)
@@ -349,7 +349,7 @@ module.exports = {
 			},
 			function(user,repos,callback){
 				var results = [];
-				async.eachLimit(repos,1,function(repo,callback){
+				async.eachLimit(repos,Number(config.get('app.async_limits.repos')),function(repo,callback){
 					thisObject.scanRepoLocally(accessToken,user,repo,function(err,repoResults){
 						if(err){
 							callback(err)
@@ -385,7 +385,7 @@ console.log('results count: %s',results.length)
 			},
 			function(user,repos,callback){
 				var results = [];
-				async.eachLimit(repos,1,function(repo,callback){
+				async.eachLimit(repos,Number(config.get('app.async_limits.repos	')),function(repo,callback){
 					thisObject.scanRepoLocally(accessToken,user,repo,function(err,repoResults){
 						if(err){
 							callback(err)

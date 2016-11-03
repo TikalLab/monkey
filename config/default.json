@@ -13,6 +13,10 @@
 		"webhook_domain": "facetogether.ngrok.io",
 		"view": {
 			"list_limit": 1
+		},
+		"async_limits":{
+			"repos": 1,
+			"branches": 1
 		}
 	},
 	"mongo": {
