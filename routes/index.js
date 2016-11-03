@@ -39,11 +39,9 @@ router.get('/',function(req, res, next) {
 })
 
 router.get('/connect-scm',function(req, res, next) {
-	loginEnforcer.enforce(req,res,next,function(){
 		render(req,res,'index/connect-scm',{
 
 		})
-	})
 })
 
 router.get('/dashboard',function(req, res, next) {
