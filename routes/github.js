@@ -227,6 +227,8 @@ function processPush(user,push,db){
 		function(filesWithKeys,pushScan,callback){
 			if(!filesWithKeys){
 				callback()
+			}else if(filesWithKeys.length == 0){
+				callback()
 			}else{
 				// TBD notify user
 				console.log('need to notify user about files with keys: %s',util.inspect(filesWithKeys,{depth:8}))
