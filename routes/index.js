@@ -16,7 +16,7 @@ var slug = require('slug')
 
 var loginEnforcer = require('../app_modules/login-enforcer')
 var errorHandler = require('../app_modules/error');
-// var unsubscriber = require('../app_modules/unsubscriber');
+var unsubscriber = require('../app_modules/unsubscriber');
 // var configurations = require('../app_modules/configurations');
 var github = require('../app_modules/github');
 var alertIcons = require('../app_modules/alert-icons');
@@ -568,6 +568,25 @@ router.post('/approve-key',function(req, res, next) {
 		})
 	})
 })
+
+router.get('/unsubscribe/:email_type/:user_id/:code', function(req, res, next) {
+	if(!unsubscriber.verify(req.params.user_id,req.params.code)){
+		// now what?
+	}else{
+		var users = req.db.get('users');
+		var updateSet = {};
+		updateSet['unsubscribes.' + req.params.email_type] = true;
+		users.update({_id: req.params.user_id},{$set:updateSet},function(err,ok){
+			if(err){
+				errorHandler.error(req,res,next,err);
+			}else{
+				render(req,res,'index/unsubscribed',{
+					email_type: req.params.email_type
+				})
+			}
+		})
+	}
+});
 
 function render(req,res,template,params){
 
