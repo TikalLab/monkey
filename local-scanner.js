@@ -114,7 +114,8 @@ function next(){
   ],function(err){
     if(err){
       console.log('error scanning item, sleeping for 5 secs: %s',err)
-      setTimeout(function(){next()},5000)
+      // setTimeout(function(){next()},5000)
+      process.exit();
     }else{
       console.log('scanned item successfuly')
       return next()
