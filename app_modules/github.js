@@ -385,7 +385,7 @@ console.log('results count: %s',results.length)
 			},
 			function(user,repos,callback){
 				var results = [];
-				async.eachLimit(repos,Number(config.get('app.async_limits.repos	')),function(repo,callback){
+				async.eachLimit(repos,Number(config.get('app.async_limits.repos')),function(repo,callback){
 					thisObject.scanRepoLocally(accessToken,user,repo,function(err,repoResults){
 						if(err){
 							callback(err)
