@@ -612,7 +612,11 @@ console.log('results count: %s',results.length)
 				})
 			}
 		],function(err,results){
-			callback(err,results)
+			if(err){
+				console.log('errpr scanning local branch %s: %s',branch.name,err)
+			}
+			// callback(err,results)
+			callback(null,results)
 		})
 
 
