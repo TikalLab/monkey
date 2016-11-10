@@ -8,17 +8,19 @@
             <th>branch</th>
             <th>file</th>
             <th>suspected key</th>
+						<th>severity</th>
             <th>actions</th>
           </tr>
         </thead>
         <tbody>
           <% local_scan.suspected_keys.forEach(function(suspectedKey){ %>
             <% var trID = slug(suspectedKey.repo) + '_' + slug(suspectedKey.branch) + '_' + slug(suspectedKey.file) + '_' + suspectedKey.key%>
-            <tr id="<%=trID%>">
+            <tr id="<%=trID%>" class="<%=(suspectedKey.severity == 'high' ? 'progress-bar-danger' : 'alert-warning')%>">
               <td><%=suspectedKey.repo%></td>
               <td><%=suspectedKey.branch%></td>
               <td><a target="_blank" href="<%=util.format('https://github.com/%s/blob/%s/%s',suspectedKey.repo,suspectedKey.branch,suspectedKey.file)%>"><%=suspectedKey.file%></a></td>
               <td><%=suspectedKey.key%></td>
+							<td><%=suspectedKey.severity%></td>
               <td><button class="btn btn-success" onclick="approveKey('<%=suspectedKey.repo%>','<%=suspectedKey.branch%>','<%=suspectedKey.file%>','<%=suspectedKey.key%>','<%=trID%>')">Approve Key</button></td>
             </tr>
           <% }) %>
