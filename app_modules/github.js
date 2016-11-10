@@ -401,6 +401,7 @@ console.log('results count: %s',results.length)
 		],function(err,results){
 console.log('FINISHED scanning account locally!!!')
 console.log('results count: %s',results.length)
+console.log('err is: %s',err)
 			// callback(null,results)
 			callback(err,results)
 		})
@@ -704,10 +705,11 @@ console.log('results count: %s',results.length)
 								var refParts = push.ref.split('/');
 								var branchName = refParts[refParts.length -1]
 								filesWithKeys.push({
-									repo: push.repository.name,
+									repo: push.repository.full_name,
 									branch: branchName,
 									file: file.filename,
-									matches: matches
+									severity: matches.severity
+									matches: matches.matches
 								})
 							}
 						})
@@ -755,11 +757,14 @@ console.log('results count: %s',results.length)
 		fileParts = fileParts.slice(3);
 		var file = fileParts.join('/');
 
-		var matches = codePart.match(/\b([a-f0-9]{40})\b/g);
+		var allMatches = codePart.match(/\b([a-f0-9]{40})\b/g);
+		var highRiskMatches = codePart.match(/(secret|token|key).+\b([a-f0-9]{40})\b/g);
+		var lowRiskMatches = _.difference(highRiskMatches,allMatches);
 
 		return {
 			file: file,
-			matches: matches
+			matches: allMatches,
+			severity: highRiskMatches ? 'high' : 'low'
 		}
 
 	}

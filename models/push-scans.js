@@ -13,6 +13,7 @@ module.exports = {
           repo: match.repo,
           branch: match.branch,
           file: match.file,
+          severity: match.severity,
           key: suspectedKey
         })
       })
