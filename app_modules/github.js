@@ -708,7 +708,7 @@ console.log('err is: %s',err)
 									repo: push.repository.full_name,
 									branch: branchName,
 									file: file.filename,
-									severity: matches.severity
+									severity: matches.severity,
 									matches: matches.matches
 								})
 							}
