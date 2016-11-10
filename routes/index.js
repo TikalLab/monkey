@@ -348,6 +348,10 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 					})
 				})
 
+				suspectedKeys = _.sortBy(suspectedKeys,function(suspectedKey){
+					return suspectedKey.severity == 'high' ? 1 : 2;
+				})
+				
 				localScan.suspected_keys = suspectedKeys;
 				render(req,res,'users/local-scan',{
 					local_scan: localScan,
@@ -388,6 +392,10 @@ router.get('/push-scan/:push_scan_id',function(req, res, next) {
 					return _.find(approvedKeys,function(approvedKey){
 						return approvedKey.key == suspectedKey.key
 					})
+				})
+
+				suspectedKeys = _.sortBy(suspectedKeys,function(suspectedKey){
+					return suspectedKey.severity == 'high' ? 1 : 2;
 				})
 
 				pushScan.suspected_keys = suspectedKeys;
