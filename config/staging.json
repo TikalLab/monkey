@@ -15,8 +15,8 @@
 			"list_limit": 1
 		},
 		"async_limits":{
-			"repos": 3,
-			"branches": 3
+			"repos": 1,
+			"branches": 1
 		}
 	},
 	"mongo": {
