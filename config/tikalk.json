@@ -1,0 +1,43 @@
+{
+	"mailgun": {
+		"api_key": "",
+		"domain": "mg.tikalk.com"
+	},
+	"app": {
+		"name": "GitMonkey",
+		"email": "shaharsol@tikalk.com",
+		"domain": "gitmonkey.tikalk.com",
+		"unsubscribe_secret": "",
+		"cookie_secret": "",
+		"cdn_url": "",
+		"webhook_domain": "tikalk-monkey.herokuapp.com",
+		"view": {
+			"list_limit": 1
+		},
+		"async_limits":{
+			"repos": 3,
+			"branches": 3
+		}
+	},
+	"mongo": {
+		"uri": ""
+	},
+	"github": {
+		"client_id": "8645c38b8a9ab9085e04",
+		"client_secret": "",
+		"redirect_domain": "gitmonkey.tikalk.com",
+		"hook_secret": "",
+		"webhook_domain": "tikalk-monkey.herokuapp.com"
+	},
+	"google": {
+		"client_id": "854023840456-u1h19r37226fc19ns663iuikm085n90s.apps.googleusercontent.com",
+		"client_secret": "",
+		"redirect_domain": "gitmonkey.tikalk.com"
+	},
+	"auth": {
+		"username": "admin",
+		"password": ""
+	}
+
+
+}
