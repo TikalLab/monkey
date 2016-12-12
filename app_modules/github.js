@@ -542,7 +542,7 @@ console.log('err is: %s',err)
 		var cloneUrl = url.format(parsedUrl);
 // console.log('url is %s',cloneUrl)
 
-		var simpleGit = require('simple-git')(dir);
+		// var simpleGit = require('simple-git')(dir);
 
 		// TBD
 		// remoce the *
@@ -559,18 +559,21 @@ console.log('err is: %s',err)
 			},
 			// clone the git
 			function(callback){
+				var simpleGit = require('simple-git')(dir);
 				simpleGit.clone(cloneUrl,dir,function(err){
 					callback(err)
 				})
 			},
 			// do a "fetch" (whatever thats good for...)
 			function(callback){
+				var simpleGit = require('simple-git')(dir);
 				simpleGit.fetch(function(err){
 					callback(err)
 				})
 			},
 			// checkout the branch
 			function(callback){
+				var simpleGit = require('simple-git')(dir);
 				simpleGit.checkout(branch.name,function(err){
 					callback(err)
 				})
