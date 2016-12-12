@@ -25,14 +25,14 @@
 	"github": {
 		"client_id": "8645c38b8a9ab9085e04",
 		"client_secret": "",
-		"redirect_domain": "gitmonkey.tikalk.com",
+		"redirect_domain": "https://gitmonkey.tikalk.com",
 		"hook_secret": "",
 		"webhook_domain": "tikalk-monkey.herokuapp.com"
 	},
 	"google": {
 		"client_id": "854023840456-u1h19r37226fc19ns663iuikm085n90s.apps.googleusercontent.com",
 		"client_secret": "",
-		"redirect_domain": "gitmonkey.tikalk.com"
+		"redirect_domain": "https://gitmonkey.tikalk.com"
 	},
 	"auth": {
 		"username": "admin",

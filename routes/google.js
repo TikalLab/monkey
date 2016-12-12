@@ -40,7 +40,7 @@ router.get('/authorize',function(req,res,next){
 		pathname: '/o/oauth2/v2/auth',
 		query: {
 			client_id: config.get('google.client_id'),
-			redirect_uri: 'http://' + config.get('google.redirect_domain') + '/google/authorized',
+			redirect_uri: config.get('google.redirect_domain') + '/google/authorized',
 			scope: 'email profile',
 			response_type: 'code'
 		}
@@ -56,7 +56,7 @@ router.get('/authorized',function(req,res,next){
  				client_id: config.get('google.client_id'),
  				client_secret: config.get('google.client_secret'),
  				code: req.query.code,
- 				redirect_uri: 'http://' + config.get('google.redirect_domain') + '/google/authorized',
+ 				redirect_uri: config.get('google.redirect_domain') + '/google/authorized',
  				grant_type: 'authorization_code'
  			}
  			request.post('https://www.googleapis.com/oauth2/v4/token',{form: form},function(error,response,body){
