@@ -548,6 +548,7 @@ console.log('err is: %s',err)
 		// remoce the *
 		// exclude .git
 		// var grepCommand = util.format("grep -rE '[0-9a-f]{40}' %s/*",dir);
+		// var grepCommand = util.format("grep -rE '[a-zA-Z0-9]{16,}' %s/*",dir);
 		var grepCommand = util.format("grep -rE '[a-zA-Z0-9]{16,}' %s/*",dir);
 
 		async.waterfall([
@@ -761,8 +762,10 @@ console.log('err is: %s',err)
 		fileParts = fileParts.slice(3);
 		var file = fileParts.join('/');
 
-		var allMatches = codePart.match(/\b([a-zA-Z0-9]{16,})\b/g);
-		var highRiskMatches = codePart.match(/(secret|token|key).+\b([a-zA-Z0-9]{16,})\b/g);
+		// var allMatches = codePart.match(/\b([a-zA-Z0-9]{16,})\b/g);
+		// var highRiskMatches = codePart.match(/(secret|token|key).+\b([a-zA-Z0-9]{16,})\b/g);
+		var allMatches = codePart.match(/\b(?=[a-zA-Z0-9]{12,}).*\d+.*\b/g);
+		var highRiskMatches = codePart.match(/(secret|token|key).+\b(?=[a-zA-Z0-9]{12,}).*\d+.*\b/g);
 		var lowRiskMatches = _.difference(highRiskMatches,allMatches);
 
 		return {
