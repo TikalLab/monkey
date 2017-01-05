@@ -7,6 +7,7 @@
 		"name": "monky-staging",
 		"email": "shaharsol@tikalk.com",
 		"domain": "monkey-staging.herokuapp.com",
+		"protocol": "http",
 		"unsubscribe_secret": "",
 		"cookie_secret": "",
 		"cdn_url": "",

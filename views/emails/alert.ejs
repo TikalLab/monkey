@@ -1,10 +1,10 @@
 <p>Hi %recipient.name%,</p>
-<p>We have found an aledgely private key in a code committed to one of your repositories. Please make sure to urgently <a href="http://<%=config.get('app.domain')%>/push-scan/<%=push_scan._id.toString()%>">check it here</a></p>
+<p>We have found an aledgely private key in a code committed to one of your repositories. Please make sure to urgently <a href="<%=config.get('app.protocol')%>://<%=config.get('app.domain')%>/push-scan/<%=push_scan._id.toString()%>">check it here</a></p>
 
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>
-To stop getting this email: http://<%=config.get('app.domain')%>/unsubscribe/<%=email_type%>/%recipient.id%/%recipient.code%<br/>
-To unsubscribe from all <%=config.get('app.name')%> emails: http://<%=config.get('app.domain')%>/unsubscribe/all/%recipient.id%/%recipient.code%
+To stop getting this email: <%=config.get('app.protocol')%>://<%=config.get('app.domain')%>/unsubscribe/<%=email_type%>/%recipient.id%/%recipient.code%<br/>
+To unsubscribe from all <%=config.get('app.name')%> emails: <%=config.get('app.protocol')%>://<%=config.get('app.domain')%>/unsubscribe/all/%recipient.id%/%recipient.code%
 </p>

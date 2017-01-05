@@ -7,6 +7,7 @@
 		"name": "GitMonkey",
 		"email": "shaharsol@tikalk.com",
 		"domain": "gitmonkey.tikalk.com",
+		"protocol": "https",
 		"unsubscribe_secret": "",
 		"cookie_secret": "",
 		"cdn_url": "",
