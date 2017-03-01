@@ -764,8 +764,13 @@ console.log('err is: %s',err)
 
 		// var allMatches = codePart.match(/\b([a-zA-Z0-9]{16,})\b/g);
 		// var highRiskMatches = codePart.match(/(secret|token|key).+\b([a-zA-Z0-9]{16,})\b/g);
-		var allMatches = codePart.match(/\b(?=[a-zA-Z0-9]{12,}).*\d+.*\b/g);
-		var highRiskMatches = codePart.match(/(secret|token|key).+\b(?=[a-zA-Z0-9]{12,}).*\d+.*\b/g);
+		// var allMatches = codePart.match(/\b(?=[a-zA-Z0-9]{12,}).*\d+.*\b/g);
+		// var highRiskMatches = codePart.match(/(secret|token|key).+\b(?=[a-zA-Z0-9]{12,}).*\d+.*\b/g);
+
+		// itai ganot
+		var allMatches = codePart.match(/\b(?=(?:[a-zA-Z]*\d){3})(?=.*\d[a-zA-Z]+\d)[a-zA-Z\d]{12,}\b/g);
+		var highRiskMatches = codePart.match(/(secret|token|key).+\b(?=(?:[a-zA-Z]*\d){3})(?=.*\d[a-zA-Z]+\d)[a-zA-Z\d]{12,}\b/g);
+
 		var lowRiskMatches = _.difference(highRiskMatches,allMatches);
 
 		return {
