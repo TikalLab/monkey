@@ -30,28 +30,68 @@
 
 
 <div class="panel panel-default">
-	<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Scans</h6></div>
-    <div class="datatable">
-      <table class="table">
-        <thead>
+	<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Full Scans</h6></div>
+  <div class="datatable">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Started at</th>
+          <th>Status</th>
+          <th># keys found</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% scans.forEach(function(scan){ %>
           <tr>
-            <th>ID</th>
-            <th>Started at</th>
-            <th>Status</th>
-            <th># keys found</th>
+            <td><a href="/local-scan/<%=scan._id.toString()%>"><%=scan._id.toString()%></a></td>
+            <td><%=moment(scan.created_at).calendar()%></td>
+            <td><%=scan.is_scanning ? 'Scanning' : (scan.is_finished ? 'Finished' : 'Waiting')%></td>
+            <td><%='suspected_keys' in scan ? scan.suspected_keys.length : 0%></td>
           </tr>
-        </thead>
-        <tbody>
-          <% scans.forEach(function(scan){ %>
-            <tr>
-              <td><a href="/local-scan/<%=scan._id.toString()%>"><%=scan._id.toString()%></a></td>
-              <td><%=moment(scan.created_at).calendar()%></td>
-              <td><%=scan.is_scanning ? 'Scanning' : (scan.is_finished ? 'Finished' : 'Waiting')%></td>
-              <td><%='suspected_keys' in scan ? scan.suspected_keys.length : 0%></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Push Scans</h6></div>
+  <div class="datatable">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Started at</th>
+          <th>Commits</th>
+          <th># keys found</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% push_scans.forEach(function(scan){ %>
+					<%
+					var trClass = null;
+					if('suspected_keys' in scan){
+						if(scan.suspected_keys.length > 0){
+							var highSeverity = _.find(scan.suspected_keys,function(suspectedKey){
+								return suspectedKey.severity == 'high'
+							})
+							trClass = _.isUndefined(highSeverity) ? 'alert-warning' : 'progress-bar-danger'
+						}
+					}
+					%>
+          <tr class="<%=trClass ? trClass : ''%>">
+            <td><a href="/push-scan/<%=scan._id.toString()%>"><%=scan._id.toString()%></a></td>
+            <td><%=moment(scan.created_at).format('YYYY-MM-DD HH:mm')%></td>
+            <td>
+							<% scan.push.commits.forEach(function(commit){ %>
+								<a target="" href="<%=commit.url%>"><%=commit.id%></a><br/>
+							<% }) %>
+						</td>
+            <td><%='suspected_keys' in scan ? scan.suspected_keys.length : 0%></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
   </div>
 </div>

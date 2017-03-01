@@ -34,5 +34,11 @@ module.exports = {
       callback(err,pushScan)
     })
   },
+  getPerOrg: function(db,userID,orgName,callback){
+    var pushScans = db.get('push_scans');
+    pushScans.find({user_id: userID,'push.organization.login': orgName},function(err,orgPushScans){
+      callback(err,orgPushScans)
+    })
+  },
 
 }

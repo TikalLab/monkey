@@ -85,6 +85,11 @@ router.get('/org/:org_name',function(req, res, next) {
 					callback(err,scans)
 				})
 			},
+			function(callback){
+				pushScans.getPerOrg(req.db,req.session.user._id.toString(),req.params.org_name,function(err,scans){
+					callback(err,scans)
+				})
+			},
 		],function(err,results){
 			if(err){
 				errorHandler.error(req,res,next,err)
@@ -92,7 +97,8 @@ router.get('/org/:org_name',function(req, res, next) {
 				render(req,res,'users/org',{
 					org: req.params.org_name,
 					active_page: 'org_' + req.params.org_name,
-					scans: results[0]
+					scans: results[0],
+					push_scans: results[1]
 				})
 			}
 		})
@@ -351,7 +357,7 @@ router.get('/local-scan/:local_scan_id',function(req, res, next) {
 				suspectedKeys = _.sortBy(suspectedKeys,function(suspectedKey){
 					return suspectedKey.severity == 'high' ? 1 : 2;
 				})
-				
+
 				localScan.suspected_keys = suspectedKeys;
 				render(req,res,'users/local-scan',{
 					local_scan: localScan,
