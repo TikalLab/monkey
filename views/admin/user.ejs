@@ -116,8 +116,6 @@
 					<tr>
 						<th>id</th>
 						<th>started at</th>
-						<th>Org/Repo/Account</th>
-						<th>status</th>
 						<th># high keys found</th>
 						<th># low keys found</th>
 					</tr>
@@ -127,8 +125,6 @@
 							<tr>
 									<td><a href="/admin/crm/scan/<%=scan._id%>"><%=scan._id%></a></td>
 									<td><%=moment.utc(scan.created_at).format('YYYY-MM-DD HH:mm')%></td>
-									<td><%=('org_name' in scan ? 'Org ' + scan.org_name : ('repo' in scan ? 'Repo ' + scan.repo.owner + '/' + scan.repo.name : 'Account'))%></td>
-									<td><%=scan.is_finished ? 'Finished' : 'Scanning'%></td>
 									<td>
 										<%= _.reduce(scan.suspected_keys,function(memo,key){
 											return memo + (key.severity == 'high' ? 1 : 0)
