@@ -24,7 +24,7 @@ var index = require('./routes/index');
 var github = require('./routes/github');
 // var agent = require('./routes/agent');
 var google = require('./routes/google');
-// var admin = require('./routes/admin');
+var admin = require('./routes/admin');
 // var bitbucket = require('./routes/bitbucket');
 
 ///*
@@ -130,7 +130,7 @@ app.use('/', index);
 app.use('/github', github);
 // app.use('/agent', agent);
 app.use('/google', google);
-// app.use('/admin', admin);
+app.use('/admin', admin);
 // app.use('/bitbucket', bitbucket);
 
 

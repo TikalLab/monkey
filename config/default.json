@@ -37,7 +37,7 @@
 	},
 	"auth": {
 		"username": "admin",
-		"password": ""
+		"password": "password"
 	}
 
 

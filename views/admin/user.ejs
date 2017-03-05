@@ -1,0 +1,147 @@
+<div class="page-header">
+	<div class="page-title">
+		&nbsp;
+	</div>
+</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><h6 class="panel-title"><i class="icon-new"></i> User Data</h6></div>
+			<div class="panel-body">
+						<div class="form-group">
+							<img src="<%=user.google.avatar_url%>">
+						</div>
+						<div class="form-group">
+								<label>id:</label>
+								<input readonly type="text" class="form-control" value="<%=user._id%>">
+						</div>
+						<div class="form-group">
+								<label>name:</label>
+								<input readonly type="text" class="form-control" value="<%=user.google.display_name%>">
+						</div>
+		        <div class="form-group">
+		            <label>email:</label>
+	            	<input readonly type="text" class="form-control" value="<%=user.email%>">
+		        </div>
+	    </div>
+	</div>
+
+	<% if('hooks' in user && 'orgs' in user.hooks){ %>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Hooked Orgs</h6></div>
+	    <div class="datatable">
+	      <table class="table">
+	        <thead>
+	          <tr>
+	            <th>name</th>
+	          </tr>
+	        </thead>
+	        <tbody>
+	          <% user.hooks.orgs.forEach(function(org){ %>
+		            <tr>
+			              <td><a target="_blank" href="https://github.com/<%=org.org_name%>"><%=org.org_name%></a></td>
+		            </tr>
+	          <% }) %>
+	        </tbody>
+	      </table>
+	    </div>
+		</div>
+	<% } %>
+
+	<% if('hooks' in user && 'repos' in user.hooks){ %>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Hooked Repos</h6></div>
+			<div class="datatable">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% user.hooks.repos.forEach(function(repo){ %>
+								<tr>
+										<td><a target="_blank" href="https://github.com/<%=repo.repo.owner%>/<%=repo.repo.name%>"><%=repo.repo.owner%>/<%=repo.repo.name%></a></td>
+								</tr>
+						<% }) %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	<% } %>
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Local Scans</h6></div>
+    <div class="datatable">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>id</th>
+						<th>started at</th>
+						<th>Org/Repo/Account</th>
+            <th>status</th>
+            <th># high keys found</th>
+            <th># low keys found</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% local_scans.forEach(function(scan){ %>
+	            <tr>
+		              <td><a href="/admin/crm/scan/<%=scan._id%>"><%=scan._id%></a></td>
+                  <td><%=moment.utc(scan.created_at).format('YYYY-MM-DD HH:mm')%></td>
+									<td><%=('org_name' in scan ? 'Org ' + scan.org_name : ('repo' in scan ? 'Repo ' + scan.repo.owner + '/' + scan.repo.name : 'Account'))%></td>
+                  <td><%=scan.is_finished ? 'Finished' : 'Scanning'%></td>
+                  <td>
+										<%= _.reduce(scan.suspected_keys,function(memo,key){
+											return memo + (key.severity == 'high' ? 1 : 0)
+										},0) %>
+									</td>
+									<td>
+										<%= _.reduce(scan.suspected_keys,function(memo,key){
+											return memo + (key.severity == 'low' ? 1 : 0)
+										},0) %>
+									</td>
+	            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Push Scans</h6></div>
+		<div class="datatable">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>started at</th>
+						<th>Org/Repo/Account</th>
+						<th>status</th>
+						<th># high keys found</th>
+						<th># low keys found</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% push_scans.forEach(function(scan){ %>
+							<tr>
+									<td><a href="/admin/crm/scan/<%=scan._id%>"><%=scan._id%></a></td>
+									<td><%=moment.utc(scan.created_at).format('YYYY-MM-DD HH:mm')%></td>
+									<td><%=('org_name' in scan ? 'Org ' + scan.org_name : ('repo' in scan ? 'Repo ' + scan.repo.owner + '/' + scan.repo.name : 'Account'))%></td>
+									<td><%=scan.is_finished ? 'Finished' : 'Scanning'%></td>
+									<td>
+										<%= _.reduce(scan.suspected_keys,function(memo,key){
+											return memo + (key.severity == 'high' ? 1 : 0)
+										},0) %>
+									</td>
+									<td>
+										<%= _.reduce(scan.suspected_keys,function(memo,key){
+											return memo + (key.severity == 'low' ? 1 : 0)
+										},0) %>
+									</td>
+							</tr>
+					<% }) %>
+				</tbody>
+			</table>
+		</div>
+	</div>

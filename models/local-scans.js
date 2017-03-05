@@ -104,6 +104,12 @@ module.exports = {
       callback(err,localScan)
     })
   },
+  getPerUser: function(db,userID,callback){
+    var localScans = db.get('local_scans');
+    localScans.find({user_id: userID},function(err,userLocalScans){
+      callback(err,userLocalScans)
+    })
+  },
   getPerOrg: function(db,userID,orgName,callback){
     var localScans = db.get('local_scans');
     localScans.find({user_id: userID,org_name: orgName},function(err,userLocalScans){
