@@ -15,6 +15,7 @@ var errorHandler = require('../app_modules/error');
 var mailer = require('../app_modules/mailer');
 
 var pushScans = require('../models/push-scans');
+var installations = require('../models/installations');
 
 var alertTemplate = fs.readFileSync(path.join(__dirname,'../views/emails/alert.ejs'), 'utf8');
 
@@ -211,6 +212,71 @@ router.post('/repo-webhook',function(req, res, next) {
 
 })
 
+
+router.post('/webhook',function(req, res, next) {
+	console.log('received a webhook notification from github!');
+	console.log('%s',util.inspect(req.body));
+	console.log('headres are : %s',util.inspect(req.headers));
+
+	// calc the signature according to X-Hub-Signature and verify the hook is valid
+	var hmac = crypto.createHmac('sha1', config.get('github.hook_secret'));
+	hmac.update(JSON.stringify(req.body));
+	// hmac.update(req.rawBody);
+	var calcedSignature = hmac.digest('hex');
+	console.log('signature is %s',calcedSignature);
+
+	var githubSignature = req.headers['x-hub-signature'].split('=')[1]; // header content is in format sha1={signature}, we need only the {signature} part
+	if(githubSignature != calcedSignature){
+		console.log('A SPOOFED HOOK RECEIVED!!! github sig: %s, calced sig: %s',githubSignature,calcedSignature);
+	}else{
+
+		// integration_installation
+
+
+
+		// find the user that signed the organization and use their access_token
+
+					switch(req.headers['x-github-event']){
+					case 'integration_installation':
+						console.log('this is a integration_installation!');
+						if(req.body.action == 'created'){
+							console.log('this is a integration_installation creation!');
+							processIntegrationInstallation(req.body,req.db);
+						}else if(req.body.action == 'deleted'){
+							console.log('this is a integration_installation deletion!');
+							processIntegrationUninstallation(req.body,req.db);
+						}
+
+						break;
+					case 'push':
+						console.log('this is a push!');
+						processPush(user,req.body,req.db);
+						break;
+					default:
+						console.log('header is : %s',req.headers['x-github-event']);
+						break;
+					}
+
+	}
+
+
+
+	res.sendStatus(200);
+
+})
+
+function processIntegrationInstallation(event,db){
+	installations.add(db,event.installation.id,event.installation.account.login,event.sender.login,function(err,installation){
+		if(err){
+			console.log('err in adding installation: %s',err)
+		}else{
+			console.log('installation %s created',installation._id)
+		}
+	})
+}
+
+function processIntegrationUninstallation(event,db){
+}
 
 function processPush(user,push,db){
 	async.waterfall([
