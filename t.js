@@ -438,17 +438,20 @@ var headers = {
 }
 
 
-async.each(hooks,function(hook,callback){
-  var qs = {access_token: '81c910d3503c41fe2955f4ccc8d4114cedfc6aa4'}
-  var url = util.format('https://api.github.com/repos/%s/%s/hooks/%s',hook.repo.owner,hook.repo.name,hook.hook_id);
-  request.delete(url,{headers: headers},function(error,response,body){
-    if(error){
-      console.log(error);
-    }else{
-      console.log(body)
-    }
-    callback()
-  })
-},function(err){
+// async.each(hooks,function(hook,callback){
+//   var qs = {access_token: '81c910d3503c41fe2955f4ccc8d4114cedfc6aa4'}
+//   var url = util.format('https://api.github.com/repos/%s/%s/hooks/%s',hook.repo.owner,hook.repo.name,hook.hook_id);
+//   request.delete(url,{headers: headers},function(error,response,body){
+//     if(error){
+//       console.log(error);
+//     }else{
+//       console.log(body)
+//     }
+//     callback()
+//   })
+// },function(err){
+//
+// })
 
-})
+var moment = require('moment')
+console.log(moment(Number(1488799520 + '000')).toDate())

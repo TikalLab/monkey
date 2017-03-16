@@ -25,7 +25,7 @@ module.exports = {
       'github.id': githubID
     },{
       $addToSet: {
-        installations: {
+        'github.installations': {
           id: installationID,
           account: {
             id: accountID,

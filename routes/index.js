@@ -44,6 +44,11 @@ router.get('/install-integration',function(req, res, next) {
 		})
 })
 
+router.get('/goto-install-integration',function(req, res, next) {
+		delete req.session.user;
+		res.redirect(config.get('github.integration_url'))
+})
+
 router.get('/connect-scm',function(req, res, next) {
 		render(req,res,'index/connect-scm',{
 
@@ -73,6 +78,38 @@ router.get('/account',function(req, res, next) {
 				render(req,res,'users/account',{
 					active_page: 'user',
 					scans: results[0]
+				})
+			}
+		})
+
+
+
+	})
+})
+
+router.get('/installation/:installation_id',function(req, res, next) {
+	loginEnforcer.enforce(req,res,next,function(){
+
+		async.parallel([
+			function(callback){
+				localScans.getPerInstallation(req.db,req.session.user._id.toString(),req.params.installation_id,function(err,scans){
+					callback(err,scans)
+				})
+			},
+			function(callback){
+				pushScans.getPerInstallation(req.db,req.session.user._id.toString(),req.params.installation_id,function(err,scans){
+					callback(err,scans)
+				})
+			},
+		],function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				render(req,res,'users/installation',{
+					installation: req.params.account_login,
+					active_page: 'installation_' + req.params.account_login,
+					scans: results[0],
+					push_scans: results[1]
 				})
 			}
 		})

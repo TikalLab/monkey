@@ -40,6 +40,12 @@ module.exports = {
       callback(err,orgPushScans)
     })
   },
+  getPerInstallation: function(db,userID,installationID,callback){
+    var pushScans = db.get('push_scans');
+    pushScans.find({user_id: userID,'push.installation.id': installationID},function(err,orgPushScans){
+      callback(err,orgPushScans)
+    })
+  },
   getPerUser: function(db,userID,callback){
     var pushScans = db.get('push_scans');
     pushScans.find({user_id: userID},function(err,pushScans){

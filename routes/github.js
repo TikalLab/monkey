@@ -16,6 +16,7 @@ var mailer = require('../app_modules/mailer');
 
 var pushScans = require('../models/push-scans');
 var installations = require('../models/installations');
+var users = require('../models/users');
 
 var alertTemplate = fs.readFileSync(path.join(__dirname,'../views/emails/alert.ejs'), 'utf8');
 
@@ -276,7 +277,7 @@ router.post('/webhook',function(req, res, next) {
 
 function processIntegrationInstallation(event,db){
 
-	users.addInstallation(db,event.sender.id,event.sender.login,event.installation.id,event.installation.account.login,event.installation.account.id,function(err,user){
+	users.addInstallation(db,event.sender.id,event.sender.login,event.installation.id,event.installation.account.id,event.installation.account.login,function(err,user){
 		if(err){
 			console.log('err in adding installation: %s',err)
 		}else{
