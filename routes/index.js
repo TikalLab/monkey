@@ -315,9 +315,9 @@ router.get('/build-local-installation-scan/:installation_id',function(req, res, 
 			}else{
 				req.session.alert = {
 					type: 'success',
-					message: util.format('Scan %s succerssfully started. We will email you when it is ready',scan._id)
+					message: util.format('Scan %s succerssfully started. We will email you when it is ready.',scan._id)
 				};
-				res.redirect('/org/' + req.params.org_name)
+				res.redirect('/installation/' + req.params.installation_id)
 				// render(req,res,'index/build-local-org-scan',{
 				// 	scan: scan
 				// })

@@ -20,7 +20,7 @@ module.exports = {
     var localScans = db.get('local_scans');
     localScans.insert({
       user_id: userID,
-      installation_id: installationID,
+      installation_id: Number(installationID),
       scm: scm,
       is_finished: false,
       is_scanning: false,
