@@ -160,14 +160,16 @@ module.exports = {
 						var qs = {
 							page: page
 						}
-						request('https://api.github.com/orgs/' + orgName + '/repos',{headers: headers, qs: qs},function(error,response,body){
+						request('https://api.github.com/installation/repositories',{headers: headers, qs: qs},function(error,response,body){
 							if(error){
 								callback(error);
 							}else if(response.statusCode > 300){
 								callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
 							}else{
 								var data = JSON.parse(body)
-								repos = repos.concat(data);
+// console.log(util.inspect(data))
+								// repos = repos.concat(data);
+								repos = repos.concat(data.repositories);
 								linkHeader = parseLinkHeader(response.headers.link);
 								page = (linkHeader? ('next' in linkHeader ? linkHeader.next.page : false) : false);
 								callback(null,repos);
