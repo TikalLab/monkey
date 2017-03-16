@@ -29,7 +29,9 @@
 		"redirect_domain": "http://localhost:3000",
 		"hook_secret": "",
 		"webhook_domain": "facetogether.ngrok.io",
-		"integration_url": "https://github.com/integration/gitmonkeydev"
+		"integration_url": "https://github.com/integration/gitmonkeydev",
+		"iss": 1745,
+		"private_key": ""
 	},
 	"google": {
 		"client_id": "334544652883-toj0a580l6pc60dqh4nfoll84mbdf9v9.apps.googleusercontent.com",

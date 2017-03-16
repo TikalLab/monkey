@@ -42,6 +42,6 @@
     "fs-extra": "*",
     "slug": "*",
     "git-patch-additions": "*",
-    "jwt": "*"
+    "jsonwebtoken": "*"
   }
 }

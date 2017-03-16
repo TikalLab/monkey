@@ -304,17 +304,17 @@ function processPush(push,db){
 				callback(err,user)
 			})
 		},
-		function(callback){
-			github.scanPush(user.github.access_token,push,function(err,filesWithKeys){
-				callback(err,filesWithKeys)
+		function(user,callback){
+			github.scanInstallationPush(push.installation.id,push,function(err,filesWithKeys){
+				callback(err,user,filesWithKeys)
 			})
 		},
-		function(filesWithKeys,callback){
+		function(user,filesWithKeys,callback){
 			pushScans.create(user._id.toString(),push,filesWithKeys,db,function(err,pushScan){
-				callback(err,filesWithKeys,pushScan)
+				callback(err,user,filesWithKeys,pushScan)
 			})
 		},
-		function(filesWithKeys,pushScan,callback){
+		function(user,filesWithKeys,pushScan,callback){
 			if(!filesWithKeys){
 				callback()
 			}else if(filesWithKeys.length == 0){

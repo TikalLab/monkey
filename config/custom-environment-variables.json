@@ -11,7 +11,8 @@
 	},
 	"github": {
 		"client_secret": "GITHUB_CLIENT_SECRET",
-		"hook_secret": "GITHUB_HOOK_SECRET"
+		"hook_secret": "GITHUB_HOOK_SECRET",
+		"private_key": "GITHUB_PRIVATE_KEY"
 	},
 	"google": {
 		"client_secret": "GOOGLE_CLIENT_SECRET"

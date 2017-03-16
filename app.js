@@ -168,3 +168,4 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 console.log('env is: ' + app.get('env'));
+// console.log('github key is: ' + config.get('github.private_key'));

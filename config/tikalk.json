@@ -29,7 +29,8 @@
 		"redirect_domain": "https://gitmonkey.tikalk.com",
 		"hook_secret": "",
 		"webhook_domain": "tikalk-monkey.herokuapp.com",
-		"integration_url": "https://github.com/integration/gitmonkey"
+		"integration_url": "https://github.com/integration/gitmonkey",
+		"iss": 
 	},
 	"google": {
 		"client_id": "854023840456-u1h19r37226fc19ns663iuikm085n90s.apps.googleusercontent.com",

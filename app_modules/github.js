@@ -11,10 +11,44 @@ var fse = require('fs-extra')
 var url = require('url');
 var slug = require('slug')
 var exec = require('child_process').exec;
+var jwt = require('jsonwebtoken');
+var moment = require('moment')
 
 var keysFinder = require('../app_modules/keys-finder')
 
 module.exports = {
+	getInstallationAPIHeaders: function(installationID,callback){
+
+		var payload = {
+			iat: moment().unix(),
+			exp: moment().add(10,'minutes').unix(),
+			iss: config.get('github.iss')
+		}
+
+		var token = jwt.sign(payload, config.get('github.private_key'), { algorithm: 'RS256'});
+
+		var hedears = {
+			Authorization: 'Bearer ' + token,
+			Accept: 'application/vnd.github.machine-man-preview+json',
+			'User-Agent': config.get('app.name')
+		}
+
+		request.post('https://api.github.com/installations/' + installationID + '/access_tokens',{headers: headers},function(error,response,body){
+			if(error){
+				callback(error)
+			}else if(response.statusCode >= 300){
+				callback(body)
+			}else{
+				var data = JSON.parse(body)
+				callback(null,{
+					Authorization: 'token ' + data.token,
+					Accept: 'application/vnd.github.machine-man-preview+json',
+					'User-Agent': config.get('app.name')
+				})
+			}
+		})
+
+	},
 	getAPIHeaders: function(accessToken){
 		return {
 			Authorization: 'token ' + accessToken,
@@ -724,6 +758,51 @@ console.log('err is: %s',err)
 		},function(err){
 			callback(err,filesWithKeys)
 		})
+	},
+	scanInstallationPush: function(installationID,push,callback){
+
+		async.waterfall([
+			function(callback){
+				this.getInstallationAPIHeaders(installationID,function(err,headers){
+					callback(err,headers)
+				})
+			},
+			function(headers,callback){
+				var filesWithKeys =[];
+				async.each(push.commits,function(commit,callback){
+						var url = 'https://api.github.com/repos/' + push.repository.owner.name + '/' + push.repository.name + '/commits/' + commit.id;
+						request(url,{headers: headers},function(error,response,body){
+							if(error){
+								callback(error);
+							}else if(response.statusCode > 300){
+								callback(response.statusCode + ' : ' + body);
+							}else{
+								var commit = JSON.parse(body);
+								_.each(commit.files,function(file){
+									var matches = keysFinder.find(file.patch);
+									if(matches){
+										var refParts = push.ref.split('/');
+										var branchName = refParts[refParts.length -1]
+										filesWithKeys.push({
+											repo: push.repository.full_name,
+											branch: branchName,
+											file: file.filename,
+											severity: matches.severity,
+											matches: matches.matches
+										})
+									}
+								})
+								callback();
+							}
+						});
+				},function(err){
+					callback(err,filesWithKeys)
+				})
+			}
+		],function(err,filesWithKeys){
+			callback(err,filesWithKeys)
+		})
+		
 	},
 	scanItem: function(accessToken,item,callback){
 		var headers = this.getAPIHeaders(accessToken);
