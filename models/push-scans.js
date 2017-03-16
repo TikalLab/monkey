@@ -42,7 +42,7 @@ module.exports = {
   },
   getPerInstallation: function(db,userID,installationID,callback){
     var pushScans = db.get('push_scans');
-    pushScans.find({user_id: userID,'push.installation.id': installationID},function(err,orgPushScans){
+    pushScans.find({user_id: userID,'push.installation.id': Number(installationID)},function(err,orgPushScans){
       callback(err,orgPushScans)
     })
   },

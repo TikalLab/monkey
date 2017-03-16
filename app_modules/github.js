@@ -18,7 +18,6 @@ var keysFinder = require('../app_modules/keys-finder')
 
 module.exports = {
 	getInstallationAPIHeaders: function(installationID,callback){
-
 		var payload = {
 			iat: moment().unix(),
 			exp: moment().add(10,'minutes').unix(),
@@ -27,7 +26,7 @@ module.exports = {
 
 		var token = jwt.sign(payload, config.get('github.private_key'), { algorithm: 'RS256'});
 
-		var hedears = {
+		var headers = {
 			Authorization: 'Bearer ' + token,
 			Accept: 'application/vnd.github.machine-man-preview+json',
 			'User-Agent': config.get('app.name')
@@ -760,10 +759,10 @@ console.log('err is: %s',err)
 		})
 	},
 	scanInstallationPush: function(installationID,push,callback){
-
+		var thisObject = this;
 		async.waterfall([
 			function(callback){
-				this.getInstallationAPIHeaders(installationID,function(err,headers){
+				thisObject.getInstallationAPIHeaders(installationID,function(err,headers){
 					callback(err,headers)
 				})
 			},
@@ -802,7 +801,7 @@ console.log('err is: %s',err)
 		],function(err,filesWithKeys){
 			callback(err,filesWithKeys)
 		})
-		
+
 	},
 	scanItem: function(accessToken,item,callback){
 		var headers = this.getAPIHeaders(accessToken);

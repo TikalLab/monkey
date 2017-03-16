@@ -118,7 +118,7 @@ module.exports = {
   },
   getPerInstallation: function(db,userID,installationID,callback){
     var localScans = db.get('local_scans');
-    localScans.find({user_id: userID,installation_id: installationID},function(err,userLocalScans){
+    localScans.find({user_id: userID,installation_id: Number(installationID)},function(err,userLocalScans){
       callback(err,userLocalScans)
     })
   },
