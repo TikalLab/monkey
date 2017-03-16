@@ -26,6 +26,7 @@ var scanItems = require('../models/scan-items');
 var localScans = require('../models/local-scans');
 var pushScans = require('../models/push-scans');
 var approvedKeys = require('../models/approved-keys');
+var users = require('../models/users');
 
 router.get('/',function(req, res, next) {
 	if(req.session.user){
@@ -38,6 +39,18 @@ router.get('/',function(req, res, next) {
 	}
 })
 
+router.get('/reload-user',function(req, res, next) {
+	users.get(req.db,req.session.user._id.toString(),function(err,user){
+		if(err){
+			console.log('err in reload user: %s',err)
+			res.sendStatus(500)
+		}else{
+			req.session.user = user;
+			res.json(user)
+		}
+	})
+})
+
 router.get('/install-integration',function(req, res, next) {
 		render(req,res,'index/install-integration',{
 
@@ -45,7 +58,7 @@ router.get('/install-integration',function(req, res, next) {
 })
 
 router.get('/goto-install-integration',function(req, res, next) {
-		delete req.session.user;
+		// delete req.session.user;
 		res.redirect(config.get('github.integration_url'))
 })
 

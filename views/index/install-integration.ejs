@@ -18,7 +18,7 @@
 				</div>
 
 				<div>
-					<a id="connect-dropbox-button" href="/goto-install-integration" class="btn standard-button inner-button"><i class="ion-social-github sign-in-icon"></i> Install Integration</a>
+					<a target="_blank" id="connect-dropbox-button" href="/goto-install-integration" class="btn standard-button inner-button"><i class="ion-social-github sign-in-icon"></i> Install Integration</a>
 				</div>
 
 <!-- 				<form class="contact-form" method="POST" action="/configure-issue-tracker">
@@ -42,3 +42,24 @@
 		</div>
 	</div>
 </section>
+
+<script>
+function reloadUser(){
+	$.ajax({
+		type: 'GET',
+		url: '/reload-user',
+		success: function(user){
+			if('installations' in user.github){
+				window.location.href = "/";
+			}else{
+				setTimeout(function(){
+					reloadUser();
+				},1000)
+			}
+		},
+	})
+}
+$(function(){
+	reloadUser();
+})
+</script>
