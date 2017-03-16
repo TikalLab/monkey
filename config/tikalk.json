@@ -30,7 +30,8 @@
 		"hook_secret": "",
 		"webhook_domain": "tikalk-monkey.herokuapp.com",
 		"integration_url": "https://github.com/integration/gitmonkey",
-		"iss": 
+		"iss": 1774,
+		"private_key": ""
 	},
 	"google": {
 		"client_id": "854023840456-u1h19r37226fc19ns663iuikm085n90s.apps.googleusercontent.com",
