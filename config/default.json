@@ -28,7 +28,8 @@
 		"client_secret": "",
 		"redirect_domain": "http://localhost:3000",
 		"hook_secret": "",
-		"webhook_domain": "facetogether.ngrok.io"
+		"webhook_domain": "facetogether.ngrok.io",
+		"integration_url": "https://github.com/integration/gitmonkeydev"
 	},
 	"google": {
 		"client_id": "334544652883-toj0a580l6pc60dqh4nfoll84mbdf9v9.apps.googleusercontent.com",

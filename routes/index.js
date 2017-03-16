@@ -38,6 +38,12 @@ router.get('/',function(req, res, next) {
 	}
 })
 
+router.get('/install-integration',function(req, res, next) {
+		render(req,res,'index/install-integration',{
+
+		})
+})
+
 router.get('/connect-scm',function(req, res, next) {
 		render(req,res,'index/connect-scm',{
 

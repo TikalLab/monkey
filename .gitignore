@@ -1,2 +1,5 @@
 /node_modules
 .project
+/t.js
+/npm-debug.log
+**/*DS_Store*

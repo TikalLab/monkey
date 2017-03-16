@@ -18,5 +18,25 @@ module.exports = {
     users.find({},function(err,users){
       callback(err,users)
     })
+  },
+  addInstallation: function(db,githubID,githubLogin,installationID,accountID,accountLogin,callback){
+    var users = db.get('users');
+    users.findOneAndUpdate({
+      'github.id': githubID
+    },{
+      $addToSet: {
+        installations: {
+          id: installationID,
+          account: {
+            id: accountID,
+            login: accountLogin
+          }
+        }
+      }
+    },{
+      new: true
+    },function(err,user){
+      callback(err,user)
+    })
   }
 }

@@ -28,7 +28,8 @@ router.get('/authorize',function(req,res,next){
 		query: {
 			client_id: config.get('github.client_id'),
 			redirect_uri: config.get('github.redirect_domain') + '/github/authorized',
-			scope: 'user,read:org,repo,admin:org_hook'
+			// scope: 'user,read:org,repo,admin:org_hook'
+			scope: 'user:email'
 
 		}
 	}
@@ -61,14 +62,22 @@ console.log('data from github: %s',util.inspect(data))
  				}
  			});
  		},
+		// get github info
 		function(accessToken,callback){
+			github.getUser(accessToken,function(err,githubUser){
+				callback(err,accessToken,githubUser)
+			})
+		},
+		function(accessToken,githubUser,callback){
 			var users = req.db.get('users');
 			users.findAndModify({
 				_id: req.session.user._id.toString()
 			},{
 				$set: {
 					github: {
-						access_token: accessToken
+						access_token: accessToken,
+						login: githubUser.login,
+						id: githubUser.id
 					}
 				}
 			},{
@@ -266,13 +275,22 @@ router.post('/webhook',function(req, res, next) {
 })
 
 function processIntegrationInstallation(event,db){
-	installations.add(db,event.installation.id,event.installation.account.login,event.sender.login,function(err,installation){
+
+	users.addInstallation(db,event.sender.id,event.sender.login,event.installation.id,event.installation.account.login,event.installation.account.id,function(err,user){
 		if(err){
 			console.log('err in adding installation: %s',err)
 		}else{
-			console.log('installation %s created',installation._id)
+			console.log('installation to user %s created',user._id)
 		}
 	})
+
+	// installations.add(db,event.installation.id,event.installation.account.login,event.sender.login,function(err,installation){
+	// 	if(err){
+	// 		console.log('err in adding installation: %s',err)
+	// 	}else{
+	// 		console.log('installation %s created',installation._id)
+	// 	}
+	// })
 }
 
 function processIntegrationUninstallation(event,db){
