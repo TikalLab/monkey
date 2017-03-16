@@ -6,27 +6,14 @@
 	<ul class="info-blocks">
 		<li class="bg-primary">
 			<div class="top-info">
-				<a href="/build-local-account-scan">Scan Your GitHub Account Now</a>
+				<a href="/goto-install-integration">Add Installation</a>
 				<small></small>
 			</div>
-			<a href="/build-local-account-scan"><i class="icon-zoom-in2"></i>
-			<span class="bottom-info bg-danger"><div>Scan Now</div></span>
+			<a href="/goto-install-integration"><i class="icon-zoom-in2"></i>
+			<span class="bottom-info bg-danger"><div>Add Installation</div></span>
       </a>
 		</li>
 
-    <% if('orgs' in user.github){ %>
-      <% user.github.orgs.forEach(function(org){ %>
-        <li class="bg-success">
-          <div class="top-info">
-            <a href="/build-local-org-scan/<%=org.login%>">Scan <%=org.login%> Now</a>
-            <small></small>
-          </div>
-          <a href="/build-local-org-scan/<%=org.login%>"><i class="icon-zoom-in2"></i>
-          <span class="bottom-info bg-primary"><div>Scan Now</div></span>
-          </a>
-        </li>
-      <% }) %>
-    <% } %>
 
 
 

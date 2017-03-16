@@ -260,7 +260,7 @@ router.post('/webhook',function(req, res, next) {
 						break;
 					case 'push':
 						console.log('this is a push!');
-						processPush(user,req.body,req.db);
+						processPush(req.body,req.db);
 						break;
 					default:
 						console.log('header is : %s',req.headers['x-github-event']);
@@ -297,8 +297,13 @@ function processIntegrationInstallation(event,db){
 function processIntegrationUninstallation(event,db){
 }
 
-function processPush(user,push,db){
+function processPush(push,db){
 	async.waterfall([
+		function(callback){
+			users.getByInstallationID(db,push.installation.id,function(err,user){
+				callback(err,user)
+			})
+		},
 		function(callback){
 			github.scanPush(user.github.access_token,push,function(err,filesWithKeys){
 				callback(err,filesWithKeys)

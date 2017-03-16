@@ -13,6 +13,12 @@ module.exports = {
       callback(err,user)
     })
   },
+  getByInstallationID: function(db,installationID,callback){
+    var users = db.get('users');
+    users.findOne({'github.installations.id': installationID},function(err,user){
+      callback(err,user)
+    })
+  },
   getAll: function(db,callback){
     var users = db.get('users');
     users.find({},function(err,users){
