@@ -71,6 +71,7 @@ router.get('/connect-scm',function(req, res, next) {
 router.get('/dashboard',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 		render(req,res,'users/dashboard',{
+			active_page: 'dashboard'
 		})
 	})
 })
