@@ -139,6 +139,52 @@ module.exports = {
 		);
 
 	},
+	getInstallationRepos: function(installationID,callback){
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getInstallationAPIHeaders(installationID,function(err,headers){
+					callback(err,headers)
+				})
+			},
+			function(headers,callback){
+				var repos = [];
+				var page = 1;
+				var linkHeader;
+
+				async.whilst(
+					function(){
+						return page;
+					},
+					function(callback){
+						var qs = {
+							page: page
+						}
+						request('https://api.github.com/orgs/' + orgName + '/repos',{headers: headers, qs: qs},function(error,response,body){
+							if(error){
+								callback(error);
+							}else if(response.statusCode > 300){
+								callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
+							}else{
+								var data = JSON.parse(body)
+								repos = repos.concat(data);
+								linkHeader = parseLinkHeader(response.headers.link);
+								page = (linkHeader? ('next' in linkHeader ? linkHeader.next.page : false) : false);
+								callback(null,repos);
+							}
+						});
+					},
+					function(err,repos){
+						callback(err,repos)
+					}
+				);
+			}
+		],function(err,repos){
+			callback(err,repos)
+		})
+
+
+	},
 	getUserRepos: function(accessToken,callback){
 		var headers = this.getAPIHeaders(accessToken);
 		var repos = [];
@@ -210,6 +256,57 @@ module.exports = {
 		);
 
 	},
+
+	getInstallationRepoBranches: function(installationID,repo,callback){
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getInstallationAPIHeaders(installationID,function(err,headers){
+					callback(err,headers)
+				})
+			},
+			function(headers,callback){
+				var branches = [];
+				var page = 1;
+				var linkHeader;
+
+				async.whilst(
+					function(){
+						return page;
+					},
+					function(callback){
+						var qs = {
+							page: page
+						}
+						request('https://api.github.com/repos/' + repo.full_name + '/branches',{headers: headers,qs: qs},function(error,response,body){
+							if(error){
+								callback(error);
+							}else if(response.statusCode > 300){
+								// console.log('error in getRepoBranches for %s',repo.full_name)
+								callback(response.statusCode + ' : ' + arguments.callee.toString() + ' : ' + body);
+							}else{
+								var data = JSON.parse(body)
+								branches = branches.concat(data);
+								linkHeader = parseLinkHeader(response.headers.link);
+								page = (linkHeader? ('next' in linkHeader ? linkHeader.next.page : false) : false);
+								callback(null,branches);
+							}
+						});
+					},
+					function(err,branches){
+						callback(err,branches)
+					}
+				);
+			}
+		],function(err,branches){
+			callback(err,branches)
+		})
+
+
+	},
+
+
+
 	scanRepo: function(accessToken,repo,callback){
 		// console.log('scanning repo %s',repo.full_name)
 		var thisObject = this;
@@ -300,6 +397,34 @@ module.exports = {
 		})
 	},
 
+	scanInstallationRepoLocally: function(installationID,repo,callback){
+		// console.log('scanning repo %s',repo.full_name)
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getInstallationRepoBranches(installationID,repo,function(err,branches){
+					callback(err,branches)
+				})
+			},
+			function(branches,callback){
+				var results = [];
+				async.eachLimit(branches,Number(config.get('app.async_limits.branches')),function(branch,callback){
+					thisObject.scanInstallationBranchLocally(installationID,repo,branch,function(err,branchResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(branchResults)
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,results)
+				})
+			}
+		],function(err,results){
+			callback(err,results)
+		})
+	},
 
 	buildRepoScan: function(accessToken,repo,callback){
 		// console.log('scanning repo %s',repo.full_name)
@@ -384,6 +509,40 @@ module.exports = {
 				var results = [];
 				async.eachLimit(repos,Number(config.get('app.async_limits.repos')),function(repo,callback){
 					thisObject.scanRepoLocally(accessToken,user,repo,function(err,repoResults){
+						if(err){
+							callback(err)
+						}else{
+							results = results.concat(repoResults);
+							callback()
+						}
+					})
+				},function(err){
+					callback(err,results)
+				})
+			}
+		],function(err,results){
+console.log('FINISHED scanning org locally!!!')
+console.log('results count: %s',results.length)
+			// callback(null,results)
+			callback(err,results)
+		})
+	},
+	scanInstallationLocally: function(installationID,callback){
+		// console.log('scanning org %s locally',orgName)
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getInstallationRepos(installationID,function(err,repos){
+					_.each(repos,function(repo){
+						// console.log('found repo: %s',repo.full_name)
+					})
+					callback(err,repos)
+				})
+			},
+			function(repos,callback){
+				var results = [];
+				async.eachLimit(repos,Number(config.get('app.async_limits.repos')),function(repo,callback){
+					thisObject.scanInstallationRepoLocally(installationID,repo,function(err,repoResults){
 						if(err){
 							callback(err)
 						}else{
@@ -660,6 +819,103 @@ console.log('err is: %s',err)
 
 
 	},
+
+	scanInstallationBranchLocally: function(accessToken,repo,branch,callback){
+		// console.log('scanning branch %s:%s locally',repo.full_name,branch.name)
+		var thisObject = this;
+		var dir = '/tmp/' + repo.owner.login + '-' + repo.name + '-' + slug(branch.name);
+// console.log('dir is %s',dir)
+		var parsedUrl = url.parse(repo.clone_url);
+		parsedUrl.auth = 'x-access-token' + ':' + accessToken;
+		var cloneUrl = url.format(parsedUrl);
+// console.log('url is %s',cloneUrl)
+
+		// var simpleGit = require('simple-git')(dir);
+
+		// TBD
+		// remoce the *
+		// exclude .git
+		// var grepCommand = util.format("grep -rE '[0-9a-f]{40}' %s/*",dir);
+		// var grepCommand = util.format("grep -rE '[a-zA-Z0-9]{16,}' %s/*",dir);
+		var grepCommand = util.format("grep -rE '[a-zA-Z0-9]{16,}' %s/*",dir);
+
+		async.waterfall([
+			// create a dir specifically for this branch
+			function(callback){
+				fs.mkdir(dir,function(err){
+					callback(err)
+				})
+			},
+			// clone the git
+			function(callback){
+				var simpleGit = require('simple-git')(dir);
+				simpleGit.clone(cloneUrl,dir,function(err){
+					callback(err)
+				})
+			},
+			// do a "fetch" (whatever thats good for...)
+			function(callback){
+				var simpleGit = require('simple-git')(dir);
+				simpleGit.fetch(function(err){
+					callback(err)
+				})
+			},
+			// checkout the branch
+			function(callback){
+				var simpleGit = require('simple-git')(dir);
+				simpleGit.checkout(branch.name,function(err){
+					callback(err)
+				})
+			},
+			// scan the branch
+			function(callback){
+				exec(grepCommand, function(err, stdin, stdout){
+					if(err){
+						// console.log('grep failed in %s/%s. err: %s',repo.full_name,branch.name,util.inspect(err))
+						// console.log('grep command: %s',grepCommand)
+						// console.log('grep failed stdin: %s',util.inspect(stdin))
+						// console.log('grep failed stdout: %s',util.inspect(stdout))
+						// callback(err)
+						callback(null,[])
+					}else{
+						var lines = stdin.split('\n');
+// console.log('grep result: %s',util.inspect(lines))
+						var filesWithKeys = [];
+						_.each(lines,function(line){
+							if(line){
+								var fileWithKeys = thisObject.processGrepLine(line);
+								if(fileWithKeys.matches){
+									fileWithKeys['repo'] = repo.full_name;
+									fileWithKeys['branch'] = branch.name;
+	console.log('new find: %s',util.inspect(fileWithKeys))
+									filesWithKeys.push(fileWithKeys)
+
+								}
+
+							}
+						})
+						callback(null,filesWithKeys)
+					}
+
+				})
+			},
+			// cleanup
+			function(filesWithKeys,callback){
+				fse.remove(dir,function(err){
+					callback(err,filesWithKeys)
+				})
+			}
+		],function(err,results){
+			if(err){
+				console.log('errpr scanning local branch %s: %s',branch.name,err)
+			}
+			// callback(err,results)
+			callback(null,results)
+		})
+
+
+	},
+
 
 
 	buildBranchScan: function(accessToken,repo,branch,callback){

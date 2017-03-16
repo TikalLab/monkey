@@ -53,6 +53,11 @@ function scan(waitingScan,callback){
         github.scanAccountLocally(user.github.access_token,function(err,matches){
           callback(err,user,matches)
         })
+      }else if('installation_id' in waitingScan){
+        console.log('will start installation scan')
+        github.scanInstallationLocally(waitingScan.installation_id,function(err,matches){
+          callback(err,user,matches)
+        })
       }
     },
     // mark it as scanned
