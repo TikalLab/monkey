@@ -182,7 +182,7 @@ router.post('/repo-webhook',function(req, res, next) {
 	IGNORING OLD HOOKS...
 	*/
 
-‘// 	console.log('received a REPO webhook notification from github!');
+// 	console.log('received a REPO webhook notification from github!');
 // 	console.log('%s',util.inspect(req.body));
 //
 // 	// calc the signature according to X-Hub-Signature and verify the hook is valid
@@ -311,7 +311,13 @@ function processPush(push,db){
 	async.waterfall([
 		function(callback){
 			users.getByInstallationID(db,push.installation.id,function(err,user){
-				callback(err,user)
+				if(err){
+					callback(err)
+				}else if(!user){
+					callback('couldnt find any user who owns this installation, probably old garbage')
+				}else{
+					callback(err,user)
+				}
 			})
 		},
 		function(user,callback){
