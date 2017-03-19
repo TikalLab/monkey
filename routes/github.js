@@ -30,7 +30,7 @@ router.get('/authorize',function(req,res,next){
 			client_id: config.get('github.client_id'),
 			redirect_uri: config.get('github.redirect_domain') + '/github/authorized',
 			// scope: 'user,read:org,repo,admin:org_hook'
-			scope: 'user:email'
+			// scope: 'user:email'
 
 		}
 	}
