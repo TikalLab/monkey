@@ -126,7 +126,7 @@ router.get('/installation/:installation_id',function(req, res, next) {
 
 				render(req,res,'users/installation',{
 					installation: installation,
-					active_page: 'installation_' + req.params.account_login,
+					active_page: 'installation_' + req.params.installation_id,
 					scans: results[0],
 					push_scans: results[1]
 				})
