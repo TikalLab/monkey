@@ -10,7 +10,7 @@ Designed By: Mizanur Rahman
 2. GLOBAL STYLES (USED IN VARIOUS SECTION OF THE WEBSITE)
 	2.1 GENERAL STYLES
 	2.2 PRE LOADER
-	2.3 ANCHOR AND BOLD TEXT  
+	2.3 ANCHOR AND BOLD TEXT
 
 3. COMPONENTS (ELEMNTS USED IN MANY SECTION)
 	3.1 BACKGROUND COLORS AND LINE
@@ -22,46 +22,46 @@ Designed By: Mizanur Rahman
 
 	4.2 SECTION: HOME
 		4.2.1 BASIC STYLES
-		4.2.2 NAVIGATION 
-		4.2.3 FEATURE LIST 
+		4.2.2 NAVIGATION
+		4.2.3 FEATURE LIST
 		4.2.4 VERTICAL REGISTRATION FORM
 
 	4.3 SECTION: WITH LEFT / RIGHT SCREENSHOT
-		4.3.1 BASIC STYLES   
-		4.3.2 FEATURE LIST    
+		4.3.1 BASIC STYLES
+		4.3.2 FEATURE LIST
 
-	4.4 SECTION: FEATURES 
+	4.4 SECTION: FEATURES
 
-	4.5 SECTION: PRICING TABLE 
+	4.5 SECTION: PRICING TABLE
 
-	4.6 SECTION: VIDEO   
+	4.6 SECTION: VIDEO
 		4.6.1 BASIC STYLE / RESET
-		4.6.2 VIDEO FEATURES 
+		4.6.2 VIDEO FEATURES
 
-	4.7 SECTION: SCREENSHOTS 
-	
+	4.7 SECTION: SCREENSHOTS
+
 	4.8 SECTION: CLIENTS AND FEEDBACKS
-		4.8.1 CLIENTS LOGO 
+		4.8.1 CLIENTS LOGO
 		4.8.2 FEEDBACKS
 
 	4.9 SECTION: CALL TO ACTION
-		4.9.1 CALL TO ACTION WITH TEXT/BUTTON 
-		4.9.2 SUBSCRIBE FORM 
+		4.9.1 CALL TO ACTION WITH TEXT/BUTTON
+		4.9.2 SUBSCRIBE FORM
 
 	4.10 SECTION: CONTACT US
 		4.10.1 BASIC STYLES
-		4.10.2 CONTACT FORM   
+		4.10.2 CONTACT FORM
 
 
-	4.11 SECTION: FOOTER   
+	4.11 SECTION: FOOTER
 
 -----------------------------------------*/
 
 /*---------------------------------------
-   1. IMPORT GOOGLE WEB FONTS                
+   1. IMPORT GOOGLE WEB FONTS
 -----------------------------------------*/
 
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Raleway:500,600,700);
+@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Raleway:500,600,700);
 
 /* --------------------------------------
 =========================================
@@ -70,7 +70,7 @@ Designed By: Mizanur Rahman
 -----------------------------------------*/
 
 /*---------------------------------------
-   2.1 GENERAL STYLES                
+   2.1 GENERAL STYLES
 -----------------------------------------*/
 
 html {
@@ -89,7 +89,7 @@ body {
 }
 
 /*---------------------------------------
-   2.2 PRE LOADER              
+   2.2 PRE LOADER
 -----------------------------------------*/
 .preloader {
 	position: fixed;
@@ -119,7 +119,7 @@ body {
 }
 
 /*---------------------------------------
-   2.3 ANCHOR AND BOLD TEXT           
+   2.3 ANCHOR AND BOLD TEXT
 -----------------------------------------*/
 a {
 	text-decoration: none;
@@ -146,7 +146,7 @@ strong {
 
 
 /*---------------------------------------
-   2.4 MISC FIXES         
+   2.4 MISC FIXES
 -----------------------------------------*/
 @-webkit-viewport {
 	width: device-width;
@@ -187,12 +187,12 @@ li {
 
 /* --------------------------------------
 =========================================
-   3. COMPONENTS 
+   3. COMPONENTS
 =========================================
 -----------------------------------------*/
 
 /*---------------------------------------
-   3.1 BACKGROUND COLORS AND LINE               
+   3.1 BACKGROUND COLORS AND LINE
 -----------------------------------------*/
 
 .dark-bg {
@@ -222,7 +222,7 @@ li {
 
 
 /*---------------------------------------
-   3.2 TYPOGRAPHY               
+   3.2 TYPOGRAPHY
 -----------------------------------------*/
 h1,
 h2,
@@ -274,7 +274,7 @@ h6 {
 
 
 /*---------------------------------------
-   3.3 BUTTONS               
+   3.3 BUTTONS
 -----------------------------------------*/
 .btn:focus,
 .btn:active,
@@ -345,7 +345,7 @@ h6 {
 -----------------------------------------*/
 
 /*---------------------------------------
-   4.1 SECTIONS PADDING AND COLOR OVERLAY                
+   4.1 SECTIONS PADDING AND COLOR OVERLAY
 -----------------------------------------*/
 .section1,
 .section2,
@@ -365,11 +365,11 @@ h6 {
 
 
 /*========================================
-   4.2 SECTION: HOME                
+   4.2 SECTION: HOME
 ==========================================*/
 
 /*---------------------------------------
-   4.2.1 BASIC STYLES               
+   4.2.1 BASIC STYLES
 -----------------------------------------*/
 header {
 /* 	background: url(../images/bg-image-1.jpg) no-repeat center top fixed;
@@ -423,7 +423,7 @@ header .home-screenshot {
 
 
 /*---------------------------------------
-   4.2.2 NAVIGATION                
+   4.2.2 NAVIGATION
 -----------------------------------------*/
 /* NAV RESETS */
 .navbar-nav > li > a:hover {
@@ -478,10 +478,10 @@ header .home-screenshot {
 
 
 /*========================================
-   4.3 SECTION WITH LEFT / RIGHT SCREENSHOT             
+   4.3 SECTION WITH LEFT / RIGHT SCREENSHOT
 ==========================================*/
 /*---------------------------------------
-   4.3.1 BASIC STYLES               
+   4.3.1 BASIC STYLES
 -----------------------------------------*/
 .side-screenshot,
 .side-screenshot2 {
@@ -498,7 +498,7 @@ header .home-screenshot {
 }
 
 /*---------------------------------------
-   4.3.2 FEATURE LIST               
+   4.3.2 FEATURE LIST
 -----------------------------------------*/
 
 .feature-list-2 {
@@ -532,7 +532,7 @@ header .home-screenshot {
 
 
 /*========================================
-   4.4 SECTION: FEATURES                
+   4.4 SECTION: FEATURES
 ==========================================*/
 .features {
 	margin-top: 35px;
@@ -554,7 +554,7 @@ header .home-screenshot {
 
 
 /*========================================
-   4.5 SECTION: PRICING TABLE               
+   4.5 SECTION: PRICING TABLE
 ==========================================*/
 .pricing-table {
 	margin-top: 35px;
@@ -631,10 +631,10 @@ header .home-screenshot {
 
 
 /*========================================
-   4.6 SECTION: VIDEO              
+   4.6 SECTION: VIDEO
 ==========================================*/
 /*---------------------------------------
-   4.6.1 BASIC STYLE / RESET         
+   4.6.1 BASIC STYLE / RESET
 -----------------------------------------*/
 video {
 	max-width: 100%;
@@ -659,7 +659,7 @@ object {
 
 
 /*---------------------------------------
-   4.6.2 VIDEO FEATURES         
+   4.6.2 VIDEO FEATURES
 -----------------------------------------*/
 .video-features {
 	margin-top: 40px;
@@ -671,7 +671,7 @@ object {
 
 
 /*========================================
-   4.7 SECTION: SCREENSHOTS              
+   4.7 SECTION: SCREENSHOTS
 ==========================================*/
 .screenshots {
 	margin-top: 68px;
@@ -695,10 +695,10 @@ object {
 
 
 /*========================================
-   4.8 SECTION: CLIENTS AND FEEDBACKS              
+   4.8 SECTION: CLIENTS AND FEEDBACKS
 ==========================================*/
 /*---------------------------------------
-   4.8.1 CLIENTS LOGO        
+   4.8.1 CLIENTS LOGO
 -----------------------------------------*/
 .clients {
 	margin-top: 35px;
@@ -711,7 +711,7 @@ object {
 }
 
 /*---------------------------------------
-   4.8.2 FEEDBACKS        
+   4.8.2 FEEDBACKS
 -----------------------------------------*/
 
 .testimonials {
@@ -795,10 +795,10 @@ object {
 
 
 /*========================================
-   4.9 SECTION: CALL TO ACTION              
+   4.9 SECTION: CALL TO ACTION
 ==========================================*/
 /*---------------------------------------
-   4.9.1 CALL TO ACTION WITH TEXT/BUTTON          
+   4.9.1 CALL TO ACTION WITH TEXT/BUTTON
 -----------------------------------------*/
 .cta-section {
 /* 	background: url(../images/bg-image-2.jpg) no-repeat center fixed;
@@ -828,7 +828,7 @@ object {
 }
 
 /*---------------------------------------
-   4.9.2 SUBSCRIBE FORM           
+   4.9.2 SUBSCRIBE FORM
 -----------------------------------------*/
 .subscribe-section {
 	margin-top: 75px;
@@ -851,10 +851,10 @@ object {
 }
 
 /*========================================
-   4.10 SECTION: CONTACT US             
+   4.10 SECTION: CONTACT US
 ==========================================*/
 /*---------------------------------------
-   4.10.1 BASIC STYLES        
+   4.10.1 BASIC STYLES
 -----------------------------------------*/
 .contact-us {
 	padding-top: 75px;
@@ -882,7 +882,7 @@ object {
 
 
 /*---------------------------------------
-   4.10.2 CONTACT FORM        
+   4.10.2 CONTACT FORM
 -----------------------------------------*/
 .contact-form {
 	margin-top: 25px;
@@ -931,7 +931,7 @@ object {
 
 
 /*========================================
-   4.11 SECTION: FOOTER             
+   4.11 SECTION: FOOTER
 ==========================================*/
 footer {
 	padding-top: 75px;
