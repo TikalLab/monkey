@@ -10,7 +10,7 @@
 		"protocol": "https",
 		"unsubscribe_secret": "",
 		"cookie_secret": "",
-		"cdn_url": "//s3.amazonaws.com/assets.gitmonkey.io",
+		"cdn_url": "//assets.gitmonkey.io.s3.amazonaws.com",
 		"webhook_domain": "gitmonkey.io",
 		"view": {
 			"list_limit": 1
