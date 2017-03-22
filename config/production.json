@@ -1,0 +1,47 @@
+{
+	"mailgun": {
+		"api_key": "",
+		"domain": "mg.tikalk.com"
+	},
+	"app": {
+		"name": "GitMonkey",
+		"email": "monkey@gitmonkey.io",
+		"domain": "gitmonkey.io",
+		"protocol": "https",
+		"unsubscribe_secret": "",
+		"cookie_secret": "",
+		"cdn_url": "",
+		"webhook_domain": "gitmonkey.io",
+		"view": {
+			"list_limit": 1
+		},
+		"async_limits":{
+			"repos": 3,
+			"branches": 3
+		}
+	},
+	"mongo": {
+		"uri": ""
+	},
+	"github": {
+		"client_id": "f9419bf927e36c7b137b",
+		"client_secret": "",
+		"redirect_domain": "https://gitmonkey.io",
+		"hook_secret": "",
+		"webhook_domain": "gitmonkey.io",
+		"integration_url": "https://github.com/integration/gitmonkeyio",
+		"iss": 1824,
+		"private_key": ""
+	},
+	"google": {
+		"client_id": "1005547304145-29rqe7ebsevv2bkltcon5polf9odm9if.apps.googleusercontent.com",
+		"client_secret": "",
+		"redirect_domain": "https://gitmonkey.io"
+	},
+	"auth": {
+		"username": "admin",
+		"password": ""
+	}
+
+
+}
