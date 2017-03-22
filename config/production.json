@@ -1,7 +1,7 @@
 {
 	"mailgun": {
 		"api_key": "",
-		"domain": "mg.tikalk.com"
+		"domain": "mg.gitmonkey.io"
 	},
 	"app": {
 		"name": "GitMonkey",
