@@ -14,6 +14,10 @@ var exec = require('child_process').exec;
 var jwt = require('jsonwebtoken');
 var moment = require('moment')
 
+var isBinaryFile = require('isbinaryfile');
+var us = require('underscore.string')
+
+
 var keysFinder = require('../app_modules/keys-finder')
 
 module.exports = {
@@ -1090,7 +1094,7 @@ console.log('err is: %s',err)
 		// a line looks like:
 		// '/tmp/pubsublab-tlvdemo-test/index.js:var s = \'c9a70467770469462ad05d88df987e1e0aefc750\';'
 		var parts = line.split(':');
-// console.log('parts are %s',util.inspect(parts))
+console.log('parts are %s',util.inspect(parts))
 		var filePart = parts[0];
 		var codePart = parts[1] || '';
 
@@ -1109,9 +1113,14 @@ console.log('err is: %s',err)
 
 		var lowRiskMatches = _.difference(highRiskMatches,allMatches);
 
+		// if(!us.startsWith(filePart,'/')){
+		// 	console.log('file %s is binary!!!',filePart)
+		// }
+
 		return {
 			file: file,
-			matches: allMatches,
+			matches: us.startsWith(filePart,'/') ? allMatches : false,
+			// matches: allMatches,
 			severity: highRiskMatches ? 'high' : 'low'
 		}
 

@@ -42,6 +42,7 @@
     "fs-extra": "*",
     "slug": "*",
     "git-patch-additions": "*",
-    "jsonwebtoken": "*"
+    "jsonwebtoken": "*",
+    "isbinaryfile": "*"
   }
 }
