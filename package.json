@@ -43,6 +43,7 @@
     "slug": "*",
     "git-patch-additions": "*",
     "jsonwebtoken": "*",
-    "isbinaryfile": "*"
+    "isbinaryfile": "*",
+    "request-debug": "*"
   }
 }

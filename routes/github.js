@@ -5,6 +5,7 @@ var config = require('config');
 var url = require('url');
 var async = require('async');
 var request = require('request');
+require('request-debug')(request);
 var _ = require('underscore');
 var crypto = require('crypto');
 var fs = require('fs')
@@ -29,12 +30,19 @@ router.get('/authorize',function(req,res,next){
 		query: {
 			client_id: config.get('github.client_id'),
 			redirect_uri: config.get('github.redirect_domain') + '/github/authorized',
+			state: 'blah'
 			// scope: 'user,read:org,repo,admin:org_hook'
 			// scope: 'user:email'
 
 		}
 	}
 	res.redirect(url.format(redirect));
+})
+
+
+router.get('/installed',function(req,res,next){
+		// url is something like http://localhost:3000/github/installed?installation_id=23075
+		res.redirect('/github/authorize')
 })
 
 router.get('/authorized',function(req,res,next){
@@ -45,14 +53,19 @@ router.get('/authorized',function(req,res,next){
  				client_id: config.get('github.client_id'),
  				client_secret: config.get('github.client_secret'),
  				code: req.query.code,
+				redirect_uri: config.get('github.redirect_domain') + '/github/authorized',
+				state: 'blah'
  			}
+console.log('form is %s',util.inspect(form))
  			var headers = {
- 				Accept: 'application/json'
+ 			// 	Accept: 'application/json'
+				Accept: 'application/vnd.github.machine-man-preview+json'
  			}
- 			request.post('https://github.com/login/oauth/access_token',{form: form, headers: headers},function(error,response,body){
+ 			request.post('https://github.com/login/oauth/access_token',{json: true, body: form, headers: headers},function(error,response,body){
  				if(error){
  					callback(error);
  				}else if(response.statusCode > 300){
+console.log('bloodydamn')
  					callback(response.statusCode + ' : ' + body);
  				}else{
  					var data = JSON.parse(body);

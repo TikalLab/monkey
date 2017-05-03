@@ -40,7 +40,8 @@ module.exports = {
         }
       }
     },{
-      new: true
+      new: true,
+      upsert: true
     },function(err,user){
       callback(err,user)
     })
