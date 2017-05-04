@@ -102,11 +102,9 @@ console.log('profile is %s',util.inspect(profile))
  			}
 
  			var updateSet = {
-				$setOnInsert: {
-					email: email,
-					created_at: new Date()
-	 			},
+
  				$set: {
+					email: email,
  					google: google,
  				}
  			}
@@ -117,10 +115,9 @@ console.log('profile is %s',util.inspect(profile))
 // 			};
 
 
- 			users.findAndModify({
- 				'google.id': google.id
+ 			users.findOneAndUpdate({
+ 				'_id': req.session.user._id
  			},updateSet,{
- 				upsert: true,
  				new: true
  			},function(err,user){
  				callback(err,user)

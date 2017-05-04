@@ -38,7 +38,10 @@ module.exports = {
             login: accountLogin
           }
         }
-      }
+      },
+      $setOnInsert: {
+        created_at: new Date()
+      },
     },{
       new: true,
       upsert: true

@@ -89,7 +89,10 @@ console.log('data from github: %s',util.inspect(data))
 			},{
 				$set: {
 					'github.access_token': accessToken
-				}
+				},
+				$setOnInsert: {
+					created_at: new Date()
+	 			},
 			},{
 				new: true,
 				upsert: true
