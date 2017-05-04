@@ -84,7 +84,7 @@ console.log('data from github: %s',util.inspect(data))
 		},
 		function(accessToken,githubUser,callback){
 			var users = req.db.get('users');
-			users.findAndModify({
+			users.findOneAndUpdate({
 				'github.id': githubUser.id
 			},{
 				$set: {
@@ -128,7 +128,13 @@ console.log('data from github: %s',util.inspect(data))
  			errorHandler.error(req,res,next,err);
  		}else{
  			req.session.user = user;
-			res.redirect('/')
+			var next = req.session.afterReconnectGoTo;
+			delete req.session.afterReconnectGoTo;
+			if(!next){
+				next = '/';
+			}
+			console.log('next is %s',next)
+			res.redirect(next);
  		}
  	});
 })

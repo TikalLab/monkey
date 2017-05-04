@@ -195,15 +195,8 @@
 				<!-- CTA BUTTONS -->
 				<div id="cta-5" class="button-container">
 
-				<%
-				var buttonText = 'Get Started';
-				if(typeof inviter !== 'undefined'){
-					buttonText = 'View ' + config.project + '\'s Dashboard';
-				}
 
-				%>
-
-				<a href="<%=config.get('github.integration_url')%>" class="btn standard-button"><i class="ion-social-github sign-in-icon"></i> <%=buttonText%></a>
+				<a href="<%=config.get('github.integration_url')%>" class="btn standard-button"><i class="ion-social-github sign-in-icon"></i> Get Started</a>
 				<a href="#how-it-works" class="btn secondary-button-white">Learn More</a>
 
 				</div>
