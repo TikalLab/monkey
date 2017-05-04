@@ -5,10 +5,10 @@ module.exports = {
 		if(!req.session.user){
 			req.session.afterReconnectGoTo = req.originalUrl;
 			res.redirect('/reconnect');
-		}else if(!('github' in req.session.user)){
-			res.redirect('/connect-scm')
-		}else if(!('installations' in req.session.user.github)){
-			res.redirect('/install-integration')
+		}else if(!('google' in req.session.user)){
+			res.redirect('/connect-gmail')
+		// }else if(!('installations' in req.session.user.github)){
+		// 	res.redirect('/install-integration')
 		// }else if(!('orgs' in req.session.user.github)){
 		// 	github.getUserOrgs(req.session.user.github.access_token,function(err,orgs){
 		// 		req.session.user.github.orgs = orgs;

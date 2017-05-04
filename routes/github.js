@@ -56,12 +56,12 @@ router.get('/authorized',function(req,res,next){
 				redirect_uri: config.get('github.redirect_domain') + '/github/authorized',
 				state: 'blah'
  			}
-console.log('form is %s',util.inspect(form))
+// console.log('form is %s',util.inspect(form))
  			var headers = {
- 			// 	Accept: 'application/json'
-				Accept: 'application/vnd.github.machine-man-preview+json'
+ 				Accept: 'application/json'
+				// Accept: 'application/vnd.github.machine-man-preview+json'
  			}
- 			request.post('https://github.com/login/oauth/access_token',{json: true, body: form, headers: headers},function(error,response,body){
+ 			request.post('https://github.com/login/oauth/access_token',{headers: headers, form: form},function(error,response,body){
  				if(error){
  					callback(error);
  				}else if(response.statusCode > 300){
@@ -85,42 +85,39 @@ console.log('data from github: %s',util.inspect(data))
 		function(accessToken,githubUser,callback){
 			var users = req.db.get('users');
 			users.findAndModify({
-				_id: req.session.user._id.toString()
+				'github.id': githubUser.id
 			},{
 				$set: {
-					github: {
-						access_token: accessToken,
-						login: githubUser.login,
-						id: githubUser.id
-					}
+					'github.access_token': accessToken
 				}
 			},{
-				new: true
+				new: true,
+				upsert: true
 			},function(err,user){
 				callback(err,user)
-			}),
-			// add user orgs to session
-			function(user,callback){
-				github.getUserOrgs(user.github.access_token,function(err,orgs){
-					if(err){
-						callback(err)
-					}else{
-						user.github.orgs = orgs;
-						callback(null,user)
-					}
-				})
-			},
-			// add user repos to session
-			function(user,callback){
-				github.getUserRepos(user.github.access_token,function(err,repos){
-					if(err){
-						callback(err)
-					}else{
-						user.github.repos = repos;
-						callback(null,user)
-					}
-				})
-			}
+			})
+			// // add user orgs to session
+			// function(user,callback){
+			// 	github.getUserOrgs(user.github.access_token,function(err,orgs){
+			// 		if(err){
+			// 			callback(err)
+			// 		}else{
+			// 			user.github.orgs = orgs;
+			// 			callback(null,user)
+			// 		}
+			// 	})
+			// },
+			// // add user repos to session
+			// function(user,callback){
+			// 	github.getUserRepos(user.github.access_token,function(err,repos){
+			// 		if(err){
+			// 			callback(err)
+			// 		}else{
+			// 			user.github.repos = repos;
+			// 			callback(null,user)
+			// 		}
+			// 	})
+			// }
 
 		}
  	],function(err,user){

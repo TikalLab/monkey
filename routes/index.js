@@ -68,6 +68,12 @@ router.get('/connect-scm',function(req, res, next) {
 		})
 })
 
+router.get('/connect-gmail',function(req, res, next) {
+		render(req,res,'index/connect-gmail',{
+
+		})
+})
+
 router.get('/dashboard',function(req, res, next) {
 	loginEnforcer.enforce(req,res,next,function(){
 		render(req,res,'users/dashboard',{
