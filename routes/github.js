@@ -88,7 +88,8 @@ console.log('data from github: %s',util.inspect(data))
 				'github.id': githubUser.id
 			},{
 				$set: {
-					'github.access_token': accessToken
+					'github.access_token': accessToken,
+					'github.login': githubUser.login
 				},
 				$setOnInsert: {
 					created_at: new Date()
