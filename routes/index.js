@@ -57,6 +57,12 @@ router.get('/install-integration',function(req, res, next) {
 		})
 })
 
+router.get('/tos',function(req, res, next) {
+		render(req,res,'index/tos',{
+
+		})
+})
+
 router.get('/goto-install-integration',function(req, res, next) {
 		delete req.session.user;
 		res.redirect(config.get('github.integration_url'))
