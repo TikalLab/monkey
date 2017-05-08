@@ -44,9 +44,9 @@
       <tbody>
         <% users.forEach(function(user){ %>
             <tr>
-								<td><img src="<%=user.google.avatar_url%>"></td>
+								<td><img src="<%='google' in user ? user.google.avatar_url : ''%>"></td>
 								<td><a href="/admin/crm/user/<%=user._id%>"><%=user._id%></a></td>
-	              <td><%=user.google.display_name%></td>
+	              <td><%='google' in user ? user.google.display_name : '@' + user.github.login%></td>
                 <td><%=user.email%></td>
                 <td><%=moment.utc(user.created_at).format('YYYY-MM-DD')%></td>
             </tr>
