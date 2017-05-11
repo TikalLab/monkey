@@ -1,0 +1,55 @@
+<div class="page-header">
+	<div class="page-title">
+		&nbsp;
+	</div>
+</div>
+
+<form role="form" action="/admin/add-billing-plan" method="POST">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h6 class="panel-title"><i class="icon-new"></i> Add Billing Plan</h6></div>
+			<div class="panel-body">
+
+
+
+		        <div class="form-group">
+		            <label>name:</label>
+	            	<input type="text" name="name" class="form-control" value="" placeholder="name">
+		        </div>
+            <div class="form-group">
+		            <label>description:</label>
+								<!-- <textarea name="description" class="form-control" placeholder="description"></textarea> -->
+	            	<input type="text" name="description" class="form-control" value="" placeholder="description">
+		        </div>
+            <div class="form-group">
+		            <label>frequency type:</label>
+								<select name="frequency_type">
+									<option value="days">days</option>
+									<option value="weeks">weeks</option>
+									<option value="months">months</option>
+								</select>
+		        </div>
+						<div class="form-group">
+		            <label>frequency interval:</label>
+	            	<input type="text" name="frequency_interval" class="form-control" value="" placeholder="interval in {type} between deliveries">
+		        </div>
+						<div class="form-group">
+		            <label>currency:</label>
+	            	<input type="text" name="currency" class="form-control" value="" placeholder="currency">
+								<a target="_blank" href="https://developer.paypal.com/webapps/developer/docs/integration/direct/rest-api-payment-country-currency-support/">list of paypal currencies</a>
+		        </div>
+		        <div class="form-group">
+		            <label>price:</label>
+	            	<input type="text" name="price" class="form-control" value="" placeholder="price">
+		        </div>
+            <div class="form-group">
+		            <label>is featured?</label>
+	            	<input type="checkbox" name="is_featured" class="form-control">
+		        </div>
+
+
+		        <div class="form-actions text-right">
+                <input type="submit" value="Add Billing Plan" class="btn btn-primary">
+            </div>
+	    </div>
+	</div>
+</form>

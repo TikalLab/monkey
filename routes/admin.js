@@ -21,7 +21,9 @@ var unsubscriber = require('../app_modules/unsubscriber');
 // var configurations = require('../app_modules/configurations');
 var github = require('../app_modules/github');
 var alertIcons = require('../app_modules/alert-icons');
+var paypal = require('../app_modules/paypal');
 
+var plans = require('../models/plans');
 var users = require('../models/users');
 var scans = require('../models/scans');
 var scanItems = require('../models/scan-items');
@@ -120,6 +122,50 @@ router.get('/crm/user/:user_id',auth,function(req,res,next){
 				local_scans: results[1],
 				push_scans: results[2],
 				active_page: 'crm'
+			})
+		}
+	})
+})
+
+router.post('/add-billing-plan',auth,function(req,res,next){
+	async.waterfall([
+		function(callback){
+			paypal.createAndActivatePlan(req.body.name,req.body.description,req.body.price,req.body.currency,function(err,paypalBillingPlan){
+				callback(err,paypalBillingPlan)
+			})
+		},
+		function(paypalBillingPlan,callback){
+			plans.add(req.db,req.body.name,req.body.description,req.body.frequency_type,req.body.frequency_interval,req.body.price,req.body.currency,(req.body.is_featured ? true : false),paypalBillingPlan.id,function(err,plan){
+				callback(err,paypalBillingPlan,plan)
+			})
+		},
+	],function(err,paypalBillingPlan,plan){
+		if(err){
+ 			errorHandler.error(req,res,next,err);
+ 		}else{
+			req.session.alert = {
+				type: 'success',
+				message: util.format('billing plan added successfuly. Paypal ID is %s, our ID is %s',paypalBillingPlan.id,plan._id)
+			}
+			res.redirect('/admin/billing-plans')
+		}
+	})
+})
+
+router.get('/add-billing-plan',auth,function(req,res,next){
+	render(req,res,'admin/add-billing-plan',{
+		active_page: 'billing_plans'
+	})
+})
+
+router.get('/billing-plans',auth,function(req,res,next){
+	plans.getAll(req.db,function(err,plans){
+		if(err){
+			errorHandler.error(req,res,next,err);
+		}else{
+			render(req,res,'admin/billing-plans',{
+				plans: plans,
+				active_page: 'billing_plans'
 			})
 		}
 	})

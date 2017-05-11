@@ -44,6 +44,7 @@
     "git-patch-additions": "*",
     "jsonwebtoken": "*",
     "isbinaryfile": "*",
+    "paypal-rest-sdk": "*",
     "request-debug": "*"
   }
 }

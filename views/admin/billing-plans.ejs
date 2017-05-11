@@ -1,0 +1,51 @@
+<div class="page-header">
+	<div class="page-title">
+		&nbsp;
+	</div>
+</div>
+
+<div class="page-header">
+	<div class="page-title">
+		<a href="/admin/add-billing-plan" class="btn btn-success"><i class="icon-plus"></i> Add Billing Plan</a>
+	</div>
+</div>
+
+<div class="page-header">
+	<div class="page-title">
+		&nbsp;
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Billing Plans</h6></div>
+  <div class="datatable">
+    <table class="table">
+      <thead>
+        <tr>
+					<th>id</th>
+          <th>name</th>
+					<th>description</th>
+					<th>frequency</th>
+					<th>currency</th>
+          <th>price</th>
+          <th>paypal ID</th>
+          <th>is featured?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% plans.forEach(function(plan){ %>
+            <tr>
+								<td><%=plan._id%></td>
+	              <td><%=plan.name%></td>
+                <td><%=plan.description%></td>
+								<td>Every <%=plan.frequency.interval%> <%=plan.frequency.type%></td>
+								<td><%=plan.currency%></td>
+                <td><%=plan.price%></td>
+                <td><%=plan.paypal_id%></td>
+                <td><%=plan.is_featured ? 'V': ''%></td>
+            </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
