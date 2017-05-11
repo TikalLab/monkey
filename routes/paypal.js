@@ -10,7 +10,6 @@ var moment = require('moment')
 // var github = require('../app_modules/github');
 
 var users = require('../models/users');
-var shipments = require('../models/shipments');
 var paypal = require('../app_modules/paypal');
 
 

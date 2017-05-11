@@ -25,7 +25,7 @@ var github = require('./routes/github');
 // var agent = require('./routes/agent');
 var google = require('./routes/google');
 var admin = require('./routes/admin');
-// var bitbucket = require('./routes/bitbucket');
+var paypal = require('./routes/paypal');
 
 ///*
 // * Passport stuff
@@ -131,7 +131,7 @@ app.use('/github', github);
 // app.use('/agent', agent);
 app.use('/google', google);
 app.use('/admin', admin);
-// app.use('/bitbucket', bitbucket);
+app.use('/paypal', paypal);
 
 
 // catch 404 and forward to error handler

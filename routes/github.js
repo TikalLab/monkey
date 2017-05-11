@@ -10,6 +10,7 @@ var _ = require('underscore');
 var crypto = require('crypto');
 var fs = require('fs')
 var path = require('path')
+var moment = require('moment')
 
 var github = require('../app_modules/github');
 var errorHandler = require('../app_modules/error');
@@ -20,6 +21,7 @@ var installations = require('../models/installations');
 var users = require('../models/users');
 
 var alertTemplate = fs.readFileSync(path.join(__dirname,'../views/emails/alert.ejs'), 'utf8');
+var pleaseSubscribeTemplate = fs.readFileSync(path.join(__dirname,'../views/emails/please-subscribe.ejs'), 'utf8');
 
 router.get('/authorize',function(req,res,next){
 	req.session.afterGithubRedirectTo = req.query.next;
@@ -352,26 +354,72 @@ function processPush(push,db){
 		},
 		function(user,filesWithKeys,pushScan,callback){
 			if(!filesWithKeys){
+				if(!('subscription' in user || moment(user.created_at).add(1,'month').isAfter(moment()))){
+					mailer.sendMulti(
+						[user], //recipients
+						'[' + config.get('app.name') + '] Possible private key committed alert',
+						pleaseSubscribeTemplate,
+						{
+						},
+						'please-subscribe',
+						function(err){
+							callback(err)
+						}
+
+					);
+				}
 				callback()
 			}else if(filesWithKeys.length == 0){
+				if(!('subscription' in user || moment(user.created_at).add(1,'month').isAfter(moment()))){
+					mailer.sendMulti(
+						[user], //recipients
+						'[' + config.get('app.name') + '] Possible private key committed alert',
+						pleaseSubscribeTemplate,
+						{
+						},
+						'please-subscribe',
+						function(err){
+							callback(err)
+						}
+
+					);
+				}
 				callback()
 			}else{
 				// TBD notify user
 				console.log('need to notify user about files with keys: %s',util.inspect(filesWithKeys,{depth:8}))
 
-				mailer.sendMulti(
-					[user], //recipients
-					'[' + config.get('app.name') + '] Possible private key committed alert',
-					alertTemplate,
-					{
-						push_scan: pushScan
-					},
-					'alert',
-					function(err){
-						callback(err)
-					}
+				if('subscription' in user || moment(user.created_at).add(1,'month').isAfter(moment())){
+					mailer.sendMulti(
+						[user], //recipients
+						'[' + config.get('app.name') + '] Possible private key committed alert',
+						alertTemplate,
+						{
+							push_scan: pushScan
+						},
+						'alert',
+						function(err){
+							callback(err)
+						}
 
-				);
+					);
+				}else{
+					mailer.sendMulti(
+						[user], //recipients
+						'[' + config.get('app.name') + '] Possible private key committed alert',
+						pleaseSubscribeTemplate,
+						{
+						},
+						'please-subscribe',
+						function(err){
+							callback(err)
+						}
+
+					);
+
+				}
+
+
 
 			}
 		}
