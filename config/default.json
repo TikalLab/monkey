@@ -38,6 +38,13 @@
 		"client_secret": "",
 		"redirect_domain": "http://localhost:3000"
 	},
+	"paypal": {
+		"client_id": "ASz7CBwHjReK7di1j1BEFprfv6eSS-0HxNukQTUVCVK40PivkgxHIN75C8pUH23BppKpCTyZ2XysCn9b",
+		"client_secret": "",
+		"mode": "sandbox",
+		"webhook_domain": "facetogether.ngrok.io",
+		"webhook_id": "8WU70833LV084674P"
+	},
 	"auth": {
 		"username": "admin",
 		"password": "password"
