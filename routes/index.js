@@ -65,6 +65,25 @@ router.get('/tos',function(req, res, next) {
 		})
 })
 
+router.get('/thank-you',function(req, res, next) {
+	async.waterfall([
+		function(callback){
+			plans.get(req.db,req.session.user.subscription.plan.ours,function(err,plan){
+				callback(err,plan)
+			})
+		}
+	],function(err,plan){
+		if(err){
+			errorHandler.error(req,res,next,err)
+		}else{
+			render(req,res,'index/thank-you',{
+				plan: plan
+			})
+		}
+	})
+
+})
+
 router.get('/pricing',function(req, res, next) {
 	async.waterfall([
 		function(callback){
