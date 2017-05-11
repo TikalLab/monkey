@@ -20,6 +20,7 @@ var unsubscriber = require('../app_modules/unsubscriber');
 // var configurations = require('../app_modules/configurations');
 var github = require('../app_modules/github');
 var alertIcons = require('../app_modules/alert-icons');
+var paypal = require('../app_modules/paypal');
 
 var scans = require('../models/scans');
 var scanItems = require('../models/scan-items');
@@ -82,6 +83,73 @@ router.get('/pricing',function(req, res, next) {
 	})
 
 })
+
+router.get('/subscribe/:plan_id',function(req,res,next){
+
+	loginEnforcer.enforce(req,res,next,function(){
+console.log('AAA')
+		async.waterfall([
+			function(callback){
+				plans.get(req.db,req.params.plan_id,function(err,plan){
+					console.log('BBBB')
+					callback(err,plan)
+				})
+			},
+			function(plan,callback){
+				paypal.createBillingAgreement(plan,function(err,billingAgreement){
+					callback(err,billingAgreement)
+				})
+			},
+		],function(err,billingAgreement){
+			if(err){
+				errorHandler.error(req,res,next,err);
+			}else{
+	console.log('billing agreement is %s',util.inspect(billingAgreement))
+				var redirectUrl = _.find(billingAgreement.links,function(link){
+					return link.rel == 'approval_url'
+				}).href;
+				req.session.plan = {
+					ours: req.params.plan_id,
+					paypal: billingAgreement.plan.id
+				}
+				res.redirect(redirectUrl)
+
+			}
+		})
+	})
+
+
+})
+
+router.get('/paypal/cancelled',function(req,res,next){
+	render(req,res,'index/paypal-cancelled',{})
+})
+
+router.get('/paypal/paid',function(req,res,next){
+	async.waterfall([
+		function(callback){
+			paypal.executeAgreement(req.query.token,function(err,billingAgreement){
+				callback(err,billingAgreement)
+			})
+		},
+		function(billingAgreement,callback){
+console.log('aggremnt: %s',util.inspect(billingAgreement,{depth:8}))
+			users.subscribePaypal(req.db,req.session.user._id,req.session.plan,billingAgreement,function(err,user){
+				callback(err,user)
+			})
+		},
+	],function(err,user){
+		if(err){
+			errorHandler.error(req,res,next,err);
+		}else{
+			delete req.session.plan;
+			req.session.user = user;
+			res.redirect('/thank-you')
+		}
+	})
+})
+
+
 
 router.get('/goto-install-integration',function(req, res, next) {
 		delete req.session.user;

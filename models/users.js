@@ -1,5 +1,5 @@
 var moment = require('moment')
-
+var async = require('async')
 module.exports = {
   get: function(db,userID,callback){
     var users = db.get('users');
@@ -48,5 +48,34 @@ module.exports = {
     },function(err,user){
       callback(err,user)
     })
-  }
+  },
+  subscribePaypal: function(db,userID,plan,billingAgreement,callback){
+
+    var thisObject = this;
+    async.waterfall([
+      function(callback){
+        var users = db.get('users');
+        users.findOneAndUpdate({
+          _id: userID
+        },{
+          $set: {
+            subscription: {
+              agreement_id: billingAgreement.id,
+              plan: plan,
+              created_at: new Date(),
+              start_date: moment(billingAgreement.start_date).toDate(),
+              status: 'active'
+            }
+          }
+        },{
+          new: true
+        },function(err,user){
+          callback(err,user)
+        })
+      }
+    ],function(err,user){
+      callback(err,user)
+    })
+  },
+
 }
