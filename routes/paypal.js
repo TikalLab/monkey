@@ -64,15 +64,10 @@ router.post('/webhook',function(req,res,next){
 function processBillingSubscriptionCancelled(db,event,callback){
 	async.waterfall([
 		function(callback){
-			users.cancelSubscription(db,event.resource.id,function(err,user){
+			users.cancelPaypalSubscription(db,event.resource.id,function(err,user){
 				callback(err,user)
 			})
 		},
-		function(user,callback){
-			shipments.removeScheduled(db,user._id.toString(),function(err){
-				callback(err)
-			})
-		}
 	],function(err){
 		callback(err)
 	})
@@ -82,15 +77,10 @@ function processBillingSubscriptionCancelled(db,event,callback){
 function processBillingSubscriptionSuspended(db,event,callback){
 	async.waterfall([
 		function(callback){
-			users.suspendSubscription(db,event.resource.id,function(err,user){
+			users.suspendPaypalSubscription(db,event.resource.id,function(err,user){
 				callback(err,user)
 			})
 		},
-		function(user,callback){
-			shipments.removeScheduled(db,user._id.toString(),function(err){
-				callback(err)
-			})
-		}
 	],function(err){
 		callback(err)
 	})
@@ -99,15 +89,10 @@ function processBillingSubscriptionSuspended(db,event,callback){
 function processBillingSubscriptionReactivated(db,event,callback){
 	async.waterfall([
 		function(callback){
-			users.reactivateSubscription(db,event.resource.id,function(err,user){
+			users.reactivatePaypalSubscription(db,event.resource.id,function(err,user){
 				callback(err,user)
 			})
 		},
-		function(user,callback){
-			shipments.schedule(db,user._id.toString(),new Date(),function(err){
-				callback(err)
-			})
-		}
 	],function(err){
 		callback(err)
 	})

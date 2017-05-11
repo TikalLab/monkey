@@ -77,5 +77,53 @@ module.exports = {
       callback(err,user)
     })
   },
+  cancelPaypalSubscription: function(db,paypalBillingAgreementID,callback){
+    var users = db.get('users');
+    users.findOneAndUpdate({
+      'subscription.agreement_id': paypalBillingAgreementID
+    },{
+      $set: {
+        'subscription.status': 'cancelled',
+        'subscription.cancelled_at': new Date(),
+      }
+    },{
+      new: true
+    },function(err,user){
+      callback(err,user)
+    })
+  },
+  suspendPaypalSubscription: function(db,paypalBillingAgreementID,callback){
+    var users = db.get('users');
+    users.findOneAndUpdate({
+      'subscription.agrrement_id': paypalBillingAgreementID
+    },{
+      $set: {
+        'subscription.status': 'suspended',
+        'subscription.suspended_at': new Date(),
+      }
+    },{
+      new: true
+    },
+    function(err,user){
+      callback(err,user)
+    })
+  },
+  reactivatePaypalSubscription: function(db,paypalBillingAgreementID,callback){
+    var users = db.get('users');
+    users.findOneAndUpdate({
+      'subscription.agrrement_id': paypalBillingAgreementID
+    },{
+      $set: {
+        'subscription.status': 'reactivated',
+        'subscription.reactivated_at': new Date(),
+      }
+    },{
+      new: true
+    },
+    function(err,user){
+      callback(err,user)
+    })
+  },
+
 
 }
