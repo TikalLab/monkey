@@ -1,0 +1,72 @@
+<section class="section4 bgcolor-2" id="section4">
+<div class="container">
+
+	<!-- SECTION HEADING -->
+	<h2>Subscribe to GitMonkey</h2>
+	<div class="colored-line">
+	</div>
+
+	<div class="sub-heading">
+		Continue receiving alerts and be safe from exposed secrets and private keys in your code
+	</div>
+
+	<div class="pricing-table">
+
+		<!-- PRICING TABLES -->
+		<div class="row">
+
+			<!-- PACKAGE ONE -->
+
+      <% plans.forEach(function(plan){ %>
+        <div class="col-md-3">
+          <div class="package bgcolor-white">
+            <div class="header dark-bg">
+              <h3><%=plan.name%></h3>
+              <div class="sub-heading">
+                <span class="colored-text strong"><%=plan.description%>
+              </div>
+            </div>
+
+            <!-- PACKAGE FEATURES -->
+            <div class="package-features">
+              <ul>
+                <li>
+                <div class="column-9p">
+                  Unlimited full scans
+                </div>
+                <div class="column-1p">
+                  <span class="icon_check"></span>
+                </div>
+                </li>
+                <li>
+                <div class="column-7p">
+                  Push Scans per Month
+                </div>
+                <div class="column-3p">
+                  <%=plan.scans_per_month.toLocaleString()%>
+                </div>
+                </li>
+              </ul>
+              <div class="bottom-row">
+                <div class="pull-left">
+                  <h6>$<%=plan.price%>/m</h6>
+                </div>
+                <div class="pull-right">
+                  <div id="cta-1">
+                    <a href="/subscribe/<%=plan._id%>" class="btn secondary-button"><i class="ion-social-github"></i> SUBSCRIBE</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+
+
+
+		</div> <!-- /END ROW -->
+	</div> <!-- /END ALL PACKAGE -->
+
+</div> <!-- /END CONTAINER -->
+
+</section>

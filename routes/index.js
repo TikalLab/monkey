@@ -27,6 +27,7 @@ var localScans = require('../models/local-scans');
 var pushScans = require('../models/push-scans');
 var approvedKeys = require('../models/approved-keys');
 var users = require('../models/users');
+var plans = require('../models/plans');
 
 router.get('/',function(req, res, next) {
 	if(req.session.user){
@@ -61,6 +62,25 @@ router.get('/tos',function(req, res, next) {
 		render(req,res,'index/tos',{
 
 		})
+})
+
+router.get('/pricing',function(req, res, next) {
+	async.waterfall([
+		function(callback){
+			plans.getFeatured(req.db,function(err,plans){
+				callback(err,plans)
+			})
+		}
+	],function(err,plans){
+		if(err){
+			errorHandler.error(req,res,next,err)
+		}else{
+			render(req,res,'index/pricing',{
+				plans: plans
+			})
+		}
+	})
+
 })
 
 router.get('/goto-install-integration',function(req, res, next) {

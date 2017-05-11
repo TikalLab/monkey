@@ -11,7 +11,7 @@ module.exports = {
       callback(err,plans)
     })
   },
-  add: function(db,name,description,frequencyType,frequencyInterval,price,currency,isFeatured,paypalID,callback){
+  add: function(db,name,description,frequencyType,frequencyInterval,scans_per_month,price,currency,isFeatured,paypalID,callback){
     var plans = db.get('plans');
     plans.insert({
       name: name,
@@ -20,6 +20,7 @@ module.exports = {
         interval: Number(frequencyInterval),
         type: frequencyType,
       },
+      scansPerMonth: scans_per_month,
       price: Number(price),
       currency: currency,
       is_featured: isFeatured,

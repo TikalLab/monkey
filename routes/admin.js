@@ -135,7 +135,7 @@ router.post('/add-billing-plan',auth,function(req,res,next){
 			})
 		},
 		function(paypalBillingPlan,callback){
-			plans.add(req.db,req.body.name,req.body.description,req.body.frequency_type,req.body.frequency_interval,req.body.price,req.body.currency,(req.body.is_featured ? true : false),paypalBillingPlan.id,function(err,plan){
+			plans.add(req.db,req.body.name,req.body.description,req.body.frequency_type,req.body.frequency_interval,req.body.scans_per_month,req.body.price,req.body.currency,(req.body.is_featured ? true : false),paypalBillingPlan.id,function(err,plan){
 				callback(err,paypalBillingPlan,plan)
 			})
 		},
