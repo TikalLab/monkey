@@ -453,5 +453,15 @@ var headers = {
 //
 // })
 
-var moment = require('moment')
-console.log(moment(Number(1488799520 + '000')).toDate())
+// var moment = require('moment')
+// console.log(moment(Number(1488799520 + '000')).toDate())
+//
+// var os = require('os')
+// var content = 'var secret="fsdfsdk89sd8f9sdfdsfsd9f8sd98f9ds8f9sd";' + os.EOL + "console.log('hello workd');" + os.EOL + 'var secret="fsdfsdk89sd8f9sdfdsfsd9f8sd98f9ds8f9sd";'
+//
+// var lineNumber = require('line-number')
+// var matches = content.match(/\b(?=(?:[a-zA-Z]*\d){3})(?=.*\d[a-zA-Z]+\d)[a-zA-Z\d]{12,}\b/g);
+// var matches = lineNumber(content,/\b(?=(?:[a-zA-Z]*\d){3})(?=.*\d[a-zA-Z]+\d)[a-zA-Z\d]{12,}\b/g);
+// console.log(util.inspect(matches))
+var a = '10000';
+console.log(a.toLocaleString())

@@ -1,3 +1,11 @@
+.severity-high {
+	background-color: #ffd6cc;
+}
+
+.severity-low {
+	background-color: #ffffe6;
+}
+
 .navbar-brand img {
 	height: 24px;
 }
@@ -25,7 +33,7 @@
 }
 
 .twitter-typeahead {
-	width: 100%;	
+	width: 100%;
 }
 
 .twitter-typeahead .tt-query,
@@ -84,7 +92,7 @@
 }
 
 .loading-animation{
-	text-align:center; 
+	text-align:center;
 	padding: 30px 0 90px;
 }
 

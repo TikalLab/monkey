@@ -30,7 +30,18 @@
       </thead>
       <tbody>
         <% scans.forEach(function(scan){ %>
-          <tr>
+					<%
+					var trClass = null;
+					if('suspected_keys' in scan){
+						if(scan.suspected_keys.length > 0){
+							var highSeverity = _.find(scan.suspected_keys,function(suspectedKey){
+								return suspectedKey.severity == 'high'
+							})
+							trClass = _.isUndefined(highSeverity) ? 'severity-low' : 'severity-high'
+						}
+					}
+					%>
+          <tr class="<%=trClass ? trClass : ''%>">
             <td><a href="/local-scan/<%=scan._id.toString()%>"><%=scan._id.toString()%></a></td>
             <td><%=moment(scan.created_at).calendar()%></td>
             <td><%=scan.is_scanning ? 'Scanning' : (scan.is_finished ? 'Finished' : 'Waiting')%></td>
@@ -63,7 +74,7 @@
 							var highSeverity = _.find(scan.suspected_keys,function(suspectedKey){
 								return suspectedKey.severity == 'high'
 							})
-							trClass = _.isUndefined(highSeverity) ? 'alert-warning' : 'progress-bar-danger'
+							trClass = _.isUndefined(highSeverity) ? 'severity-low' : 'severity-high'
 						}
 					}
 					%>
