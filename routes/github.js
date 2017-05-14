@@ -399,8 +399,9 @@ console.log('suspected kets are: %s',util.inspect(suspectedKeys))
 						}
 
 					);
+				}else{
+					callback()
 				}
-				callback()
 			}else{
 				// TBD notify user
 				console.log('need to notify user about files with keys: %s',util.inspect(filesWithKeys,{depth:8}))
