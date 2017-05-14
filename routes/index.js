@@ -785,7 +785,7 @@ console.log('%s hooked',repo.full_name)
 
 
 router.post('/approve-key',function(req, res, next) {
-	approvedKeys.create(req.body.scan_id,req.body.org,req.body.repo,req.body.branch,req.body.file,req.body.key,req.db,function(err,approvedKey){
+	approvedKeys.create(req.session.user._id.toString(),req.body.scan_id,req.body.org,req.body.repo,req.body.branch,req.body.file,req.body.key,req.db,function(err,approvedKey){
 		res.json({
 			approved_key: approvedKey
 		})

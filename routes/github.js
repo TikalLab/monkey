@@ -19,6 +19,7 @@ var mailer = require('../app_modules/mailer');
 var pushScans = require('../models/push-scans');
 var installations = require('../models/installations');
 var users = require('../models/users');
+var approvedKeys = require('../models/approved-keys');
 
 var alertTemplate = fs.readFileSync(path.join(__dirname,'../views/emails/alert.ejs'), 'utf8');
 var pleaseSubscribeTemplate = fs.readFileSync(path.join(__dirname,'../views/emails/please-subscribe.ejs'), 'utf8');
@@ -350,6 +351,21 @@ function processPush(push,db){
 		function(user,filesWithKeys,callback){
 			pushScans.create(user._id.toString(),push,filesWithKeys,db,function(err,pushScan){
 				callback(err,user,filesWithKeys,pushScan)
+			})
+		},
+		function(user,filesWithKeys,pushScan,callback){
+			approvedKeys.getPerUser(db,user._id.toString(),function(err,userApprovedKeys){
+				if(err){
+					callback(err)
+				}else{
+					var suspectedKeys = _.reject(pushScan.suspected_keys,function(suspectedKey){
+						return _.find(userApprovedKeys,function(approvedKey){
+							return approvedKey.key == suspectedKey.key
+						})
+					})
+console.log('suspected kets are: %s',util.inspect(suspectedKeys))
+					callback(null,user,suspectedKeys,pushScan)
+				}
 			})
 		},
 		function(user,filesWithKeys,pushScan,callback){
