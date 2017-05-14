@@ -843,7 +843,7 @@ console.log('err is: %s',err)
 		// exclude .git
 		// var grepCommand = util.format("grep -rE '[0-9a-f]{40}' %s/*",dir);
 		// var grepCommand = util.format("grep -rE '[a-zA-Z0-9]{16,}' %s/*",dir);
-		var grepCommand = util.format("grep -rE '[a-zA-Z0-9]{16,}' %s/*",dir);
+		var grepCommand = util.format("grep -rnE '[a-zA-Z0-9]{16,}' %s/*",dir);
 
 		async.waterfall([
 			// create a dir specifically for this branch
@@ -1096,7 +1096,8 @@ console.log('err is: %s',err)
 		var parts = line.split(':');
 console.log('parts are %s',util.inspect(parts))
 		var filePart = parts[0];
-		var codePart = parts[1] || '';
+		var linePart = parts[1];
+		var codePart = parts[2] || '';
 
 		var fileParts = filePart.split('/');
 		fileParts = fileParts.slice(3);
@@ -1121,7 +1122,8 @@ console.log('parts are %s',util.inspect(parts))
 			file: file,
 			matches: us.startsWith(filePart,'/') ? allMatches : false,
 			// matches: allMatches,
-			severity: highRiskMatches ? 'high' : 'low'
+			severity: highRiskMatches ? 'high' : 'low',
+			line: linePart
 		}
 
 	}
