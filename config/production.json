@@ -38,6 +38,13 @@
 		"client_secret": "",
 		"redirect_domain": "https://gitmonkey.io"
 	},
+	"paypal": {
+		"client_id": "ASZBbkqh1z4RLGJ3wxc7Sb2bxYDyMLsIJEBkMkHF0DDQFbDcfl1wkBz4Z4A7Qdj9nsq8lkbFrE-EHMC4",
+		"client_secret": "",
+		"mode": "live",
+		"webhook_domain": "gitmonkey.io",
+		"webhook_id": "1K6624354R378310B"
+	},
 	"auth": {
 		"username": "admin",
 		"password": ""
