@@ -22,7 +22,7 @@
 					</div>
 					<h4>Connect Your GitHub</h4>
 					<p>
-						Connect our GitHub app and install our GitHub integration.
+						Install our GitHub integration and set its scope.
 					</p>
 				</div>
 			</div>
@@ -244,6 +244,76 @@
 
 </section>
 
+<section class="section4 bgcolor-2" id="pricing">
+<div class="container">
+
+	<!-- SECTION HEADING -->
+	<h2>Pricing</h2>
+	<div class="colored-line">
+	</div>
+
+	<div class="sub-heading">
+		First 30 days free. Unlimited usage. No credit card required.
+	</div>
+
+	<div class="pricing-table">
+
+		<!-- PRICING TABLES -->
+		<div class="row">
+
+			<!-- PACKAGE ONE -->
+
+      <% var i=0%>
+      <% plans.forEach(function(plan){ %>
+        <% i++ %>
+        <div class="col-md-4">
+          <div class="package bgcolor-white">
+            <div class="header <%=(i==2 ? 'color-bg' : 'dark-bg')%>">
+              <h3><%=plan.name%></h3>
+              <div class="sub-heading">
+                <span class="strong <%=(i==2 ? '' : 'colored-text')%>">$<%=plan.price%></span> per month
+              </div>
+            </div>
+
+            <!-- PACKAGE FEATURES -->
+            <div class="package-features">
+              <ul>
+                <li>
+                <div class="column-7p">
+                  Monthly Full Scans
+                </div>
+                <div class="column-3p">
+                  <%=Number(plan.full_scans_per_month).toLocaleString()%>
+                </div>
+                </li>
+                <li>
+                <div class="column-7p">
+                  Monthly Push Scans
+                </div>
+                <div class="column-3p">
+                  <%=Number(plan.push_scans_per_month).toLocaleString()%>
+                </div>
+                </li>
+              </ul>
+              <div class="bottom-row">
+                <div class="pull-right">
+                  <h6>$<%=plan.price%>/month</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+
+
+
+		</div> <!-- /END ROW -->
+	</div> <!-- /END ALL PACKAGE -->
+
+</div> <!-- /END CONTAINER -->
+
+</section>
+
 
 <section class="cta-section" id="section8">
 <div class="color-overlay">
@@ -253,7 +323,7 @@
 		<h4>Ready to Start Feeling Safer</h4>
 		<h2>About Your Code?</h2>
 		<div id="cta-4">
-			<a href="/google/authorize" class="btn standard-button"><i class="ion-social-github"></i>  Get Started</a>
+			<a href="/google/authorize" class="btn standard-button"><i class="ion-social-github"></i>  Start Free Trial</a>
 		</div>
 
 

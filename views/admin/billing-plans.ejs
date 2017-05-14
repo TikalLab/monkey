@@ -25,7 +25,8 @@
 					<th>id</th>
           <th>name</th>
 					<th>description</th>
-					<th>scans per month</th>
+					<th>full scans per month</th>
+					<th>push scans per month</th>
 					<th>frequency</th>
 					<th>currency</th>
           <th>price</th>
@@ -39,7 +40,8 @@
 								<td><%=plan._id%></td>
 	              <td><%=plan.name%></td>
                 <td><%=plan.description%></td>
-								<td><%=plan.scans_per_month%></td>
+								<td><%=plan.full_scans_per_month%></td>
+								<td><%=plan.push_scans_per_month%></td>
 								<td>Every <%=plan.frequency.interval%> <%=plan.frequency.type%></td>
 								<td><%=plan.currency%></td>
                 <td><%=plan.price%></td>

@@ -34,9 +34,22 @@ router.get('/',function(req, res, next) {
 	if(req.session.user){
 		res.redirect('/dashboard');
 	}else{
-		render(req,res,'index/homepage',{
-			isHomepage: true
-		});
+		async.waterfall([
+			function(callback){
+				plans.getFeatured(req.db,function(err,plans){
+					callback(err,plans)
+				})
+			}
+		],function(err,plans){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+				render(req,res,'index/homepage',{
+					isHomepage: true,
+					plans: plans
+				});
+			}
+		})
 
 	}
 })
