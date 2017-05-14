@@ -13,8 +13,9 @@ module.exports = {
           repo: match.repo,
           branch: match.branch,
           file: match.file,
+          line: suspectedKey.number,
           severity: match.severity,
-          key: suspectedKey
+          key: suspectedKey.match,
         })
       })
     })

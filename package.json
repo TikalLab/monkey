@@ -45,6 +45,7 @@
     "jsonwebtoken": "*",
     "isbinaryfile": "*",
     "paypal-rest-sdk": "*",
-    "request-debug": "*"
+    "request-debug": "*",
+    "line-number": "*"
   }
 }

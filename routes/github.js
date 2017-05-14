@@ -344,9 +344,12 @@ function processPush(push,db){
 			})
 		},
 		function(user,callback){
-			github.scanInstallationPush(push.installation.id,push,function(err,filesWithKeys){
+			github.scanInstallationPushWithLineNumbers(push.installation.id,push,function(err,filesWithKeys){
 				callback(err,user,filesWithKeys)
 			})
+			// github.scanInstallationPush(push.installation.id,push,function(err,filesWithKeys){
+			// 	callback(err,user,filesWithKeys)
+			// })
 		},
 		function(user,filesWithKeys,callback){
 			pushScans.create(user._id.toString(),push,filesWithKeys,db,function(err,pushScan){

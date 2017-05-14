@@ -1065,6 +1065,61 @@ console.log('err is: %s',err)
 		})
 
 	},
+	scanInstallationPushWithLineNumbers: function(installationID,push,callback){
+		var thisObject = this;
+		async.waterfall([
+			function(callback){
+				thisObject.getInstallationAPIHeaders(installationID,function(err,headers){
+					callback(err,headers)
+				})
+			},
+			function(headers,callback){
+				var filesWithKeys =[];
+				async.each(push.commits,function(commit,callback){
+						var url = 'https://api.github.com/repos/' + push.repository.owner.name + '/' + push.repository.name + '/commits/' + commit.id;
+						request(url,{headers: headers},function(error,response,body){
+							if(error){
+								callback(error);
+							}else if(response.statusCode > 300){
+								callback(response.statusCode + ' : ' + body);
+							}else{
+								var commit = JSON.parse(body);
+								async.each(commit.files,function(file,callback){
+									request(file.raw_url,{headers: headers},function(error,response,body){
+										if(error){
+											callback(error);
+										}else if(response.statusCode > 300){
+											callback(response.statusCode + ' : ' + body);
+										}else{
+											var matches = keysFinder.find(body);
+											if(matches){
+												var refParts = push.ref.split('/');
+												var branchName = refParts[refParts.length -1]
+												filesWithKeys.push({
+													repo: push.repository.full_name,
+													branch: branchName,
+													file: file.filename,
+													severity: matches.severity,
+													matches: matches.matches
+												})
+											}
+											callback()
+										}
+									})
+								},function(err){
+									callback(err,filesWithKeys)
+								})
+							};
+						})
+				},function(err){
+					callback(err,filesWithKeys)
+				})
+			}
+		],function(err,filesWithKeys){
+			callback(err,filesWithKeys)
+		})
+
+	},
 	scanItem: function(accessToken,item,callback){
 		var headers = this.getAPIHeaders(accessToken);
 		request(item.url,{headers: headers},function(error,response,body){
