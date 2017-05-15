@@ -119,11 +119,9 @@ router.get('/pricing',function(req, res, next) {
 router.get('/subscribe/:plan_id',function(req,res,next){
 
 	loginEnforcer.enforce(req,res,next,function(){
-console.log('AAA')
 		async.waterfall([
 			function(callback){
 				plans.get(req.db,req.params.plan_id,function(err,plan){
-					console.log('BBBB')
 					callback(err,plan)
 				})
 			},

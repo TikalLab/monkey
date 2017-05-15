@@ -70,7 +70,7 @@ module.exports = {
     // isoDate.setSeconds(isoDate.getSeconds() + 4);
     // isoDate.toISOString().slice(0, 19) + 'Z';
 
-    var startDate = moment().format()
+    var startDate = moment().add(1,'minutes').format()
     // var startDate = moment().add(plan.frequency.interval,plan.frequency.type).format()
     // var startDate = moment().add(1,'weeks').format()
     // TBD check if to use toISOString instead
