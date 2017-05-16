@@ -22,6 +22,7 @@ var unsubscriber = require('../app_modules/unsubscriber');
 var github = require('../app_modules/github');
 var alertIcons = require('../app_modules/alert-icons');
 var paypal = require('../app_modules/paypal');
+var mailer = require('../app_modules/mailer');
 
 var plans = require('../models/plans');
 var users = require('../models/users');

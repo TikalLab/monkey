@@ -17,7 +17,6 @@ var unsubscriber = require('../app_modules/unsubscriber');
 
 module.exports = {
 	sendMulti: function(recipients,subject,template,params,emailType,callback){
-
 		// add some common stuff to params
 		params.config = config;
 		params.email_type = emailType;
