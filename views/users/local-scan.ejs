@@ -15,7 +15,7 @@
         <tbody>
           <% local_scan.suspected_keys.forEach(function(suspectedKey){ %>
             <% var trID = slug(suspectedKey.repo) + '_' + slug(suspectedKey.branch) + '_' + slug(suspectedKey.file) + '_' + suspectedKey.key%>
-            <tr id="<%=trID%>" class="<%=(suspectedKey.severity == 'high' ? 'progress-bar-danger' : 'alert-warning')%>">
+            <tr id="<%=trID%>" class="<%=(suspectedKey.severity == 'high' ? 'severity-high' : 'severity-low')%>">
               <td><%=suspectedKey.repo%></td>
               <td><%=suspectedKey.branch%></td>
               <td><a target="_blank" href="<%=util.format('https://github.com/%s/blob/%s/%s#L%s',suspectedKey.repo,suspectedKey.branch,suspectedKey.file,'line' in suspectedKey ? suspectedKey.line : '')%>"><%=suspectedKey.file%></a></td>
