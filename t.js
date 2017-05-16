@@ -464,4 +464,211 @@ var headers = {
 // var matches = lineNumber(content,/\b(?=(?:[a-zA-Z]*\d){3})(?=.*\d[a-zA-Z]+\d)[a-zA-Z\d]{12,}\b/g);
 // console.log(util.inspect(matches))
 var a = '10000';
-console.log(a.toLocaleString())
+// console.log(a.toLocaleString())
+
+
+var obj = {
+	"user_id" : "58f8b5506e38872e58810c26",
+	"push" : {
+		"ref" : "refs/heads/260_populate_node_var",
+		"before" : "4e5142a11a159e615580c2354c23f563a9ab1bee",
+		"after" : "987af93275951dd83d93215a248472cd19cbcea3",
+		"created" : false,
+		"deleted" : false,
+		"forced" : false,
+		"base_ref" : null,
+		"compare" : "https://github.com/mobdata/md-rules/compare/4e5142a11a15...987af9327595",
+		"commits" : [
+			{
+				"id" : "987af93275951dd83d93215a248472cd19cbcea3",
+				"tree_id" : "9d5ab5f18aa85bd8b4ec0462b31501cdd4ccbaa3",
+				"distinct" : false,
+				"message" : "Supports mobdata/replication#260 by adding support in DSL for populating target node's attributes in filters",
+				"timestamp" : "2017-04-18T19:34:02Z",
+				"url" : "https://github.com/mobdata/md-rules/commit/987af93275951dd83d93215a248472cd19cbcea3",
+				"author" : {
+					"name" : "Timothy D. McKernan",
+					"email" : "timbitsandbytes@gmail.com",
+					"username" : "bitsandbytes"
+				},
+				"committer" : {
+					"name" : "Timothy D. McKernan",
+					"email" : "timbitsandbytes@gmail.com",
+					"username" : "bitsandbytes"
+				},
+				"added" : [ ],
+				"removed" : [ ],
+				"modified" : [
+					"peg/mobdata_grammar.pegjs",
+					"peg/mobdata_parser.js"
+				]
+			}
+		],
+		"head_commit" : {
+			"id" : "987af93275951dd83d93215a248472cd19cbcea3",
+			"tree_id" : "9d5ab5f18aa85bd8b4ec0462b31501cdd4ccbaa3",
+			"distinct" : false,
+			"message" : "Supports mobdata/replication#260 by adding support in DSL for populating target node's attributes in filters",
+			"timestamp" : "2017-04-18T19:34:02Z",
+			"url" : "https://github.com/mobdata/md-rules/commit/987af93275951dd83d93215a248472cd19cbcea3",
+			"author" : {
+				"name" : "Timothy D. McKernan",
+				"email" : "timbitsandbytes@gmail.com",
+				"username" : "bitsandbytes"
+			},
+			"committer" : {
+				"name" : "Timothy D. McKernan",
+				"email" : "timbitsandbytes@gmail.com",
+				"username" : "bitsandbytes"
+			},
+			"added" : [ ],
+			"removed" : [ ],
+			"modified" : [
+				"peg/mobdata_grammar.pegjs",
+				"peg/mobdata_parser.js"
+			]
+		},
+		"repository" : {
+			"id" : 64392746,
+			"name" : "md-rules",
+			"full_name" : "mobdata/md-rules",
+			"owner" : {
+				"name" : "mobdata",
+				"email" : "mobdatasolution@gmail.com",
+				"login" : "mobdata",
+				"id" : 16724252,
+				"avatar_url" : "https://avatars0.githubusercontent.com/u/16724252?v=3",
+				"gravatar_id" : "",
+				"url" : "https://api.github.com/users/mobdata",
+				"html_url" : "https://github.com/mobdata",
+				"followers_url" : "https://api.github.com/users/mobdata/followers",
+				"following_url" : "https://api.github.com/users/mobdata/following{/other_user}",
+				"gists_url" : "https://api.github.com/users/mobdata/gists{/gist_id}",
+				"starred_url" : "https://api.github.com/users/mobdata/starred{/owner}{/repo}",
+				"subscriptions_url" : "https://api.github.com/users/mobdata/subscriptions",
+				"organizations_url" : "https://api.github.com/users/mobdata/orgs",
+				"repos_url" : "https://api.github.com/users/mobdata/repos",
+				"events_url" : "https://api.github.com/users/mobdata/events{/privacy}",
+				"received_events_url" : "https://api.github.com/users/mobdata/received_events",
+				"type" : "Organization",
+				"site_admin" : false
+			},
+			"private" : true,
+			"html_url" : "https://github.com/mobdata/md-rules",
+			"description" : "DSL for specifying replication rules",
+			"fork" : false,
+			"url" : "https://github.com/mobdata/md-rules",
+			"forks_url" : "https://api.github.com/repos/mobdata/md-rules/forks",
+			"keys_url" : "https://api.github.com/repos/mobdata/md-rules/keys{/key_id}",
+			"collaborators_url" : "https://api.github.com/repos/mobdata/md-rules/collaborators{/collaborator}",
+			"teams_url" : "https://api.github.com/repos/mobdata/md-rules/teams",
+			"hooks_url" : "https://api.github.com/repos/mobdata/md-rules/hooks",
+			"issue_events_url" : "https://api.github.com/repos/mobdata/md-rules/issues/events{/number}",
+			"events_url" : "https://api.github.com/repos/mobdata/md-rules/events",
+			"assignees_url" : "https://api.github.com/repos/mobdata/md-rules/assignees{/user}",
+			"branches_url" : "https://api.github.com/repos/mobdata/md-rules/branches{/branch}",
+			"tags_url" : "https://api.github.com/repos/mobdata/md-rules/tags",
+			"blobs_url" : "https://api.github.com/repos/mobdata/md-rules/git/blobs{/sha}",
+			"git_tags_url" : "https://api.github.com/repos/mobdata/md-rules/git/tags{/sha}",
+			"git_refs_url" : "https://api.github.com/repos/mobdata/md-rules/git/refs{/sha}",
+			"trees_url" : "https://api.github.com/repos/mobdata/md-rules/git/trees{/sha}",
+			"statuses_url" : "https://api.github.com/repos/mobdata/md-rules/statuses/{sha}",
+			"languages_url" : "https://api.github.com/repos/mobdata/md-rules/languages",
+			"stargazers_url" : "https://api.github.com/repos/mobdata/md-rules/stargazers",
+			"contributors_url" : "https://api.github.com/repos/mobdata/md-rules/contributors",
+			"subscribers_url" : "https://api.github.com/repos/mobdata/md-rules/subscribers",
+			"subscription_url" : "https://api.github.com/repos/mobdata/md-rules/subscription",
+			"commits_url" : "https://api.github.com/repos/mobdata/md-rules/commits{/sha}",
+			"git_commits_url" : "https://api.github.com/repos/mobdata/md-rules/git/commits{/sha}",
+			"comments_url" : "https://api.github.com/repos/mobdata/md-rules/comments{/number}",
+			"issue_comment_url" : "https://api.github.com/repos/mobdata/md-rules/issues/comments{/number}",
+			"contents_url" : "https://api.github.com/repos/mobdata/md-rules/contents/{+path}",
+			"compare_url" : "https://api.github.com/repos/mobdata/md-rules/compare/{base}...{head}",
+			"merges_url" : "https://api.github.com/repos/mobdata/md-rules/merges",
+			"archive_url" : "https://api.github.com/repos/mobdata/md-rules/{archive_format}{/ref}",
+			"downloads_url" : "https://api.github.com/repos/mobdata/md-rules/downloads",
+			"issues_url" : "https://api.github.com/repos/mobdata/md-rules/issues{/number}",
+			"pulls_url" : "https://api.github.com/repos/mobdata/md-rules/pulls{/number}",
+			"milestones_url" : "https://api.github.com/repos/mobdata/md-rules/milestones{/number}",
+			"notifications_url" : "https://api.github.com/repos/mobdata/md-rules/notifications{?since,all,participating}",
+			"labels_url" : "https://api.github.com/repos/mobdata/md-rules/labels{/name}",
+			"releases_url" : "https://api.github.com/repos/mobdata/md-rules/releases{/id}",
+			"deployments_url" : "https://api.github.com/repos/mobdata/md-rules/deployments",
+			"created_at" : 1469708089,
+			"updated_at" : "2016-09-09T17:37:34Z",
+			"pushed_at" : 1492701986,
+			"git_url" : "git://github.com/mobdata/md-rules.git",
+			"ssh_url" : "git@github.com:mobdata/md-rules.git",
+			"clone_url" : "https://github.com/mobdata/md-rules.git",
+			"svn_url" : "https://github.com/mobdata/md-rules",
+			"homepage" : null,
+			"size" : 239,
+			"stargazers_count" : 0,
+			"watchers_count" : 0,
+			"language" : "JavaScript",
+			"has_issues" : true,
+			"has_projects" : true,
+			"has_downloads" : true,
+			"has_wiki" : true,
+			"has_pages" : false,
+			"forks_count" : 0,
+			"mirror_url" : null,
+			"open_issues_count" : 0,
+			"forks" : 0,
+			"open_issues" : 0,
+			"watchers" : 0,
+			"default_branch" : "master",
+			"stargazers" : 0,
+			"master_branch" : "master",
+			"organization" : "mobdata"
+		},
+		"pusher" : {
+			"name" : "bitsandbytes",
+			"email" : "bitsandbytes@users.noreply.github.com"
+		},
+		"organization" : {
+			"login" : "mobdata",
+			"id" : 16724252,
+			"url" : "https://api.github.com/orgs/mobdata",
+			"repos_url" : "https://api.github.com/orgs/mobdata/repos",
+			"events_url" : "https://api.github.com/orgs/mobdata/events",
+			"hooks_url" : "https://api.github.com/orgs/mobdata/hooks",
+			"issues_url" : "https://api.github.com/orgs/mobdata/issues",
+			"members_url" : "https://api.github.com/orgs/mobdata/members{/member}",
+			"public_members_url" : "https://api.github.com/orgs/mobdata/public_members{/member}",
+			"avatar_url" : "https://avatars0.githubusercontent.com/u/16724252?v=3",
+			"description" : ""
+		},
+		"sender" : {
+			"login" : "bitsandbytes",
+			"id" : 761244,
+			"avatar_url" : "https://avatars2.githubusercontent.com/u/761244?v=3",
+			"gravatar_id" : "",
+			"url" : "https://api.github.com/users/bitsandbytes",
+			"html_url" : "https://github.com/bitsandbytes",
+			"followers_url" : "https://api.github.com/users/bitsandbytes/followers",
+			"following_url" : "https://api.github.com/users/bitsandbytes/following{/other_user}",
+			"gists_url" : "https://api.github.com/users/bitsandbytes/gists{/gist_id}",
+			"starred_url" : "https://api.github.com/users/bitsandbytes/starred{/owner}{/repo}",
+			"subscriptions_url" : "https://api.github.com/users/bitsandbytes/subscriptions",
+			"organizations_url" : "https://api.github.com/users/bitsandbytes/orgs",
+			"repos_url" : "https://api.github.com/users/bitsandbytes/repos",
+			"events_url" : "https://api.github.com/users/bitsandbytes/events{/privacy}",
+			"received_events_url" : "https://api.github.com/users/bitsandbytes/received_events",
+			"type" : "User",
+			"site_admin" : false
+		},
+		"installation" : {
+			"id" : 21161
+		}
+	},
+	"suspected_keys" : [ ],
+}
+
+var _ = require('underscore')
+var picked = _.pick(obj.push,'commits')
+console.log(util.inspect(picked))
+
+
+var moment = require('moment')
+console.log(moment().add(30,'days').toDate())

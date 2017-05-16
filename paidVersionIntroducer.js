@@ -24,7 +24,7 @@ var paidVersionIntroTemplate = fs.readFileSync(path.join(__dirname,'./views/emai
 
 async.waterfall([
 	function(callback){
-		users.find({unsubscribes:{$exists:false}},function(err,allUsers){
+		users.find({google:{$exists:true},unsubscribes:{$exists:false}},function(err,allUsers){
 			callback(err,allUsers)
 		})
 	},
