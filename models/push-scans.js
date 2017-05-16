@@ -20,9 +20,29 @@ module.exports = {
       })
     })
 
+    var filteredPush = {
+      commits: push.commits,
+      repository: {
+        id: push.repository.id,
+        name: push.repository.name,
+        owner: {
+          login: push.repository.owner.login
+        }
+      },
+      sender: {
+        login: push.sender.login,
+        id: push.sender.id
+      },
+      installation: {
+        id: push.installation.id
+      }
+    }
+
+
     pushScans.insert({
       user_id: userID,
-      push: push,
+      // push: push,
+      push: filteredPush,
       suspected_keys: suspectedKeys,
       created_at: new Date()
     },function(err,pushScan){
