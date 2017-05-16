@@ -5,7 +5,7 @@ var config = require('config');
 var url = require('url');
 var async = require('async');
 var request = require('request');
-require('request-debug')(request);
+// require('request-debug')(request);
 var _ = require('underscore');
 var crypto = require('crypto');
 var fs = require('fs')
