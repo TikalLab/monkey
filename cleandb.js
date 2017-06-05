@@ -10,7 +10,8 @@ pushScans = db.get('push_scans');
 
 var lastMonth = moment().subtract(1,'months').toDate()
 
-pushScans.remove({created_at:{$lt:lastMonth}},function(err,cnt){
+pushScans.remove({created_at:{$lt:lastMonth},'suspected_keys.0':{$exists: false}},function(err,cnt){
 	console.log(err)
 	console.log(cnt.result.n)
+	// console.log(cnt)
 })
