@@ -280,7 +280,8 @@ router.post('/webhook',function(req, res, next) {
 		// find the user that signed the organization and use their access_token
 
 					switch(req.headers['x-github-event']){
-					case 'integration_installation':
+					case 'integration_installation': // deprecated from API
+					case 'installation':
 						console.log('this is a integration_installation!');
 						if(req.body.action == 'created'){
 							console.log('this is a integration_installation creation!');
