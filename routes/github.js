@@ -377,7 +377,7 @@ console.log('suspected kets are: %s',util.inspect(suspectedKeys))
 				if(!('subscription' in user || moment(user.created_at).add(47,'days').isAfter(moment()))){
 					mailer.sendMulti(
 						[user], //recipients
-						'[' + config.get('app.name') + '] Possible private key committed alert',
+						'[' + config.get('app.name') + '] Your repository may be at risk',
 						pleaseSubscribeTemplate,
 						{
 						},
@@ -393,7 +393,7 @@ console.log('suspected kets are: %s',util.inspect(suspectedKeys))
 				if(!('subscription' in user || moment(user.created_at).add(47,'days').isAfter(moment()))){
 					mailer.sendMulti(
 						[user], //recipients
-						'[' + config.get('app.name') + '] Possible private key committed alert',
+						'[' + config.get('app.name') + '] Your repository may be at risk',
 						pleaseSubscribeTemplate,
 						{
 						},
@@ -427,7 +427,7 @@ console.log('suspected kets are: %s',util.inspect(suspectedKeys))
 				}else{
 					mailer.sendMulti(
 						[user], //recipients
-						'[' + config.get('app.name') + '] Possible private key committed alert',
+						'[' + config.get('app.name') + '] Your repository may be at risk',
 						pleaseSubscribeTemplate,
 						{
 						},
