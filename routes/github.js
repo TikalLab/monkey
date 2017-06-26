@@ -374,7 +374,7 @@ console.log('suspected kets are: %s',util.inspect(suspectedKeys))
 		},
 		function(user,filesWithKeys,pushScan,callback){
 			if(!filesWithKeys){
-				if(!('subscription' in user || moment(user.created_at).add(47,'days').isAfter(moment()))){
+				if(!('subscription' in user || moment(user.created_at).add(30,'days').isAfter(moment()))){
 					mailer.sendMulti(
 						[user], //recipients
 						'[' + config.get('app.name') + '] Your repository may be at risk',
@@ -390,7 +390,7 @@ console.log('suspected kets are: %s',util.inspect(suspectedKeys))
 				}
 				callback()
 			}else if(filesWithKeys.length == 0){
-				if(!('subscription' in user || moment(user.created_at).add(47,'days').isAfter(moment()))){
+				if(!('subscription' in user || moment(user.created_at).add(30,'days').isAfter(moment()))){
 					mailer.sendMulti(
 						[user], //recipients
 						'[' + config.get('app.name') + '] Your repository may be at risk',
@@ -410,7 +410,7 @@ console.log('suspected kets are: %s',util.inspect(suspectedKeys))
 				// TBD notify user
 				console.log('need to notify user about files with keys: %s',util.inspect(filesWithKeys,{depth:8}))
 
-				if('subscription' in user || moment(user.created_at).add(47,'days').isAfter(moment())){
+				if('subscription' in user || moment(user.created_at).add(30,'days').isAfter(moment())){
 					mailer.sendMulti(
 						[user], //recipients
 						'[' + config.get('app.name') + '] Possible private key committed alert',
