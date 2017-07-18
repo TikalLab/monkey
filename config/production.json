@@ -29,7 +29,7 @@
 		"redirect_domain": "https://gitmonkey.io",
 		"hook_secret": "",
 		"webhook_domain": "gitmonkey.io",
-		"integration_url": "https://github.com/integration/gitmonkeyio",
+		"integration_url": "https://github.com/apps/gitmonkeyio",
 		"iss": 1824,
 		"private_key": ""
 	},
