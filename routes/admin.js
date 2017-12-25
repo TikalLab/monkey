@@ -172,6 +172,52 @@ router.get('/billing-plans',auth,function(req,res,next){
 	})
 })
 
+router.get('/crm/scan/:push_scan_id',function(req, res, next) {
+
+		async.parallel([
+			function(callback){
+				pushScans.getUnsecured(req.db,req.params.push_scan_id,function(err,pushScan){
+					callback(err,pushScan)
+				})
+			},
+			function(callback){
+				approvedKeys.all(req.db,function(err,approvedKeys){
+					callback(err,approvedKeys)
+				})
+			}
+		],function(err,results){
+			if(err){
+				errorHandler.error(req,res,next,err)
+			}else{
+
+
+				// filter out approved keys
+				var pushScan = results[0];
+				var approvedKeys = results[1];
+				var suspectedKeys = _.reject(pushScan.suspected_keys,function(suspectedKey){
+					return _.find(approvedKeys,function(approvedKey){
+						return approvedKey.key == suspectedKey.key
+					})
+				})
+
+				suspectedKeys = _.sortBy(suspectedKeys,function(suspectedKey){
+					return suspectedKey.severity == 'high' ? 1 : 2;
+				})
+
+				pushScan.suspected_keys = suspectedKeys;
+				render(req,res,'admin/push-scan',{
+					push_scan: pushScan,
+					active_page: 'crm'
+				})
+
+			}
+		})
+
+
+})
+
+
+
 function render(req,res,template,params){
 
 //	params.user = req.session.user;

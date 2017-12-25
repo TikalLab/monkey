@@ -1,0 +1,35 @@
+<div class="page-header">
+	<div class="page-title">
+		&nbsp;
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading"><h6 class="panel-title"><i class="icon-table"></i> Suspected Keys for Scan <%=push_scan._id.toString()%></h6></div>
+    <div class="datatable">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>repo</th>
+            <th>branch</th>
+            <th>file</th>
+            <th>suspected key</th>
+						<th>severity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% push_scan.suspected_keys.forEach(function(suspectedKey){ %>
+            <% var trID = slug(suspectedKey.repo) + '_' + slug(suspectedKey.branch) + '_' + slug(suspectedKey.file) + '_' + suspectedKey.key%>
+            <tr id="<%=trID%>" class="<%=(suspectedKey.severity == 'high' ? 'severity-high' : 'severity-low')%>">
+              <td><%=suspectedKey.repo%></td>
+              <td><%=suspectedKey.branch%></td>
+              <td><a target="_blank" href="<%=util.format('https://github.com/%s/blob/%s/%s#L%s',suspectedKey.repo,suspectedKey.branch,suspectedKey.file,'line' in suspectedKey ? suspectedKey.line : '')%>"><%=suspectedKey.file%></a></td>
+              <td><%=suspectedKey.key%></td>
+							<td><%=suspectedKey.severity%></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
