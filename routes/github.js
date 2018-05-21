@@ -454,4 +454,11 @@ console.log('suspected kets are: %s',util.inspect(suspectedKeys))
 
 }
 
+router.post('/marketplace-webhook',function(req, res, next) {
+	console.log('received a marketplace webhook notification from github!');
+	console.log('%s',util.inspect(req.body));
+	console.log('headres are : %s',util.inspect(req.headers));
+	res.send(200);
+});
+
 module.exports = router;
